@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group 'com.epam.esm'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    implementation group: 'org.springframework', name: 'spring-core', version: '5.2.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-context
+    implementation group: 'org.springframework', name: 'spring-context', version: '5.2.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-beans
+    implementation group: 'org.springframework', name: 'spring-beans', version: '5.2.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-jdbc
+    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.2.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-test
+    testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.9.RELEASE'
+
+
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    //providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+
+}
+
+test {
+    useJUnitPlatform()
+}
