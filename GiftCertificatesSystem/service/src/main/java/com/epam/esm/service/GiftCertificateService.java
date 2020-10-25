@@ -8,11 +8,26 @@ import java.util.List;
 public interface GiftCertificateService {
     void addGiftCertificate(String name, String description, String price, String duration);
 
-    GiftCertificate getGiftCertificateById(Long id) throws ServiceException;
+    GiftCertificate getGiftCertificateById(String id) throws ServiceException;
 
     List<GiftCertificate> getAllGiftCertificates();
 
-    void updateGiftCertificate(Long id, String name, String description, String price, String duration) throws ServiceException;
+    List<GiftCertificate> getAllGiftCertificatesByTagName(String name);
 
-    void removeGiftCertificate(Long id);
+    List<GiftCertificate> getAllGiftCertificatesByPartOfName(String name);
+
+    List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String description);
+
+    void updateGiftCertificate(String id, String name, String description, String price, String duration)
+            throws ServiceException;
+
+    void removeGiftCertificate(String id) throws ServiceException;
+
+    List<GiftCertificate> sortGiftCertificatesByNameAsc();
+
+    List<GiftCertificate> sortGiftCertificatesByNameDesc();
+
+    List<GiftCertificate> sortGiftCertificatesByDateAsc();
+
+    List<GiftCertificate> sortGiftCertificatesByDateDesc();
 }

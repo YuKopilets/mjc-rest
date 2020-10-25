@@ -8,13 +8,13 @@ import java.util.List;
 public interface TagService {
     void addTag(String name);
 
-    void addGiftCertificateTag(Long giftCertificateId, Long tagId);
+    void addGiftCertificateTag(String giftCertificateId, String tagId) throws ServiceException;
 
-    Tag getTagById(Long id) throws ServiceException;
+    Tag getTagById(String id) throws ServiceException;
 
     List<Tag> getAllTags();
 
-    List<Tag> getGiftCertificateTags(Long giftCertificateId);
+    List<Tag> getGiftCertificateTags(String giftCertificateId) throws ServiceException;
 
-    void removeTag(Long id);
+    void removeTag(String id) throws ServiceException;
 }

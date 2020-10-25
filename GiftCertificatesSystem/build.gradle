@@ -30,6 +30,8 @@ allprojects {
         // https://mvnrepository.com/artifact/org.springframework/spring-test
         testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.9.RELEASE'
 
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+
         // https://mvnrepository.com/artifact/com.h2database/h2
         testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
         // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
