@@ -10,14 +10,15 @@ import java.time.LocalDateTime;
 public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
-        GiftCertificate giftCertificate = new GiftCertificate();
-        giftCertificate.setId(rs.getLong("id"));
-        giftCertificate.setName(rs.getString("name"));
-        giftCertificate.setDescription(rs.getString("description"));
-        giftCertificate.setPrice(rs.getBigDecimal("price"));
-        giftCertificate.setCreateDate(rs.getObject("create_date", LocalDateTime.class));
-        giftCertificate.setLastUpdateDate(rs.getObject("last_update_date", LocalDateTime.class));
-        giftCertificate.setDuration(rs.getInt("duration"));
+        GiftCertificate giftCertificate = GiftCertificate.builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .description(rs.getString("description"))
+                .price(rs.getBigDecimal("price"))
+                .createDate(rs.getObject("create_date", LocalDateTime.class))
+                .lastUpdateDate(rs.getObject("last_update_date", LocalDateTime.class))
+                .duration(rs.getInt("duration"))
+                .build();
         return giftCertificate;
     }
 }

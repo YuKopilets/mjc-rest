@@ -8,9 +8,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +19,10 @@ public class TagDaoImpl implements TagDao {
     private static final String SELECT_TAG = "SELECT id, name FROM tag WHERE id = ?";
     private static final String SELECT_ALL_TAGS = "SELECT id, name FROM tag";
     private static final String DELETE_TAG = "DELETE FROM tag WHERE id = ?";
+    private final static String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
+            "(gift_certificate_id, tag_id) VALUES (?, ?)";
+    private final static String SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID = "SELECT gift_certificate_id, tag_id " +
+            "FROM gift_certificate_has_tag WHERE gift_certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
@@ -64,5 +68,24 @@ public class TagDaoImpl implements TagDao {
     public boolean delete(Long id) {
         int updatedRows = jdbcTemplate.update(DELETE_TAG, id);
         return updatedRows > 0;
+    }
+
+    @Override
+    public void saveGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId) {
+        jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tagId);
+    }
+
+    @Override
+    public List<Tag> findAllTagsByGiftCertificateId(Long id) {
+        ArrayList<Tag> tags = new ArrayList<>();
+        jdbcTemplate.query(connection -> {
+            PreparedStatement ps = connection.prepareStatement(SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID);
+            ps.setLong(1, id);
+            return ps;
+        }, rs -> {
+            Optional<Tag> tag = findById(rs.getLong("tag_id"));
+            tag.ifPresent(tags::add);
+        });
+        return tags;
     }
 }
