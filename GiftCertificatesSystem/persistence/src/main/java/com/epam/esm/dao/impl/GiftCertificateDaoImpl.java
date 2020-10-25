@@ -3,7 +3,6 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -27,10 +26,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private final static String UPDATE_GIFT_CERTIFICATE = "UPDATE gift_certificate SET " +
             "name = ?, description = ?, price = ?, create_date = ?, last_update_date = ?, duration = ? WHERE id = ?";
     private final static String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
-    private final static String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
-            "(gift_certificate_id, tag_id) VALUES (?, ?)";
-    private final static String SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID = "SELECT gift_certificate_id, tag_id " +
-            "FROM gift_certificate_has_tag WHERE gift_certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
@@ -90,16 +85,5 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public boolean delete(Long id) {
         int updatedRows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE, id);
         return updatedRows > 0;
-    }
-
-    @Override
-    public void saveGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId) {
-        jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tagId);
-    }
-
-    @Override
-    public List<Tag> findAllTagsByGiftCertificateId(Long id) {
-        // TODO
-        return null;
     }
 }
