@@ -19,9 +19,9 @@ public class TagDaoImpl implements TagDao {
     private static final String SELECT_TAG = "SELECT id, name FROM tag WHERE id = ?";
     private static final String SELECT_ALL_TAGS = "SELECT id, name FROM tag";
     private static final String DELETE_TAG = "DELETE FROM tag WHERE id = ?";
-    private final static String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
+    private static final String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
-    private final static String SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID = "SELECT gift_certificate_id, tag_id " +
+    private static final String SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID = "SELECT tag_id " +
             "FROM gift_certificate_has_tag WHERE gift_certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;

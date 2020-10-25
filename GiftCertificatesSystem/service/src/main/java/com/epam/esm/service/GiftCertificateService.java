@@ -3,7 +3,6 @@ package com.epam.esm.service;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.ServiceException;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface GiftCertificateService {
