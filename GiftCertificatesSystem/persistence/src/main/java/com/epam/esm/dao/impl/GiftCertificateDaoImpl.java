@@ -10,22 +10,30 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
-    private final static String INSERT_GIFT_CERTIFICATE = "INSERT INTO gift_certificate " +
+    private static final String INSERT_GIFT_CERTIFICATE = "INSERT INTO gift_certificate " +
             "(name, description, price, create_date, last_update_date, duration) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
-    private final static String SELECT_GIFT_CERTIFICATE = "SELECT " +
+    private static final String SELECT_GIFT_CERTIFICATE = "SELECT " +
             "id, name, description, price, create_date, last_update_date, duration " +
             "FROM gift_certificate WHERE id = ?";
-    private final static String SELECT_ALL_GIFT_CERTIFICATES = "SELECT " +
+    private static final String SELECT_ALL_GIFT_CERTIFICATES = "SELECT " +
             "id, name, description, price, create_date, last_update_date, duration " +
             "FROM gift_certificate";
-    private final static String UPDATE_GIFT_CERTIFICATE = "UPDATE gift_certificate SET " +
+    private static final String UPDATE_GIFT_CERTIFICATE = "UPDATE gift_certificate SET " +
             "name = ?, description = ?, price = ?, create_date = ?, last_update_date = ?, duration = ? WHERE id = ?";
-    private final static String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
+    private static final String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
+    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_NAME = "SELECT " +
+            "id, name, description, price, create_date, last_update_date, duration WHERE name LIKE '%?%'";
+    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_DESCRIPTION = "SELECT " +
+            "id, name, description, price, create_date, last_update_date, duration WHERE description LIKE '%?%'";
+    private static final String SELECT_TAG_ID_BY_TAG_NAME = "SELECT id FROM tag WHERE name = ?";
+    private static final String SELECT_ALL_GIFT_CERTIFICATE_BY_TAG_ID = "SELECT gift_certificate_id " +
+            "FROM gift_certificate_has_tag WHERE tag_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
@@ -86,4 +94,43 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         int updatedRows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE, id);
         return updatedRows > 0;
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public List<GiftCertificate> findAllGiftCertificatesByTagName(String name) {
+        Long tagId;
+        try {
+            tagId = jdbcTemplate.queryForObject(SELECT_TAG_ID_BY_TAG_NAME, Long.class, name);
+        } catch (EmptyResultDataAccessException e) {
+            tagId = null;
+        }
+        ArrayList<GiftCertificate> giftCertificates = new ArrayList<>();
+        if (tagId != null) {
+            Long finalTagId = tagId;
+            jdbcTemplate.query(connection -> {
+                PreparedStatement ps = connection.prepareStatement(SELECT_ALL_GIFT_CERTIFICATE_BY_TAG_ID);
+                ps.setLong(1, finalTagId);
+                return ps;
+            }, rs -> {
+                Optional<GiftCertificate> giftCertificate = findById(rs.getLong("tag_id"));
+                giftCertificate.ifPresent(giftCertificates::add);
+            });
+        }
+        return giftCertificates;
+    }
+
+    @Override
+    public List<GiftCertificate> findAllGiftCertificatesByPartOfName(String name) {
+        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_NAME, giftCertificateMapper, name);
+    }
+
+    @Override
+    public List<GiftCertificate> findAllGiftCertificatesByPartOfDescription(String description) {
+        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_DESCRIPTION,
+                giftCertificateMapper,
+                description
+        );
+    }
+>>>>>>> feature/add-service-layer
 }
