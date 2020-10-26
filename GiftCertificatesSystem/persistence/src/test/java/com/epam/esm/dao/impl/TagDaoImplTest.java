@@ -1,42 +1,31 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.context.TestConfig;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.test.jdbc.JdbcTestUtils;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {TestConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@ActiveProfiles("test")
+@Sql(scripts = {"classpath:create_tag_table.sql"})
 class TagDaoImplTest {
+    @Autowired
     private TagDao tagDao;
-    private JdbcTemplate jdbcTemplate;
-
-    @BeforeEach
-    void setUp() {
-        DataSource dataSource = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("create_tag_table.sql")
-                .build();
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        tagDao = new TagDaoImpl(jdbcTemplate);
-    }
-
-    @AfterEach
-    void tearDown() {
-        JdbcTestUtils.dropTables(jdbcTemplate, "tag");
-        jdbcTemplate = null;
-        tagDao = null;
-    }
 
     @Test
     void savePositiveTest() {

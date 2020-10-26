@@ -1,16 +1,17 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.context.TestConfig;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.test.jdbc.JdbcTestUtils;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -20,26 +21,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {TestConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@ActiveProfiles("test")
+@Sql(scripts = {"classpath:create_gift_certificate_table.sql"})
 class GiftCertificateDaoImplTest {
+    @Autowired
     private GiftCertificateDao giftCertificateDao;
-    private JdbcTemplate jdbcTemplate;
-
-    @BeforeEach
-    void setUp() {
-        DataSource dataSource = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("create_gift_certificate_table.sql")
-                .build();
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        giftCertificateDao = new GiftCertificateDaoImpl(jdbcTemplate);
-    }
-
-    @AfterEach
-    void tearDown() {
-        JdbcTestUtils.dropTables(jdbcTemplate, "gift_certificate");
-        jdbcTemplate = null;
-        giftCertificateDao = null;
-    }
 
     @Test
     void savePositiveTest() {
