@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String INSERT_GIFT_CERTIFICATE = "INSERT INTO gift_certificate " +
             "(name, description, price, create_date, last_update_date, duration) " +
@@ -94,8 +96,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         int updatedRows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE, id);
         return updatedRows > 0;
     }
-<<<<<<< HEAD
-=======
 
     @Override
     public List<GiftCertificate> findAllGiftCertificatesByTagName(String name) {
@@ -132,5 +132,4 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 description
         );
     }
->>>>>>> feature/add-service-layer
 }

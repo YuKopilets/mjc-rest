@@ -1,10 +1,15 @@
 package com.epam.esm.context;
 
+import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
+import com.epam.esm.dao.impl.TagDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -15,6 +20,11 @@ import javax.sql.DataSource;
 public class ApplicationConfig {
     @Autowired
     private Environment environment;
+
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
 
     @Bean
     public DataSource dataSource() {
