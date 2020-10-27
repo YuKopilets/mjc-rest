@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,16 +29,15 @@ public class TagDaoImpl implements TagDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
-    private final KeyHolder keyHolder;
 
-    public TagDaoImpl(JdbcTemplate jdbcTemplate) {
+    public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        tagMapper = new TagMapper();
-        keyHolder = new GeneratedKeyHolder();
+        this.tagMapper = tagMapper;
     }
 
     @Override
     public void save(Tag tag) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_TAG, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, tag.getName());

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,16 +42,15 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
-    private final KeyHolder keyHolder;
 
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate) {
+    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        giftCertificateMapper = new GiftCertificateMapper();
-        keyHolder = new GeneratedKeyHolder();
+        this.giftCertificateMapper = giftCertificateMapper;
     }
 
     @Override
     public void save(GiftCertificate giftCertificate) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_GIFT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, giftCertificate.getName());
