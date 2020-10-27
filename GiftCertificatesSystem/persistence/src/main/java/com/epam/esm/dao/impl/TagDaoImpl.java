@@ -23,8 +23,10 @@ public class TagDaoImpl implements TagDao {
     private static final String DELETE_TAG = "DELETE FROM tag WHERE id = ?";
     private static final String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
-    private static final String SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID = "SELECT tag_id " +
-            "FROM gift_certificate_has_tag WHERE gift_certificate_id = ?";
+    private static final String SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID = "SELECT tag.id, tag.name " +
+            "FROM tag " +
+            "INNER JOIN gift_certificate_has_tag ON gift_certificate_has_tag.tag_id = tag.id " +
+            "WHERE gift_certificate_has_tag.gift_certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
@@ -48,13 +50,11 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> findById(Long id) {
-        Tag tag;
         try {
-            tag = jdbcTemplate.queryForObject(SELECT_TAG, tagMapper, id);
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SELECT_TAG, tagMapper, id));
         } catch (EmptyResultDataAccessException e) {
-            tag = null;
+            return Optional.empty();
         }
-        return Optional.ofNullable(tag);
     }
 
     @Override
@@ -79,15 +79,6 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public List<Tag> findAllTagsByGiftCertificateId(Long id) {
-        ArrayList<Tag> tags = new ArrayList<>();
-        jdbcTemplate.query(connection -> {
-            PreparedStatement ps = connection.prepareStatement(SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID);
-            ps.setLong(1, id);
-            return ps;
-        }, rs -> {
-            Optional<Tag> tag = findById(rs.getLong("tag_id"));
-            tag.ifPresent(tags::add);
-        });
-        return tags;
+        return jdbcTemplate.query(SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID, tagMapper, id);
     }
 }

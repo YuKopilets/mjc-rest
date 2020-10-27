@@ -33,9 +33,13 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "id, name, description, price, create_date, last_update_date, duration WHERE name LIKE '%?%'";
     private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_DESCRIPTION = "SELECT " +
             "id, name, description, price, create_date, last_update_date, duration WHERE description LIKE '%?%'";
-    private static final String SELECT_TAG_ID_BY_TAG_NAME = "SELECT id FROM tag WHERE name = ?";
-    private static final String SELECT_ALL_GIFT_CERTIFICATE_BY_TAG_ID = "SELECT gift_certificate_id " +
-            "FROM gift_certificate_has_tag WHERE tag_id = ?";
+    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_TAG_NAME = "SELECT gift_certificate.id, " +
+            "gift_certificate.name, gift_certificate.description, gift_certificate.price, " +
+            "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration " +
+            "FROM tag " +
+            "INNER JOIN gift_certificate_has_tag ON tag.id = gift_certificate_has_tag.tag_id " +
+            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id" +
+            "WHERE tag.name = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
@@ -64,13 +68,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public Optional<GiftCertificate> findById(Long id) {
-        GiftCertificate giftCertificate;
         try {
-            giftCertificate = jdbcTemplate.queryForObject(SELECT_GIFT_CERTIFICATE, giftCertificateMapper, id);
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SELECT_GIFT_CERTIFICATE, giftCertificateMapper, id));
         } catch (EmptyResultDataAccessException e) {
-            giftCertificate = null;
+            return Optional.empty();
         }
-        return Optional.ofNullable(giftCertificate);
     }
 
     @Override
@@ -99,25 +101,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> findAllGiftCertificatesByTagName(String name) {
-        Long tagId;
-        try {
-            tagId = jdbcTemplate.queryForObject(SELECT_TAG_ID_BY_TAG_NAME, Long.class, name);
-        } catch (EmptyResultDataAccessException e) {
-            tagId = null;
-        }
-        ArrayList<GiftCertificate> giftCertificates = new ArrayList<>();
-        if (tagId != null) {
-            Long finalTagId = tagId;
-            jdbcTemplate.query(connection -> {
-                PreparedStatement ps = connection.prepareStatement(SELECT_ALL_GIFT_CERTIFICATE_BY_TAG_ID);
-                ps.setLong(1, finalTagId);
-                return ps;
-            }, rs -> {
-                Optional<GiftCertificate> giftCertificate = findById(rs.getLong("tag_id"));
-                giftCertificate.ifPresent(giftCertificates::add);
-            });
-        }
-        return giftCertificates;
+        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_TAG_NAME, giftCertificateMapper, name);
     }
 
     @Override
