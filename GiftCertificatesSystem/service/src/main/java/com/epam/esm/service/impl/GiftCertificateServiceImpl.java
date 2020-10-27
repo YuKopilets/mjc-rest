@@ -4,11 +4,8 @@ import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.ServiceException;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,35 +19,24 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void addGiftCertificate(String name, String description, String price, String duration) {
+    public void addGiftCertificate(GiftCertificate giftCertificate) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        GiftCertificate giftCertificate = GiftCertificate.builder()
-                .name(name)
-                .description(description)
-                .price(new BigDecimal(price).setScale(2, RoundingMode.HALF_UP))
-                .createDate(localDateTime)
-                .lastUpdateDate(localDateTime)
-                .duration(new Integer(duration))
-                .build();
+        giftCertificate.setCreateDate(localDateTime);
+        giftCertificate.setLastUpdateDate(localDateTime);
         giftCertificateDao.save(giftCertificate);
     }
 
     @Override
-    public GiftCertificate getGiftCertificateById(String id) throws ServiceException {
-        if (NumberUtils.isCreatable(id)) {
-            Long numId = NumberUtils.createLong(id);
-            if (numId > 0 && id.length() < 21) {
-                Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(numId);
-                if (giftCertificateById.isPresent()) {
-                    return giftCertificateById.get();
-                } else {
-                    throw new ServiceException("Tag with id=" + id + " not found");
-                }
+    public GiftCertificate getGiftCertificateById(Long id) throws ServiceException {
+        if (id > 0) {
+            Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(id);
+            if (giftCertificateById.isPresent()) {
+                return giftCertificateById.get();
             } else {
-                throw new ServiceException(numId + " does not fit the allowed gap. Expected gap: 0 > id");
+                throw new ServiceException("Tag with id=" + id + " not found");
             }
         } else {
-            throw new ServiceException(id + " isn't a number. Expected type: Long");
+            throw new ServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 
@@ -75,52 +61,39 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void updateGiftCertificate(String id, String name, String description, String price, String duration)
+    public void updateGiftCertificate(GiftCertificate giftCertificate)
             throws ServiceException {
-        if (NumberUtils.isCreatable(id)) {
-            Long numId = NumberUtils.createLong(id);
-            if (numId > 0 && id.length() < 21) {
-                Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(numId);
-                if (giftCertificateById.isPresent()
-                        && (name != null || description != null || price != null || duration != null)) {
-                    LocalDateTime localDateTime = LocalDateTime.now();
-                    GiftCertificate giftCertificate = giftCertificateById.get();
-                    if (name != null) {
-                        giftCertificate.setName(name);
-                    }
-                    if (description != null) {
-                        giftCertificate.setDescription(description);
-                    }
-                    if (price != null) {
-                        giftCertificate.setPrice(new BigDecimal(price).setScale(2, RoundingMode.HALF_UP));
-                    }
-                    if (duration != null) {
-                        giftCertificate.setDuration(new Integer(duration));
-                    }
-                    giftCertificate.setLastUpdateDate(localDateTime);
-                    giftCertificateDao.update(giftCertificate);
-                } else {
-                    throw new ServiceException("Tag with id=" + id + " not found");
-                }
-            } else {
-                throw new ServiceException(numId + " does not fit the allowed gap. Expected gap: 0 > id");
+        Optional<GiftCertificate> giftCertificateOptional = giftCertificateDao.findById(giftCertificate.getId());
+        if (giftCertificateOptional.isPresent()
+                && (giftCertificate.getName() != null || giftCertificate.getDescription() != null
+                || giftCertificate.getPrice() != null || giftCertificate.getDuration() != null)) {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            GiftCertificate giftCertificateById = giftCertificateOptional.get();
+            if (giftCertificate.getName() != null) {
+                giftCertificateById.setName(giftCertificate.getName());
             }
+            if (giftCertificate.getDescription() != null) {
+                giftCertificateById.setDescription(giftCertificate.getDescription());
+            }
+            if (giftCertificate.getPrice() != null) {
+                giftCertificateById.setPrice(giftCertificate.getPrice());
+            }
+            if (giftCertificate.getDuration() != null) {
+                giftCertificateById.setDuration(giftCertificate.getDuration());
+            }
+            giftCertificate.setLastUpdateDate(localDateTime);
+            giftCertificateDao.update(giftCertificate);
         } else {
-            throw new ServiceException(id + " isn't a number. Expected type: Long");
+            throw new ServiceException("Tag with id=" + giftCertificate.getId() + " not found");
         }
     }
 
     @Override
-    public void removeGiftCertificate(String id) throws ServiceException {
-        if (NumberUtils.isCreatable(id)) {
-            Long numId = NumberUtils.createLong(id);
-            if (numId > 0 && id.length() < 21) {
-                giftCertificateDao.delete(numId);
-            } else {
-                throw new ServiceException(numId + " does not fit the allowed gap. Expected gap: 0 > id");
-            }
+    public void removeGiftCertificate(Long id) throws ServiceException {
+        if (id > 0) {
+            giftCertificateDao.delete(id);
         } else {
-            throw new ServiceException(id + " isn't a number. Expected type: Long");
+            throw new ServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 

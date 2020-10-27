@@ -4,7 +4,6 @@ import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.ServiceException;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,45 +18,31 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void addTag(String name) {
-        Tag tag = new Tag();
-        tag.setName(name);
+    public void addTag(Tag tag) {
         tagDao.save(tag);
     }
 
     @Override
-    public void addGiftCertificateTag(String giftCertificateId, String tagId) throws ServiceException {
-        if (NumberUtils.isCreatable(giftCertificateId) && NumberUtils.isCreatable(tagId)) {
-            Long numGiftCertificateId = NumberUtils.createLong(giftCertificateId);
-            Long numTagId = NumberUtils.createLong(tagId);
-            if (numGiftCertificateId > 0 && giftCertificateId.length() < 21
-                    && numTagId > 0 && tagId.length() < 21) {
-                tagDao.saveGiftCertificateIdAndTagId(numGiftCertificateId, numTagId);
-            } else {
-                throw new ServiceException(numGiftCertificateId + " or " + numTagId +
-                        " does not fit the allowed gap. Expected gap: 0 > id");
-            }
+    public void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws ServiceException {
+        if (giftCertificateId > 0 && tagId > 0) {
+            tagDao.saveGiftCertificateIdAndTagId(giftCertificateId, tagId);
         } else {
-            throw new ServiceException(giftCertificateId + " or " + tagId + " isn't a number. Expected type: Long");
+            throw new ServiceException(giftCertificateId + " or " + tagId +
+                    " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 
     @Override
-    public Tag getTagById(String id) throws ServiceException {
-        if (NumberUtils.isCreatable(id)) {
-            Long numId = NumberUtils.createLong(id);
-            if (numId > 0 && id.length() < 21) {
-                Optional<Tag> tagById = tagDao.findById(numId);
-                if (tagById.isPresent()) {
-                    return tagById.get();
-                } else {
-                    throw new ServiceException("Tag with id=" + id + " not found!");
-                }
+    public Tag getTagById(Long id) throws ServiceException {
+        if (id > 0) {
+            Optional<Tag> tagById = tagDao.findById(id);
+            if (tagById.isPresent()) {
+                return tagById.get();
             } else {
-                throw new ServiceException(numId + " does not fit the allowed gap. Expected gap: 0 > id");
+                throw new ServiceException("Tag with id=" + id + " not found!");
             }
         } else {
-            throw new ServiceException(id + " isn't a number. Expected type: Long");
+            throw new ServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 
@@ -67,30 +52,20 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getGiftCertificateTags(String giftCertificateId) throws ServiceException {
-        if (NumberUtils.isCreatable(giftCertificateId)) {
-            Long numGiftCertificateId = NumberUtils.createLong(giftCertificateId);
-            if (numGiftCertificateId > 0 && giftCertificateId.length() < 21) {
-                return tagDao.findAllTagsByGiftCertificateId(numGiftCertificateId);
-            } else {
-                throw new ServiceException(numGiftCertificateId + " does not fit the allowed gap. Expected gap: 0 > id");
-            }
+    public List<Tag> getGiftCertificateTags(Long giftCertificateId) throws ServiceException {
+        if (giftCertificateId > 0) {
+            return tagDao.findAllTagsByGiftCertificateId(giftCertificateId);
         } else {
-            throw new ServiceException(giftCertificateId + " isn't a number. Expected type: Long");
+            throw new ServiceException(giftCertificateId + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 
     @Override
-    public void removeTag(String id) throws ServiceException {
-        if (NumberUtils.isCreatable(id)) {
-            Long numId = NumberUtils.createLong(id);
-            if (numId > 0 && id.length() < 21) {
-                tagDao.delete(numId);
-            } else {
-                throw new ServiceException(numId + " does not fit the allowed gap. Expected gap: 0 > id");
-            }
+    public void removeTag(Long id) throws ServiceException {
+        if (id > 0) {
+            tagDao.delete(id);
         } else {
-            throw new ServiceException(id + " isn't a number. Expected type: Long");
+            throw new ServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 }

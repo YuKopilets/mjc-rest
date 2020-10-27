@@ -6,9 +6,9 @@ import com.epam.esm.service.exception.ServiceException;
 import java.util.List;
 
 public interface GiftCertificateService {
-    void addGiftCertificate(String name, String description, String price, String duration);
+    void addGiftCertificate(GiftCertificate giftCertificate);
 
-    GiftCertificate getGiftCertificateById(String id) throws ServiceException;
+    GiftCertificate getGiftCertificateById(Long id) throws ServiceException;
 
     List<GiftCertificate> getAllGiftCertificates();
 
@@ -18,10 +18,10 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String description);
 
-    void updateGiftCertificate(String id, String name, String description, String price, String duration)
+    void updateGiftCertificate(GiftCertificate giftCertificate)
             throws ServiceException;
 
-    void removeGiftCertificate(String id) throws ServiceException;
+    void removeGiftCertificate(Long id) throws ServiceException;
 
     List<GiftCertificate> sortGiftCertificatesByNameAsc();
 
