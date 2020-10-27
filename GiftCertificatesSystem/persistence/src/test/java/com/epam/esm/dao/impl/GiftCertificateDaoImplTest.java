@@ -120,7 +120,7 @@ class GiftCertificateDaoImplTest {
     }
 
     private List<GiftCertificate> createExpectedGiftCertificates() {
-        ArrayList<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
+        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");

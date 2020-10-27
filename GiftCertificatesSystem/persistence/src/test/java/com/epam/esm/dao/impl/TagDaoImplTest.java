@@ -29,9 +29,7 @@ class TagDaoImplTest {
 
     @Test
     void savePositiveTest() {
-        Tag tag = Tag.builder()
-                .name("test name")
-                .build();
+        Tag tag = createTag();
         tagDao.save(tag);
         Long expected = 6L;
         Long actual = tag.getId();
@@ -40,9 +38,7 @@ class TagDaoImplTest {
 
     @Test
     void saveNegativeTest() {
-        Tag tag = Tag.builder()
-                .name("test name")
-                .build();
+        Tag tag = createTag();
         tagDao.save(tag);
         Long expected = 2L;
         Long actual = tag.getId();
@@ -89,8 +85,14 @@ class TagDaoImplTest {
         assertFalse(isDeleted);
     }
 
+    private Tag createTag() {
+        return Tag.builder()
+                .name("test tag")
+                .build();
+    }
+
     private List<Tag> createExceptedTags() {
-        ArrayList<Tag> tags = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         Tag firstTag = Tag.builder()
                 .id(1L)
                 .name("firstTag")
