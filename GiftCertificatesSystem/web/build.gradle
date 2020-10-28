@@ -2,3 +2,8 @@
 group 'com.epam.esm'
 version '1.0'
 
+dependencies {
+    compile project(":persistence")
+    compile project(":service")
+}
+
