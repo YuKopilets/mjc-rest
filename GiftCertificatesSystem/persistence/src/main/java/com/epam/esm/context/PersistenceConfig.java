@@ -1,11 +1,10 @@
 package com.epam.esm.context;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -16,8 +15,17 @@ import javax.sql.DataSource;
 @PropertySource("classpath:datasource.properties")
 @ComponentScan("com.epam.esm.dao")
 public class PersistenceConfig {
-    @Autowired
-    private Environment environment;
+    @Value("${dataSource.driverClassName}")
+    private String driverClassName;
+
+    @Value("${dataSource.url}")
+    private String url;
+
+    @Value("${dataSource.username}")
+    private String username;
+
+    @Value("${dataSource.password}")
+    private String password;
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
@@ -27,10 +35,10 @@ public class PersistenceConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("dataSource.driverClassName"));
-        dataSource.setUrl(environment.getProperty("dataSource.url"));
-        dataSource.setUsername(environment.getProperty("dataSource.username"));
-        dataSource.setPassword(environment.getProperty("dataSource.password"));
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         return dataSource;
     }
 
