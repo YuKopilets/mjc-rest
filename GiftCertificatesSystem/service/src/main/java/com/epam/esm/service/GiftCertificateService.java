@@ -14,9 +14,9 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getAllGiftCertificatesByTagName(String name);
 
-    List<GiftCertificate> getAllGiftCertificatesByPartOfName(String name);
+    List<GiftCertificate> getAllGiftCertificatesByPartOfName(String partOfName);
 
-    List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String description);
+    List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String partOfDescription);
 
     GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
             throws ServiceException;

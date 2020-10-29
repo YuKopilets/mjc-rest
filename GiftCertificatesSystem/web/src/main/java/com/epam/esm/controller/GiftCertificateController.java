@@ -31,6 +31,41 @@ public class GiftCertificateController {
         return giftCertificateService.getAllGiftCertificates();
     }
 
+    @GetMapping(value = "/tag/{name}")
+    public List<GiftCertificate> getAllGiftCertificatesByTagName(@PathVariable String name) {
+        return giftCertificateService.getAllGiftCertificatesByTagName(name);
+    }
+
+    @GetMapping("/{partOfName}")
+    public List<GiftCertificate> getAllGiftCertificatesByPartOfName(@PathVariable String partOfName) {
+        return giftCertificateService.getAllGiftCertificatesByPartOfName(partOfName);
+    }
+
+    @GetMapping("/{partOfDescription}")
+    public List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(@PathVariable String partOfDescription) {
+        return giftCertificateService.getAllGiftCertificatesByPartOfDescription(partOfDescription);
+    }
+
+    @GetMapping("/sort/name/asc")
+    public List<GiftCertificate> getGiftCertificatesByNameAsc() {
+        return giftCertificateService.sortGiftCertificatesByNameAsc();
+    }
+
+    @GetMapping("/sort/name/desc")
+    public List<GiftCertificate> getGiftCertificatesByNameDesc() {
+        return giftCertificateService.sortGiftCertificatesByNameDesc();
+    }
+
+    @GetMapping("/sort/date/asc")
+    public List<GiftCertificate> getGiftCertificatesByDateAsc() {
+        return giftCertificateService.sortGiftCertificatesByDateAsc();
+    }
+
+    @GetMapping("/sort/date/desc")
+    public List<GiftCertificate> getGiftCertificatesByDateDesc() {
+        return giftCertificateService.sortGiftCertificatesByDateDesc();
+    }
+
     @PutMapping
     public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws ServiceException {
         return giftCertificateService.updateGiftCertificate(giftCertificate);

@@ -51,13 +51,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> getAllGiftCertificatesByPartOfName(String name) {
-        return giftCertificateDao.findAllGiftCertificatesByPartOfName(name);
+    public List<GiftCertificate> getAllGiftCertificatesByPartOfName(String partOfName) {
+        return giftCertificateDao.findAllGiftCertificatesByPartOfName(partOfName);
     }
 
     @Override
-    public List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String description) {
-        return giftCertificateDao.findAllGiftCertificatesByPartOfDescription(description);
+    public List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String partOfDescription) {
+        return giftCertificateDao.findAllGiftCertificatesByPartOfDescription(partOfDescription);
     }
 
     @Override
