@@ -28,7 +28,7 @@ class TagDaoImplTest {
     private TagDao tagDao;
 
     @Test
-    void savePositiveTest() {
+    void saveTest() {
         Tag tag = createTag();
         tagDao.save(tag);
         Long expected = 6L;
@@ -37,16 +37,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void saveNegativeTest() {
-        Tag tag = createTag();
-        tagDao.save(tag);
-        Long expected = 2L;
-        Long actual = tag.getId();
-        assertNotEquals(expected, actual);
-    }
-
-    @Test
-    void findTagByIdPositiveTest() {
+    void findTagByIdTest() {
         Optional<Tag> tagById = tagDao.findById(1L);
         String expected = "firstTag";
         String actual = tagById.get().getName();
@@ -60,7 +51,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void findAllTagsPositiveTest() {
+    void findAllTagsTest() {
         List<Tag> expectedTags = createExceptedTags();
         List<Tag> actualTags = tagDao.findAll();
         assertEquals(expectedTags, actualTags);
@@ -74,7 +65,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void deletePositiveTest() {
+    void deleteTest() {
         boolean isDeleted = tagDao.delete(1L);
         assertTrue(isDeleted);
     }

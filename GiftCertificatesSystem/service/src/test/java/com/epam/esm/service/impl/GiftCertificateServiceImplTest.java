@@ -36,10 +36,18 @@ class GiftCertificateServiceImplTest {
     private GiftCertificateService giftCertificateService;
 
     @Test
-    void getGiftCertificateByIdPositiveTest() {
+    void addGiftCertificateTest() {
+        GiftCertificate giftCertificate = createGiftCertificate();
+        giftCertificateService.addGiftCertificate(giftCertificate);
+        Mockito.verify(giftCertificateDao).save(giftCertificate);
+    }
+
+    @Test
+    void getGiftCertificateByIdTest() throws ServiceException {
         Optional<GiftCertificate> giftCertificate = Optional.ofNullable(createGiftCertificate());
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificate);
-        assertDoesNotThrow(() -> giftCertificateService.getGiftCertificateById(1L));
+        giftCertificateService.getGiftCertificateById(1L);
+        Mockito.verify(giftCertificateDao).findById(Mockito.anyLong());
     }
 
     @Test
@@ -49,7 +57,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void getAllGiftCertificatesPositiveTest() {
+    void getAllGiftCertificatesTest() {
         List<GiftCertificate> exceptedGiftCertificates = createExpectedGiftCertificates();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(exceptedGiftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getAllGiftCertificates();
@@ -66,12 +74,11 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void updateGiftCertificatePositiveTest() {
+    void updateGiftCertificateTest() throws ServiceException {
         Optional<GiftCertificate> giftCertificate = Optional.ofNullable(createGiftCertificate());
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificate);
-        assertDoesNotThrow(() -> giftCertificateService.updateGiftCertificate(giftCertificate.get()));
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(ServiceException.class, () -> giftCertificateService.getGiftCertificateById(1L));
+        giftCertificateService.updateGiftCertificate(giftCertificate.get());
+        Mockito.verify(giftCertificateDao).update(giftCertificate.get());
     }
 
     @Test
@@ -83,9 +90,9 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void removeGiftCertificatePositiveTest() {
-        Mockito.when(giftCertificateDao.delete(1L)).thenReturn(true);
-        assertDoesNotThrow(() -> giftCertificateService.removeGiftCertificate(1L));
+    void removeGiftCertificateTest() throws ServiceException {
+        giftCertificateService.removeGiftCertificate(1L);
+        Mockito.verify(giftCertificateDao).delete(Mockito.anyLong());
     }
 
     @Test
@@ -95,7 +102,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void sortGiftCertificatesByNameAscPositiveTest() {
+    void sortGiftCertificatesByNameAscTest() {
         List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>(giftCertificates);
@@ -115,7 +122,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void sortGiftCertificatesByNameDescPositiveTest() {
+    void sortGiftCertificatesByNameDescTest() {
         List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
@@ -136,7 +143,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void sortGiftCertificatesByDateAscPositiveTest() {
+    void sortGiftCertificatesByDateAscTest() {
         List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>(giftCertificates);
@@ -154,7 +161,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void sortGiftCertificatesByDateDescPositiveTest() {
+    void sortGiftCertificatesByDateDescTest() {
         List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();

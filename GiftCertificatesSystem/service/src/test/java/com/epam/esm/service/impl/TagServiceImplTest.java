@@ -31,8 +31,16 @@ class TagServiceImplTest {
     private TagService tagService;
 
     @Test
-    void addGiftCertificateTagPositiveTest() {
-        assertDoesNotThrow(() -> tagService.addGiftCertificateTag(1L, 1L));
+    void addGiftCertificateTest() {
+        Tag tag = createTag();
+        tagService.addTag(tag);
+        Mockito.verify(tagDao).save(tag);
+    }
+
+    @Test
+    void addGiftCertificateTagTest() throws ServiceException {
+        tagService.addGiftCertificateTag(10L, 10L);
+        Mockito.verify(tagDao).saveGiftCertificateIdAndTagId(Mockito.anyLong(), Mockito.anyLong());
     }
 
     @Test
@@ -41,10 +49,11 @@ class TagServiceImplTest {
     }
 
     @Test
-    void getTagByIdPositiveTest() {
+    void getTagByIdTest() throws ServiceException {
         Optional<Tag> tag = Optional.ofNullable(createTag());
         Mockito.when(tagDao.findById(1L)).thenReturn(tag);
-        assertDoesNotThrow(() -> tagService.getTagById(1L));
+        tagService.getTagById(1L);
+        Mockito.verify(tagDao).findById(Mockito.anyLong());
     }
 
     @Test
@@ -54,7 +63,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    void getAllTagsPositiveTest() {
+    void getAllTagsTest() {
         List<Tag> exceptedTags = createExceptedTags();
         Mockito.when(tagDao.findAll()).thenReturn(exceptedTags);
         List<Tag> actualTags = tagService.getAllTags();
@@ -71,7 +80,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    void getGiftCertificateTagsPositiveTest() throws ServiceException {
+    void getGiftCertificateTagsTest() throws ServiceException {
         List<Tag> exceptedTags = createExceptedTags();
         Mockito.when(tagDao.findAllTagsByGiftCertificateId(1L)).thenReturn(exceptedTags);
         List<Tag> actualTags = tagService.getGiftCertificateTags(1L);
@@ -86,9 +95,9 @@ class TagServiceImplTest {
     }
 
     @Test
-    void removeTagPositiveTest() {
-        Mockito.when(tagDao.delete(1L)).thenReturn(true);
-        assertDoesNotThrow(() -> tagService.removeTag(1L));
+    void removeTagTest() throws ServiceException {
+        tagService.removeTag(1L);
+        Mockito.verify(tagDao).delete(Mockito.anyLong());
     }
 
     @Test

@@ -31,7 +31,7 @@ class GiftCertificateDaoImplTest {
     private GiftCertificateDao giftCertificateDao;
 
     @Test
-    void savePositiveTest() {
+    void saveTest() {
         GiftCertificate certificate = createGiftCertificate();
         giftCertificateDao.save(certificate);
         Long expected = 4L;
@@ -40,16 +40,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void saveNegativeTest() {
-        GiftCertificate certificate = createGiftCertificate();
-        giftCertificateDao.save(certificate);
-        Long expected = 2L;
-        Long actual = certificate.getId();
-        assertNotEquals(expected, actual);
-    }
-
-    @Test
-    void findGiftCertificateByIdPositiveTest() {
+    void findGiftCertificateByIdTest() {
         Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(1L);
         String expected = "firstCertificate";
         String actual = giftCertificateById.get().getName();
@@ -63,7 +54,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void findAllGiftCertificatesPositiveTest() {
+    void findAllGiftCertificatesTest() {
         List<GiftCertificate> expectedGiftCertificates = createExpectedGiftCertificates();
         List<GiftCertificate> actualGiftCertificates = giftCertificateDao.findAll();
         assertEquals(expectedGiftCertificates, actualGiftCertificates);
@@ -77,7 +68,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void updatePositiveTest() {
+    void updateTest() {
         GiftCertificate expectedCertificate = createGiftCertificate();
         expectedCertificate.setId(1L);
         giftCertificateDao.update(expectedCertificate);
@@ -86,17 +77,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void updateNegativeTest() {
-        GiftCertificate expectedCertificate = createGiftCertificate();
-        expectedCertificate.setId(1L);
-        giftCertificateDao.update(expectedCertificate);
-        expectedCertificate.setName("other name");
-        GiftCertificate actualGiftCertificate = giftCertificateDao.findById(1L).get();
-        assertNotEquals(expectedCertificate, actualGiftCertificate);
-    }
-
-    @Test
-    void deletePositiveTest() {
+    void deleteTest() {
         boolean isDeleted = giftCertificateDao.delete(1L);
         assertTrue(isDeleted);
     }
