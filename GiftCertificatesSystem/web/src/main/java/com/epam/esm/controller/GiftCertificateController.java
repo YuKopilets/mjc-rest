@@ -1,7 +1,6 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.ServiceException;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +36,8 @@ public class GiftCertificateController {
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }
 
-    @DeleteMapping
-    public void deleteGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws ServiceException {
-        giftCertificateService.removeGiftCertificate(giftCertificate.getId());
+    @DeleteMapping(value = "/{id}")
+    public void deleteGiftCertificate(@PathVariable long id) throws ServiceException {
+        giftCertificateService.removeGiftCertificate(id);
     }
 }

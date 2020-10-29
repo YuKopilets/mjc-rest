@@ -82,7 +82,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 giftCertificateById.setDuration(giftCertificate.getDuration());
             }
             giftCertificate.setLastUpdateDate(localDateTime);
-            return giftCertificateDao.update(giftCertificate);
+            return giftCertificateDao.update(giftCertificateById);
         } else {
             throw new ServiceException("Tag with id=" + giftCertificate.getId() + " not found");
         }

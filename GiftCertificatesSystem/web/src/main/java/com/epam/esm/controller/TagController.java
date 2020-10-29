@@ -31,8 +31,8 @@ public class TagController {
         return tagService.getAllTags();
     }
 
-    @DeleteMapping
-    public void deleteTag(@RequestBody Tag tag) throws ServiceException {
-        tagService.removeTag(tag.getId());
+    @DeleteMapping(value = "/{id}")
+    public void deleteTag(@PathVariable long id) throws ServiceException {
+        tagService.removeTag(id);
     }
 }
