@@ -29,15 +29,17 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "name = ?, description = ?, price = ?, create_date = ?, last_update_date = ?, duration = ? WHERE id = ?";
     private static final String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
     private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_NAME = "SELECT " +
-            "id, name, description, price, create_date, last_update_date, duration WHERE name LIKE '%?%'";
+            "id, name, description, price, create_date, last_update_date, duration " +
+            "FROM gift_certificate WHERE name LIKE '%?%'";
     private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_DESCRIPTION = "SELECT " +
-            "id, name, description, price, create_date, last_update_date, duration WHERE description LIKE '%?%'";
+            "id, name, description, price, create_date, last_update_date, duration " +
+            "FROM gift_certificate WHERE description LIKE '%?%'";
     private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_TAG_NAME = "SELECT gift_certificate.id, " +
             "gift_certificate.name, gift_certificate.description, gift_certificate.price, " +
             "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration " +
-            "FROM tag " +
-            "INNER JOIN gift_certificate_has_tag ON tag.id = gift_certificate_has_tag.tag_id " +
-            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id" +
+            "FROM gift_certificate_has_tag " +
+            "INNER JOIN tag ON tag.id = gift_certificate_has_tag.tag_id " +
+            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id " +
             "WHERE tag.name = ?";
 
     private final JdbcTemplate jdbcTemplate;
@@ -49,7 +51,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public void save(GiftCertificate giftCertificate) {
+    public GiftCertificate save(GiftCertificate giftCertificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_GIFT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS);
@@ -62,6 +64,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             return ps;
         }, keyHolder);
         giftCertificate.setId(keyHolder.getKey().longValue());
+        return giftCertificate;
     }
 
     @Override

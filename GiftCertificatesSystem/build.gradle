@@ -6,8 +6,8 @@ group 'com.epam.esm'
 version '1.0'
 
 allprojects {
-
     apply plugin: 'java'
+    apply plugin: 'war'
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -27,10 +27,24 @@ allprojects {
         implementation group: 'org.springframework', name: 'spring-beans', version: '5.2.9.RELEASE'
         // https://mvnrepository.com/artifact/org.springframework/spring-jdbc
         implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.2.9.RELEASE'
+        // https://mvnrepository.com/artifact/org.springframework/spring-web
+        implementation group: 'org.springframework', name: 'spring-web', version: '5.2.9.RELEASE'
+        // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
+        implementation group: 'org.springframework', name: 'spring-webmvc', version: '5.2.9.RELEASE'
+        // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.3'
+        // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+        implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.3'
+        implementation "javax.servlet:javax.servlet-api:4.0.1"
+        // https://mvnrepository.com/artifact/org.apache.tiles/tiles-core
+        //implementation group: 'org.apache.tiles', name: 'tiles-core', version: '3.0.8'
+        // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+        implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
+
+
+
         // https://mvnrepository.com/artifact/org.springframework/spring-test
         testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.9.RELEASE'
-
-        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
 
         // https://mvnrepository.com/artifact/com.h2database/h2
         testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
@@ -45,9 +59,10 @@ allprojects {
 
         testCompileOnly 'org.projectlombok:lombok:1.18.16'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
-        
+
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
     }
 
     test {

@@ -36,7 +36,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public void save(Tag tag) {
+    public Tag save(Tag tag) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_TAG, Statement.RETURN_GENERATED_KEYS);
@@ -44,6 +44,7 @@ public class TagDaoImpl implements TagDao {
             return ps;
         }, keyHolder);
         tag.setId(keyHolder.getKey().longValue());
+        return tag;
     }
 
     @Override

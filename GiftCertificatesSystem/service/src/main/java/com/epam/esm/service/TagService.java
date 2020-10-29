@@ -6,7 +6,7 @@ import com.epam.esm.service.exception.ServiceException;
 import java.util.List;
 
 public interface TagService {
-    void addTag(Tag tag);
+    Tag addTag(Tag tag);
 
     void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws ServiceException;
 
