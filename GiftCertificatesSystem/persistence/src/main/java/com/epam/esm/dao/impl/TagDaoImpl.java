@@ -62,7 +62,8 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public void update(Tag entity) {
+    public Tag update(Tag tag) {
+        return tag;
     }
 
     @Override

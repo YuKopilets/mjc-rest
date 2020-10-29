@@ -10,7 +10,7 @@ public interface CrudDao<T> {
 
     List<T> findAll();
 
-    void update(T entity);
+    T update(T entity);
 
     boolean delete(Long id);
 }

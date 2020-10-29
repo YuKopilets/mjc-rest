@@ -82,7 +82,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public void update(GiftCertificate giftCertificate) {
+    public GiftCertificate update(GiftCertificate giftCertificate) {
         jdbcTemplate.update(UPDATE_GIFT_CERTIFICATE,
                 giftCertificate.getName(),
                 giftCertificate.getDescription(),
@@ -92,6 +92,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 giftCertificate.getDuration(),
                 giftCertificate.getId()
         );
+        return giftCertificate;
     }
 
     @Override

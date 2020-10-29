@@ -19,11 +19,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void addGiftCertificate(GiftCertificate giftCertificate) {
+    public GiftCertificate addGiftCertificate(GiftCertificate giftCertificate) {
         LocalDateTime localDateTime = LocalDateTime.now();
         giftCertificate.setCreateDate(localDateTime);
         giftCertificate.setLastUpdateDate(localDateTime);
-        giftCertificateDao.save(giftCertificate);
+        return giftCertificateDao.save(giftCertificate);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void updateGiftCertificate(GiftCertificate giftCertificate)
+    public GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
             throws ServiceException {
         Optional<GiftCertificate> giftCertificateOptional = giftCertificateDao.findById(giftCertificate.getId());
         if (giftCertificateOptional.isPresent()
@@ -82,7 +82,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 giftCertificateById.setDuration(giftCertificate.getDuration());
             }
             giftCertificate.setLastUpdateDate(localDateTime);
-            giftCertificateDao.update(giftCertificate);
+            return giftCertificateDao.update(giftCertificate);
         } else {
             throw new ServiceException("Tag with id=" + giftCertificate.getId() + " not found");
         }
