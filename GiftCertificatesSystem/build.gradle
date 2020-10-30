@@ -36,8 +36,9 @@ allprojects {
         // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
         implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.3'
         implementation "javax.servlet:javax.servlet-api:4.0.1"
-        // https://mvnrepository.com/artifact/org.apache.tiles/tiles-core
-        //implementation group: 'org.apache.tiles', name: 'tiles-core', version: '3.0.8'
+        // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
+        implementation group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
+
         // https://mvnrepository.com/artifact/mysql/mysql-connector-java
         implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
 
