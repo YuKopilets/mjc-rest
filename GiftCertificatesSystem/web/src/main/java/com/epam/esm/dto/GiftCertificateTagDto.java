@@ -1,22 +1,14 @@
 package com.epam.esm.dto;
 
+import lombok.NoArgsConstructor;
+import lombok.Value;
+import lombok.experimental.NonFinal;
+
+@Value
+@NoArgsConstructor
 public class GiftCertificateTagDto {
+    @NonFinal
     private Long giftCertificateId;
+    @NonFinal
     private Long tagId;
-
-    public GiftCertificateTagDto() {
-    }
-
-    public GiftCertificateTagDto(Long giftCertificateId, Long tagId) {
-        this.giftCertificateId = giftCertificateId;
-        this.tagId = tagId;
-    }
-
-    public Long getGiftCertificateId() {
-        return giftCertificateId;
-    }
-
-    public Long getTagId() {
-        return tagId;
-    }
 }
