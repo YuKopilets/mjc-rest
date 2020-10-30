@@ -47,11 +47,11 @@ public class GiftCertificateController {
 
     @GetMapping("/filter")
     public List<GiftCertificate> getGiftCertificatesByQueryParams(
-            @RequestParam(name = "tag_name") String tagName,
-            @RequestParam(name = "part_of_name") String partOfName,
-            @RequestParam(name = "part_of_description") String partOfDescription,
-            @RequestParam(name = "sort_name") String sortName,
-            @RequestParam(name = "sort_date") String sortDate
+            @RequestParam(name = "tag_name", required = false) String tagName,
+            @RequestParam(name = "part_of_name", required = false) String partOfName,
+            @RequestParam(name = "part_of_description", required = false) String partOfDescription,
+            @RequestParam(name = "sort_name", required = false) String sortName,
+            @RequestParam(name = "sort_date", required = false) String sortDate
     ) {
         return giftCertificateService.getGiftCertificatesByQueryParams(
                 new GiftCertificateQuery(
