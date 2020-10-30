@@ -1,13 +1,14 @@
 package com.epam.esm.context;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
@@ -15,31 +16,30 @@ import javax.sql.DataSource;
 @PropertySource("classpath:datasource.properties")
 @ComponentScan("com.epam.esm.dao")
 public class PersistenceConfig {
-    @Value("${dataSource.driverClassName}")
-    private String driverClassName;
+    private final Environment environment;
 
-    @Value("${dataSource.url}")
-    private String url;
-
-    @Value("${dataSource.username}")
-    private String username;
-
-    @Value("${dataSource.password}")
-    private String password;
+    public PersistenceConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
-    
+
+    @Bean
+    public HikariConfig hikariConfig() {
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName(environment.getProperty("dataSource.driverClassName"));
+        config.setJdbcUrl(environment.getProperty("dataSource.url"));
+        config.setUsername(environment.getProperty("dataSource.username"));
+        config.setPassword(environment.getProperty("dataSource.password"));
+        return config;
+    }
+
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/gift_certificates_system?useUnicode=true&serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
-        return dataSource;
+        return new HikariDataSource(hikariConfig());
     }
 
     @Bean
