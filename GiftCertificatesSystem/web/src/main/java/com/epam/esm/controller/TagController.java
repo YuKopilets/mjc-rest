@@ -7,10 +7,12 @@ import com.epam.esm.exception.TagNotFoundResponseStatusException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/tags")
 public class TagController {
@@ -30,6 +32,7 @@ public class TagController {
         try {
             tagService.addGiftCertificateTag(dto.getGiftCertificateId(), dto.getTagId());
         } catch (InvalidRequestedIdServiceException e) {
+            log.error("Failed to add tag for gift certificate!", e);
             throw new InvalidRequestedIdResponseStatusException(e);
         }
     }
@@ -39,8 +42,10 @@ public class TagController {
         try {
             return tagService.getTagById(id);
         } catch (TagNotFoundServiceException e) {
+            log.error("Failed to get tag by id (tag not found)", e);
             throw new TagNotFoundResponseStatusException(e);
         } catch (InvalidRequestedIdServiceException e) {
+            log.error("Failed to get tag by id (invalid id value)", e);
             throw new InvalidRequestedIdResponseStatusException(e);
         }
     }
@@ -55,6 +60,7 @@ public class TagController {
         try {
             return tagService.getGiftCertificateTags(id);
         } catch (InvalidRequestedIdServiceException e) {
+            log.error("Failed to get tag by gift certificate id (invalid gift certificate id value)", e);
             throw new InvalidRequestedIdResponseStatusException(e);
         }
     }
@@ -64,6 +70,7 @@ public class TagController {
         try {
             tagService.removeTag(id);
         } catch (InvalidRequestedIdServiceException e) {
+            log.error("Failed to delete tag by id (invalid id value)", e);
             throw new InvalidRequestedIdResponseStatusException(e);
         }
     }
