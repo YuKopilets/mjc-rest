@@ -1,8 +1,11 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.exception.GiftCertificateNotFoundResponseStatusException;
+import com.epam.esm.exception.InvalidRequestedIdResponseStatusException;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +25,14 @@ public class GiftCertificateController {
     }
 
     @GetMapping(value = "/{id}")
-    public GiftCertificate getGiftCertificateById(@PathVariable long id) throws ServiceException {
-        return giftCertificateService.getGiftCertificateById(id);
+    public GiftCertificate getGiftCertificateById(@PathVariable long id) {
+        try {
+            return giftCertificateService.getGiftCertificateById(id);
+        } catch (GiftCertificateNotFoundServiceException e) {
+            throw new GiftCertificateNotFoundResponseStatusException(e);
+        } catch (InvalidRequestedIdServiceException e) {
+            throw new InvalidRequestedIdResponseStatusException(e);
+        }
     }
 
     @GetMapping
@@ -67,12 +76,20 @@ public class GiftCertificateController {
     }
 
     @PutMapping
-    public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate) throws ServiceException {
-        return giftCertificateService.updateGiftCertificate(giftCertificate);
+    public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
+        try {
+            return giftCertificateService.updateGiftCertificate(giftCertificate);
+        } catch (GiftCertificateNotFoundServiceException e) {
+            throw new GiftCertificateNotFoundResponseStatusException(e);
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteGiftCertificate(@PathVariable long id) throws ServiceException {
-        giftCertificateService.removeGiftCertificate(id);
+    public void deleteGiftCertificate(@PathVariable long id) {
+        try {
+            giftCertificateService.removeGiftCertificate(id);
+        } catch (InvalidRequestedIdServiceException e) {
+            throw new InvalidRequestedIdResponseStatusException(e);
+        }
     }
 }

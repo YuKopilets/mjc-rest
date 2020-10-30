@@ -2,8 +2,11 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateTagDto;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.InvalidRequestedIdResponseStatusException;
+import com.epam.esm.exception.TagNotFoundResponseStatusException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
+import com.epam.esm.service.exception.TagNotFoundServiceException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,13 +26,23 @@ public class TagController {
     }
 
     @PostMapping(value = "/certificate")
-    public void createGiftCertificateTag(@RequestBody GiftCertificateTagDto dto) throws ServiceException {
-        tagService.addGiftCertificateTag(dto.getGiftCertificateId(), dto.getTagId());
+    public void createGiftCertificateTag(@RequestBody GiftCertificateTagDto dto) {
+        try {
+            tagService.addGiftCertificateTag(dto.getGiftCertificateId(), dto.getTagId());
+        } catch (InvalidRequestedIdServiceException e) {
+            throw new InvalidRequestedIdResponseStatusException(e);
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public Tag getTagById(@PathVariable long id) throws ServiceException {
-        return tagService.getTagById(id);
+    public Tag getTagById(@PathVariable long id) {
+        try {
+            return tagService.getTagById(id);
+        } catch (TagNotFoundServiceException e) {
+            throw new TagNotFoundResponseStatusException(e);
+        } catch (InvalidRequestedIdServiceException e) {
+            throw new InvalidRequestedIdResponseStatusException(e);
+        }
     }
 
     @GetMapping
@@ -38,12 +51,20 @@ public class TagController {
     }
 
     @GetMapping(value = "/certificate/{id}")
-    public List<Tag> getTagByGiftCertificateId(@PathVariable long id) throws ServiceException {
-        return tagService.getGiftCertificateTags(id);
+    public List<Tag> getTagByGiftCertificateId(@PathVariable long id) {
+        try {
+            return tagService.getGiftCertificateTags(id);
+        } catch (InvalidRequestedIdServiceException e) {
+            throw new InvalidRequestedIdResponseStatusException(e);
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteTag(@PathVariable long id) throws ServiceException {
-        tagService.removeTag(id);
+    public void deleteTag(@PathVariable long id) {
+        try {
+            tagService.removeTag(id);
+        } catch (InvalidRequestedIdServiceException e) {
+            throw new InvalidRequestedIdResponseStatusException(e);
+        }
     }
 }

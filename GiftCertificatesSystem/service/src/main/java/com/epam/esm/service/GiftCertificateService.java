@@ -1,14 +1,16 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 
 import java.util.List;
 
 public interface GiftCertificateService {
     GiftCertificate addGiftCertificate(GiftCertificate giftCertificate);
 
-    GiftCertificate getGiftCertificateById(Long id) throws ServiceException;
+    GiftCertificate getGiftCertificateById(Long id)
+            throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException;
 
     List<GiftCertificate> getAllGiftCertificates();
 
@@ -19,9 +21,9 @@ public interface GiftCertificateService {
     List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String partOfDescription);
 
     GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
-            throws ServiceException;
+            throws GiftCertificateNotFoundServiceException;
 
-    void removeGiftCertificate(Long id) throws ServiceException;
+    void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException;
 
     List<GiftCertificate> sortGiftCertificatesByNameAsc();
 

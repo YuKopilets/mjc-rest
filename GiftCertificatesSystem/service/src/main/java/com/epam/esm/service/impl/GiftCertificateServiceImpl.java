@@ -3,7 +3,8 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,16 +28,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificate getGiftCertificateById(Long id) throws ServiceException {
+    public GiftCertificate getGiftCertificateById(Long id)
+            throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException {
         if (id > 0) {
             Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(id);
             if (giftCertificateById.isPresent()) {
                 return giftCertificateById.get();
             } else {
-                throw new ServiceException("Tag with id=" + id + " not found");
+                throw new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found");
             }
         } else {
-            throw new ServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
+            throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 
@@ -62,7 +64,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
-            throws ServiceException {
+            throws GiftCertificateNotFoundServiceException {
         Optional<GiftCertificate> giftCertificateOptional = giftCertificateDao.findById(giftCertificate.getId());
         if (giftCertificateOptional.isPresent()
                 && (giftCertificate.getName() != null || giftCertificate.getDescription() != null
@@ -84,16 +86,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             giftCertificate.setLastUpdateDate(localDateTime);
             return giftCertificateDao.update(giftCertificateById);
         } else {
-            throw new ServiceException("Tag with id=" + giftCertificate.getId() + " not found");
+            throw new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + giftCertificate.getId() +
+                    " not found");
         }
     }
 
     @Override
-    public void removeGiftCertificate(Long id) throws ServiceException {
+    public void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException {
         if (id > 0) {
             giftCertificateDao.delete(id);
         } else {
-            throw new ServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
+            throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
 
