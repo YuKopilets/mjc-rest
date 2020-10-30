@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.service.query.*;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
@@ -45,6 +46,22 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificate> getAllGiftCertificates() {
         return giftCertificateDao.findAll();
+    }
+
+    @Override
+    public List<GiftCertificate> getGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery) {
+        TagNameQueryParam tagNameQueryParam = new TagNameQueryParam(this, giftCertificateQuery);
+        PartOfNameQueryParam partOfNameQueryParam = new PartOfNameQueryParam(this, giftCertificateQuery);
+        PartOfDescriptionQueryParam partOfDescriptionQueryParam = new PartOfDescriptionQueryParam(this,
+                giftCertificateQuery);
+        SortNameQueryParam sortNameQueryParam = new SortNameQueryParam(this, giftCertificateQuery);
+        SortDateQueryParam sortDateQueryParam = new SortDateQueryParam(this, giftCertificateQuery);
+        tagNameQueryParam.setNextQueryParam(partOfNameQueryParam);
+        partOfNameQueryParam.setNextQueryParam(partOfDescriptionQueryParam);
+        partOfDescriptionQueryParam.setNextQueryParam(sortNameQueryParam);
+        sortNameQueryParam.setNextQueryParam(sortDateQueryParam);
+        tagNameQueryParam.filterGiftCertificatesWithParam();
+        return giftCertificateQuery.getGiftCertificates();
     }
 
     @Override

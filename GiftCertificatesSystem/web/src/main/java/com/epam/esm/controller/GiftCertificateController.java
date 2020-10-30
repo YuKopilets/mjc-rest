@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.GiftCertificateNotFoundResponseStatusException;
 import com.epam.esm.exception.InvalidRequestedIdResponseStatusException;
+import com.epam.esm.service.query.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
@@ -44,37 +45,56 @@ public class GiftCertificateController {
         return giftCertificateService.getAllGiftCertificates();
     }
 
+    @GetMapping("/filter")
+    public List<GiftCertificate> getGiftCertificatesByQueryParams(
+            @RequestParam(name = "tag_name") String tagName,
+            @RequestParam(name = "part_of_name") String partOfName,
+            @RequestParam(name = "part_of_description") String partOfDescription,
+            @RequestParam(name = "sort_name") String sortName,
+            @RequestParam(name = "sort_date") String sortDate
+    ) {
+        return giftCertificateService.getGiftCertificatesByQueryParams(
+                new GiftCertificateQuery(
+                        tagName,
+                        partOfName,
+                        partOfDescription,
+                        sortName,
+                        sortDate
+                )
+        );
+    }
+
     @GetMapping(value = "/tag/{name}")
     public List<GiftCertificate> getAllGiftCertificatesByTagName(@PathVariable String name) {
         return giftCertificateService.getAllGiftCertificatesByTagName(name);
     }
 
-    @GetMapping("/{partOfName}")
+    @GetMapping(value = "/{partOfName}")
     public List<GiftCertificate> getAllGiftCertificatesByPartOfName(@PathVariable String partOfName) {
         return giftCertificateService.getAllGiftCertificatesByPartOfName(partOfName);
     }
 
-    @GetMapping("/{partOfDescription}")
+    @GetMapping(value = "/{partOfDescription}")
     public List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(@PathVariable String partOfDescription) {
         return giftCertificateService.getAllGiftCertificatesByPartOfDescription(partOfDescription);
     }
 
-    @GetMapping("/sort/name/asc")
+    @GetMapping(value = "/sort/name/asc")
     public List<GiftCertificate> getGiftCertificatesByNameAsc() {
         return giftCertificateService.sortGiftCertificatesByNameAsc();
     }
 
-    @GetMapping("/sort/name/desc")
+    @GetMapping(value = "/sort/name/desc")
     public List<GiftCertificate> getGiftCertificatesByNameDesc() {
         return giftCertificateService.sortGiftCertificatesByNameDesc();
     }
 
-    @GetMapping("/sort/date/asc")
+    @GetMapping(value = "/sort/date/asc")
     public List<GiftCertificate> getGiftCertificatesByDateAsc() {
         return giftCertificateService.sortGiftCertificatesByDateAsc();
     }
 
-    @GetMapping("/sort/date/desc")
+    @GetMapping(value = "/sort/date/desc")
     public List<GiftCertificate> getGiftCertificatesByDateDesc() {
         return giftCertificateService.sortGiftCertificatesByDateDesc();
     }
