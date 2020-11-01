@@ -26,6 +26,7 @@ public class TagDaoImpl implements TagDao {
             "FROM tag " +
             "INNER JOIN gift_certificate_has_tag ON gift_certificate_has_tag.tag_id = tag.id " +
             "WHERE gift_certificate_has_tag.gift_certificate_id = ?";
+    private static final String DELETE_GIFT_CERTIFICATE_TAGS = "DELETE FROM gift_certificate_has_tag WHERE tag_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
@@ -80,5 +81,10 @@ public class TagDaoImpl implements TagDao {
     @Override
     public List<Tag> findAllTagsByGiftCertificateId(Long id) {
         return jdbcTemplate.query(SELECT_ALL_TAGS_BY_GIFT_CERTIFICATE_ID, tagMapper, id);
+    }
+
+    @Override
+    public void deleteGiftCertificateTagsByTagId(Long tagId) {
+        jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_TAGS, tagId);
     }
 }

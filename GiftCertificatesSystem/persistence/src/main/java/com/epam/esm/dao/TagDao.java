@@ -8,4 +8,6 @@ public interface TagDao extends CrudDao<Tag> {
     void saveGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId);
 
     List<Tag> findAllTagsByGiftCertificateId(Long id);
+
+    void deleteGiftCertificateTagsByTagId(Long tagId);
 }

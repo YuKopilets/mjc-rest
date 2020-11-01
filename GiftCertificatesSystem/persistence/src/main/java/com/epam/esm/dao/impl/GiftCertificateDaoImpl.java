@@ -41,6 +41,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "INNER JOIN tag ON tag.id = gift_certificate_has_tag.tag_id " +
             "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id " +
             "WHERE tag.name = ?";
+    private static final String DELETE_GIFT_CERTIFICATE_TAGS = "DELETE FROM gift_certificate_has_tag " +
+            "WHERE gift_certificate_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
@@ -117,5 +119,10 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 giftCertificateMapper,
                 description
         );
+    }
+
+    @Override
+    public void deleteGiftCertificateTagsByGiftCertificateId(Long giftCertificateId) {
+        jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_TAGS, giftCertificateId);
     }
 }

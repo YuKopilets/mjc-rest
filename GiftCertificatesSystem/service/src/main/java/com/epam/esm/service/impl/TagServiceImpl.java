@@ -70,4 +70,13 @@ public class TagServiceImpl implements TagService {
             throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }
+
+    @Override
+    public void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException {
+        if (tagId > 0) {
+            tagDao.delete(tagId);
+        } else {
+            throw new InvalidRequestedIdServiceException(tagId + " does not fit the allowed gap. Expected gap: 0 > id");
+        }
+    }
 }

@@ -144,4 +144,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificates.sort((g1, g2) -> g2.getCreateDate().compareTo(g1.getCreateDate()));
         return giftCertificates;
     }
+
+    @Override
+    public void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException {
+        if (giftCertificateId > 0) {
+            giftCertificateDao.delete(giftCertificateId);
+        } else {
+            throw new InvalidRequestedIdServiceException(giftCertificateId +
+                    " does not fit the allowed gap. Expected gap: 0 > id");
+        }
+    }
 }

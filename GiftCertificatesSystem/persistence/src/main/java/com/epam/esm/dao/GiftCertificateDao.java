@@ -10,4 +10,6 @@ public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
     List<GiftCertificate> findAllGiftCertificatesByPartOfName(String name);
 
     List<GiftCertificate> findAllGiftCertificatesByPartOfDescription(String description);
+
+    void deleteGiftCertificateTagsByGiftCertificateId(Long giftCertificateId);
 }

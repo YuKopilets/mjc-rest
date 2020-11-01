@@ -35,4 +35,6 @@ public interface GiftCertificateService {
     List<GiftCertificate> sortGiftCertificatesByDateAsc();
 
     List<GiftCertificate> sortGiftCertificatesByDateDesc();
+
+    void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException;
 }
