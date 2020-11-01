@@ -22,11 +22,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional
     public GiftCertificate addGiftCertificate(GiftCertificate giftCertificate) {
         LocalDateTime localDateTime = LocalDateTime.now();
         giftCertificate.setCreateDate(localDateTime);
         giftCertificate.setLastUpdateDate(localDateTime);
-        return giftCertificateDao.save(giftCertificate);
+        giftCertificateDao.save(giftCertificate);
+        addGiftCertificateTags(giftCertificate);
+        return giftCertificate;
     }
 
     @Override
@@ -121,14 +124,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void addGiftCertificateTags(GiftCertificate giftCertificate) throws InvalidRequestedIdServiceException {
-        Long giftCertificateId = giftCertificate.getId();
-        if (giftCertificate.getId() > 0) {
-            giftCertificateDao.saveGiftCertificateTags(giftCertificate);
-        } else {
-            throw new InvalidRequestedIdServiceException(giftCertificateId +
-                    " does not fit the allowed gap. Expected gap: 0 > id");
-        }
+    public void addGiftCertificateTags(GiftCertificate giftCertificate) {
+        giftCertificateDao.saveGiftCertificateTags(giftCertificate);
     }
 
     @Override
