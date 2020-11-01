@@ -44,16 +44,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException {
-        if (giftCertificateId > 0) {
-            return tagDao.findAllTagsByGiftCertificateId(giftCertificateId);
-        } else {
-            throw new InvalidRequestedIdServiceException(giftCertificateId +
-                    " does not fit the allowed gap. Expected gap: 0 > id");
-        }
-    }
-
-    @Override
     @Transactional
     public void removeTag(Long id) throws InvalidRequestedIdServiceException {
         if (id > 0) {

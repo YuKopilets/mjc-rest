@@ -13,8 +13,6 @@ public interface TagService {
 
     List<Tag> getAllTags();
 
-    List<Tag> getGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException;
-
     void removeTag(Long id) throws InvalidRequestedIdServiceException;
 
     void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException;

@@ -27,16 +27,6 @@ public class TagController {
         return tagService.addTag(tag);
     }
 
-    @PostMapping(value = "/certificate")
-    public void createGiftCertificateTag(@RequestBody GiftCertificateTagDto dto) {
-        try {
-            tagService.addGiftCertificateTag(dto.getGiftCertificateId(), dto.getTagId());
-        } catch (InvalidRequestedIdServiceException e) {
-            log.error("Failed to add tag for gift certificate!", e);
-            throw new InvalidRequestedIdResponseStatusException(e);
-        }
-    }
-
     @GetMapping(value = "/{id}")
     public Tag getTagById(@PathVariable long id) {
         try {
@@ -53,16 +43,6 @@ public class TagController {
     @GetMapping
     public List<Tag> getAllTags() {
         return tagService.getAllTags();
-    }
-
-    @GetMapping(value = "/certificate/{id}")
-    public List<Tag> getTagByGiftCertificateId(@PathVariable long id) {
-        try {
-            return tagService.getGiftCertificateTags(id);
-        } catch (InvalidRequestedIdServiceException e) {
-            log.error("Failed to get tag by gift certificate id (invalid gift certificate id value)", e);
-            throw new InvalidRequestedIdResponseStatusException(e);
-        }
     }
 
     @DeleteMapping(value = "/{id}")
