@@ -38,17 +38,6 @@ class TagServiceImplTest {
     }
 
     @Test
-    void addGiftCertificateTagTest() throws ServiceException {
-        tagService.addGiftCertificateTag(10L, 10L);
-        Mockito.verify(tagDao).saveGiftCertificateIdAndTagId(Mockito.anyLong(), Mockito.anyLong());
-    }
-
-    @Test
-    void addGiftCertificateTagNegativeTest() {
-        assertThrows(ServiceException.class, () -> tagService.addGiftCertificateTag(-1L, 1L));
-    }
-
-    @Test
     void getTagByIdTest() throws ServiceException {
         Optional<Tag> tag = Optional.ofNullable(createTag());
         Mockito.when(tagDao.findById(1L)).thenReturn(tag);
@@ -77,21 +66,6 @@ class TagServiceImplTest {
         Mockito.when(tagDao.findAll()).thenReturn(tags);
         List<Tag> actualTags = tagService.getAllTags();
         assertNotEquals(exceptedTags, actualTags);
-    }
-
-    @Test
-    void getGiftCertificateTagsTest() throws ServiceException {
-        List<Tag> exceptedTags = createExceptedTags();
-        Mockito.when(tagDao.findAllTagsByGiftCertificateId(1L)).thenReturn(exceptedTags);
-        List<Tag> actualTags = tagService.getGiftCertificateTags(1L);
-        assertEquals(exceptedTags, actualTags);
-    }
-
-    @Test
-    void getGiftCertificateTagsNegativeTest() {
-        List<Tag> exceptedTags = createExceptedTags();
-        Mockito.when(tagDao.findAllTagsByGiftCertificateId(-1L)).thenReturn(exceptedTags);
-        assertThrows(ServiceException.class, () -> tagService.getGiftCertificateTags(-1L));
     }
 
     @Test
