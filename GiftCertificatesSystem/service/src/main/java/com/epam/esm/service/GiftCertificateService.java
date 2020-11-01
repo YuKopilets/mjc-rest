@@ -28,7 +28,7 @@ public interface GiftCertificateService {
 
     void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException;
 
-    void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws InvalidRequestedIdServiceException;
+    void addGiftCertificateTags(GiftCertificate giftCertificate) throws InvalidRequestedIdServiceException;
 
     List<GiftCertificate> sortGiftCertificatesByNameAsc();
 

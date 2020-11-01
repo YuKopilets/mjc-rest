@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -106,8 +107,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public void saveGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId) {
-        jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tagId);
+    public void saveGiftCertificateTags(GiftCertificate giftCertificate) {
+        Long giftCertificateId = giftCertificate.getId();
+        List<Tag> tags = giftCertificate.getTags();
+        for (Tag tag : tags) {
+            jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tag.getId());
+        }
     }
 
     @Override

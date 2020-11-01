@@ -121,11 +121,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws InvalidRequestedIdServiceException {
-        if (giftCertificateId > 0 && tagId > 0) {
-            giftCertificateDao.saveGiftCertificateIdAndTagId(giftCertificateId, tagId);
+    public void addGiftCertificateTags(GiftCertificate giftCertificate) throws InvalidRequestedIdServiceException {
+        Long giftCertificateId = giftCertificate.getId();
+        if (giftCertificate.getId() > 0) {
+            giftCertificateDao.saveGiftCertificateTags(giftCertificate);
         } else {
-            throw new InvalidRequestedIdServiceException(giftCertificateId + " or " + tagId +
+            throw new InvalidRequestedIdServiceException(giftCertificateId +
                     " does not fit the allowed gap. Expected gap: 0 > id");
         }
     }

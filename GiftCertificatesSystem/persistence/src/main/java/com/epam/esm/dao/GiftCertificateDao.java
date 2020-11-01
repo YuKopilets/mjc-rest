@@ -5,7 +5,7 @@ import com.epam.esm.entity.GiftCertificate;
 import java.util.List;
 
 public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
-    void saveGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId);
+    void saveGiftCertificateTags(GiftCertificate giftCertificate);
 
     List<GiftCertificate> findAllGiftCertificatesByTagName(String name);
 
