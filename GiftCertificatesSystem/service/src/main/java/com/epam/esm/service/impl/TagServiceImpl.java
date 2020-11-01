@@ -6,6 +6,7 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,9 +64,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public void removeTag(Long id) throws InvalidRequestedIdServiceException {
         if (id > 0) {
             tagDao.delete(id);
+            removeGiftCertificateTags(id);
         } else {
             throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }

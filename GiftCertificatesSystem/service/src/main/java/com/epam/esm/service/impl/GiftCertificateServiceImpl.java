@@ -7,6 +7,7 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -109,9 +110,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional
     public void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException {
         if (id > 0) {
             giftCertificateDao.delete(id);
+            removeGiftCertificateTags(id);
         } else {
             throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
