@@ -9,8 +9,6 @@ import java.util.List;
 public interface TagService {
     Tag addTag(Tag tag);
 
-    void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws InvalidRequestedIdServiceException;
-
     Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException;
 
     List<Tag> getAllTags();

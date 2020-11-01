@@ -28,6 +28,8 @@ public interface GiftCertificateService {
 
     void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException;
 
+    void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws InvalidRequestedIdServiceException;
+
     List<GiftCertificate> sortGiftCertificatesByNameAsc();
 
     List<GiftCertificate> sortGiftCertificatesByNameDesc();

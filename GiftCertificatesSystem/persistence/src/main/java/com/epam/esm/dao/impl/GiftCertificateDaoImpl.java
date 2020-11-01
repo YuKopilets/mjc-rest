@@ -28,6 +28,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String UPDATE_GIFT_CERTIFICATE = "UPDATE gift_certificate SET " +
             "name = ?, description = ?, price = ?, create_date = ?, last_update_date = ?, duration = ? WHERE id = ?";
     private static final String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
+    private static final String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
+            "(gift_certificate_id, tag_id) VALUES (?, ?)";
     private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_NAME = "SELECT " +
             "id, name, description, price, create_date, last_update_date, duration " +
             "FROM gift_certificate WHERE name LIKE '%?%'";
@@ -101,6 +103,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public boolean delete(Long id) {
         int updatedRows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE, id);
         return updatedRows > 0;
+    }
+
+    @Override
+    public void saveGiftCertificateIdAndTagId(Long giftCertificateId, Long tagId) {
+        jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tagId);
     }
 
     @Override

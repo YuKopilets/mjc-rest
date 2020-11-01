@@ -25,16 +25,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void addGiftCertificateTag(Long giftCertificateId, Long tagId) throws InvalidRequestedIdServiceException {
-        if (giftCertificateId > 0 && tagId > 0) {
-            tagDao.saveGiftCertificateIdAndTagId(giftCertificateId, tagId);
-        } else {
-            throw new InvalidRequestedIdServiceException(giftCertificateId + " or " + tagId +
-                    " does not fit the allowed gap. Expected gap: 0 > id");
-        }
-    }
-
-    @Override
     public Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException {
         if (id > 0) {
             Optional<Tag> tagById = tagDao.findById(id);
