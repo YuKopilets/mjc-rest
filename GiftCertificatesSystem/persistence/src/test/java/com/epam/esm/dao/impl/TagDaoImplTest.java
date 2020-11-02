@@ -3,6 +3,9 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.context.TestConfig;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +25,34 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = TestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-@Sql(scripts = {"classpath:create_tag_table.sql"})
+@Sql({"/create_gift_certificates_system_schema.sql", "/gift_certificates_system_inserts.sql"})
 class TagDaoImplTest {
     @Autowired
     private TagDao tagDao;
+
+    /*@BeforeAll
+    @Sql("/create_gift_certificates_system_schema.sql")
+    static void start() {
+
+    }
+
+    @AfterAll
+    @Sql("/drop_gift_certificates_system_schema.sql")
+    static void finish() {
+
+    }
+
+    @BeforeEach
+    @Sql("/gift_certificates_system_inserts.sql")
+    void setUp() {
+
+    }*/
 
     @Test
     void saveTest() {
         Tag tag = createTag();
         tagDao.save(tag);
-        Long expected = 6L;
+        Long expected = 7L;
         Long actual = tag.getId();
         assertEquals(expected, actual);
     }
@@ -72,7 +93,7 @@ class TagDaoImplTest {
 
     @Test
     void deleteNegativeTest() {
-        boolean isDeleted = tagDao.delete(6L);
+        boolean isDeleted = tagDao.delete(7L);
         assertFalse(isDeleted);
     }
 
