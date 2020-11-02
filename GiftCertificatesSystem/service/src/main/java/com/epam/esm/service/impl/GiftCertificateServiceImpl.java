@@ -2,7 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.query.*;
+import com.epam.esm.dao.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
@@ -54,33 +54,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> getGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        TagNameQueryParam tagNameQueryParam = new TagNameQueryParam(this, giftCertificateQuery);
-        PartOfNameQueryParam partOfNameQueryParam = new PartOfNameQueryParam(this, giftCertificateQuery);
-        PartOfDescriptionQueryParam partOfDescriptionQueryParam = new PartOfDescriptionQueryParam(this,
-                giftCertificateQuery);
-        SortNameQueryParam sortNameQueryParam = new SortNameQueryParam(this, giftCertificateQuery);
-        SortDateQueryParam sortDateQueryParam = new SortDateQueryParam(this, giftCertificateQuery);
-        tagNameQueryParam.setNextQueryParam(partOfNameQueryParam);
-        partOfNameQueryParam.setNextQueryParam(partOfDescriptionQueryParam);
-        partOfDescriptionQueryParam.setNextQueryParam(sortNameQueryParam);
-        sortNameQueryParam.setNextQueryParam(sortDateQueryParam);
-        tagNameQueryParam.filterGiftCertificatesWithParam();
-        return giftCertificateQuery.getGiftCertificates();
-    }
-
-    @Override
-    public List<GiftCertificate> getAllGiftCertificatesByTagName(String name) {
-        return giftCertificateDao.findAllGiftCertificatesByTagName(name);
-    }
-
-    @Override
-    public List<GiftCertificate> getAllGiftCertificatesByPartOfName(String partOfName) {
-        return giftCertificateDao.findAllGiftCertificatesByPartOfName(partOfName);
-    }
-
-    @Override
-    public List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(String partOfDescription) {
-        return giftCertificateDao.findAllGiftCertificatesByPartOfDescription(partOfDescription);
+        return giftCertificateDao.findAllGiftCertificatesByQueryParams(giftCertificateQuery);
     }
 
     @Override
@@ -126,34 +100,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void addGiftCertificateTags(GiftCertificate giftCertificate) {
         giftCertificateDao.saveGiftCertificateTags(giftCertificate);
-    }
-
-    @Override
-    public List<GiftCertificate> sortGiftCertificatesByNameAsc() {
-        List<GiftCertificate> giftCertificates = giftCertificateDao.findAll();
-        giftCertificates.sort((g1, g2) -> g1.getName().compareTo(g2.getName()));
-        return giftCertificates;
-    }
-
-    @Override
-    public List<GiftCertificate> sortGiftCertificatesByNameDesc() {
-        List<GiftCertificate> giftCertificates = giftCertificateDao.findAll();
-        giftCertificates.sort((g1, g2) -> g2.getName().compareTo(g1.getName()));
-        return giftCertificates;
-    }
-
-    @Override
-    public List<GiftCertificate> sortGiftCertificatesByDateAsc() {
-        List<GiftCertificate> giftCertificates = giftCertificateDao.findAll();
-        giftCertificates.sort((g1, g2) -> g1.getCreateDate().compareTo(g2.getCreateDate()));
-        return giftCertificates;
-    }
-
-    @Override
-    public List<GiftCertificate> sortGiftCertificatesByDateDesc() {
-        List<GiftCertificate> giftCertificates = giftCertificateDao.findAll();
-        giftCertificates.sort((g1, g2) -> g2.getCreateDate().compareTo(g1.getCreateDate()));
-        return giftCertificates;
     }
 
     @Override

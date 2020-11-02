@@ -1,6 +1,5 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dto.GiftCertificateTagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.InvalidRequestedIdResponseStatusException;
 import com.epam.esm.exception.TagNotFoundResponseStatusException;

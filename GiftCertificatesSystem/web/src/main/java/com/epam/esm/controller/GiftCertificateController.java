@@ -3,11 +3,12 @@ package com.epam.esm.controller;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.GiftCertificateNotFoundResponseStatusException;
 import com.epam.esm.exception.InvalidRequestedIdResponseStatusException;
-import com.epam.esm.service.query.GiftCertificateQuery;
+import com.epam.esm.dao.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,63 +41,25 @@ public class GiftCertificateController {
         }
     }
 
-    @GetMapping
-    public List<GiftCertificate> getAllGiftCertificates() {
-        return giftCertificateService.getAllGiftCertificates();
-    }
-
-    @GetMapping("/filter")
-    public List<GiftCertificate> getGiftCertificatesByQueryParams(
+    @GetMapping()
+    public List<GiftCertificate> getGiftCertificates(
             @RequestParam(name = "tag_name", required = false) String tagName,
             @RequestParam(name = "part_of_name", required = false) String partOfName,
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
-            @RequestParam(name = "sort_name", required = false) String sortName,
-            @RequestParam(name = "sort_date", required = false) String sortDate
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(name = "order", required = false) String order
     ) {
-        return giftCertificateService.getGiftCertificatesByQueryParams(
-                new GiftCertificateQuery(
-                        tagName,
-                        partOfName,
-                        partOfDescription,
-                        sortName,
-                        sortDate
-                )
-        );
-    }
-
-    @GetMapping(value = "/tag/{name}")
-    public List<GiftCertificate> getAllGiftCertificatesByTagName(@PathVariable String name) {
-        return giftCertificateService.getAllGiftCertificatesByTagName(name);
-    }
-
-    @GetMapping(value = "/{partOfName}")
-    public List<GiftCertificate> getAllGiftCertificatesByPartOfName(@PathVariable String partOfName) {
-        return giftCertificateService.getAllGiftCertificatesByPartOfName(partOfName);
-    }
-
-    @GetMapping(value = "/{partOfDescription}")
-    public List<GiftCertificate> getAllGiftCertificatesByPartOfDescription(@PathVariable String partOfDescription) {
-        return giftCertificateService.getAllGiftCertificatesByPartOfDescription(partOfDescription);
-    }
-
-    @GetMapping(value = "/sort/name/asc")
-    public List<GiftCertificate> getGiftCertificatesByNameAsc() {
-        return giftCertificateService.sortGiftCertificatesByNameAsc();
-    }
-
-    @GetMapping(value = "/sort/name/desc")
-    public List<GiftCertificate> getGiftCertificatesByNameDesc() {
-        return giftCertificateService.sortGiftCertificatesByNameDesc();
-    }
-
-    @GetMapping(value = "/sort/date/asc")
-    public List<GiftCertificate> getGiftCertificatesByDateAsc() {
-        return giftCertificateService.sortGiftCertificatesByDateAsc();
-    }
-
-    @GetMapping(value = "/sort/date/desc")
-    public List<GiftCertificate> getGiftCertificatesByDateDesc() {
-        return giftCertificateService.sortGiftCertificatesByDateDesc();
+        if (StringUtils.isEmpty(tagName) && StringUtils.isEmpty(partOfName)
+                && StringUtils.isEmpty(partOfDescription) && StringUtils.isEmpty(sort)) {
+            return giftCertificateService.getAllGiftCertificates();
+        } else {
+            if (!StringUtils.isEmpty(sort) && !sort.equals("name") && !sort.equals("date")) {
+                sort = null;
+            }
+            return giftCertificateService.getGiftCertificatesByQueryParams(
+                    new GiftCertificateQuery(tagName, partOfName, partOfDescription, sort, order)
+            );
+        }
     }
 
     @PutMapping

@@ -1,6 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.GiftCertificateOrderType;
+import com.epam.esm.dao.GiftCertificateQuery;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.dao.mapper.TagMapper;
 import com.epam.esm.entity.GiftCertificate;
@@ -10,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -36,19 +39,13 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
     private static final String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
-    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_NAME = "SELECT " +
-            "id, name, description, price, create_date, last_update_date, duration " +
-            "FROM gift_certificate WHERE name LIKE '%?%'";
-    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_DESCRIPTION = "SELECT " +
-            "id, name, description, price, create_date, last_update_date, duration " +
-            "FROM gift_certificate WHERE description LIKE '%?%'";
-    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_TAG_NAME = "SELECT gift_certificate.id, " +
+    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_QUERY_PARAMS = "SELECT gift_certificate.id, " +
             "gift_certificate.name, gift_certificate.description, gift_certificate.price, " +
-            "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration " +
+            "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration, " +
+            "tag.id, tag.name " +
             "FROM gift_certificate_has_tag " +
             "INNER JOIN tag ON tag.id = gift_certificate_has_tag.tag_id " +
-            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id " +
-            "WHERE tag.name = ?";
+            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id";
     private static final String DELETE_GIFT_CERTIFICATE_TAGS = "DELETE FROM gift_certificate_has_tag " +
             "WHERE gift_certificate_id = ?";
 
@@ -142,21 +139,37 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> findAllGiftCertificatesByTagName(String name) {
-        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_TAG_NAME, giftCertificateMapper, name);
-    }
-
-    @Override
-    public List<GiftCertificate> findAllGiftCertificatesByPartOfName(String name) {
-        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_NAME, giftCertificateMapper, name);
-    }
-
-    @Override
-    public List<GiftCertificate> findAllGiftCertificatesByPartOfDescription(String description) {
-        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_PART_OF_DESCRIPTION,
-                giftCertificateMapper,
-                description
-        );
+    public List<GiftCertificate> findAllGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery) {
+        StringBuilder condition = new StringBuilder();
+        if (!StringUtils.isEmpty(giftCertificateQuery.getTagName())) {
+            condition.append(" WHERE tag.name = '")
+                    .append(giftCertificateQuery.getTagName())
+                    .append("'");
+        }
+        if (!StringUtils.isEmpty(giftCertificateQuery.getPartOfName())) {
+            if (condition.length() > 0) {
+                condition.append(" AND ");
+            } else {
+                condition.append(" WHERE ");
+            }
+            condition.append("gift_certificate.name LIKE '%")
+                    .append(giftCertificateQuery.getPartOfName())
+                    .append("%'");
+        }
+        if (!StringUtils.isEmpty(giftCertificateQuery.getPartOfDescription())) {
+            if (condition.length() > 0) {
+                condition.append(" AND ");
+            } else {
+                condition.append(" WHERE ");
+            }
+            condition.append("gift_certificate.description LIKE '%")
+                    .append(giftCertificateQuery.getPartOfDescription())
+                    .append("%'");
+        }
+        if (!StringUtils.isEmpty(giftCertificateQuery.getSort())) {
+            condition.append(GiftCertificateOrderType.getSortCondition(giftCertificateQuery));
+        }
+        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES_BY_QUERY_PARAMS + condition, giftCertificateMapper);
     }
 
     @Override

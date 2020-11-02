@@ -18,10 +18,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,86 +97,6 @@ class GiftCertificateServiceImplTest {
     void removeGiftCertificateNegativeTest() {
         Mockito.when(giftCertificateDao.delete(-1L)).thenReturn(true);
         assertThrows(ServiceException.class, () -> giftCertificateService.removeGiftCertificate(-1L));
-    }
-
-    @Test
-    void sortGiftCertificatesByNameAscTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>(giftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByNameAsc();
-        assertEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByNameAscNegativeTest() {
-        List<GiftCertificate> expectedGiftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(expectedGiftCertificates);
-        expectedGiftCertificates = expectedGiftCertificates.stream()
-                .sorted(Comparator.comparingInt(o -> o.getName().length()))
-                .collect(Collectors.toList());
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByNameAsc();
-        assertNotEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByNameDescTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
-        expectedGiftCertificates.add(giftCertificates.get(2));
-        expectedGiftCertificates.add(giftCertificates.get(1));
-        expectedGiftCertificates.add(giftCertificates.get(0));
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByNameDesc();
-        assertEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByNameDescNegativeTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>(giftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByNameDesc();
-        assertNotEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByDateAscTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>(giftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByDateAsc();
-        assertEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByDateAscNegativeTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByDateAsc();
-        assertNotEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByDateDescTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
-        expectedGiftCertificates.add(giftCertificates.get(2));
-        expectedGiftCertificates.add(giftCertificates.get(1));
-        expectedGiftCertificates.add(giftCertificates.get(0));
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByDateDesc();
-        assertEquals(expectedGiftCertificates, actualGiftCertificates);
-    }
-
-    @Test
-    void sortGiftCertificatesByDateDescNegativeTest() {
-        List<GiftCertificate> giftCertificates = createExpectedGiftCertificates();
-        Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> expectedGiftCertificates = new ArrayList<>(giftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.sortGiftCertificatesByDateDesc();
-        assertNotEquals(expectedGiftCertificates, actualGiftCertificates);
     }
 
     private GiftCertificate createGiftCertificate() {
