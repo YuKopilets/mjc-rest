@@ -1,0 +1,1 @@
+DROP SCHEMA gift_certificates_system;

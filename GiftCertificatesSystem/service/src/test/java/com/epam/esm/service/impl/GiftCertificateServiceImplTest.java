@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class GiftCertificateServiceImplTest {
     @Autowired
@@ -45,7 +43,7 @@ class GiftCertificateServiceImplTest {
         Optional<GiftCertificate> giftCertificate = Optional.ofNullable(createGiftCertificate());
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificate);
         giftCertificateService.getGiftCertificateById(1L);
-        Mockito.verify(giftCertificateDao).findById(Mockito.anyLong());
+        Mockito.verify(giftCertificateDao, Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
 
     @Test

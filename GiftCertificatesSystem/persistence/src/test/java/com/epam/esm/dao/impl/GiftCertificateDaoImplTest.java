@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = TestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-@Sql(scripts = {"classpath:create_gift_certificate_table.sql"})
+@Sql({"/create_gift_certificates_system_schema.sql", "/gift_certificates_system_inserts.sql"})
 class GiftCertificateDaoImplTest {
     @Autowired
     private GiftCertificateDao giftCertificateDao;

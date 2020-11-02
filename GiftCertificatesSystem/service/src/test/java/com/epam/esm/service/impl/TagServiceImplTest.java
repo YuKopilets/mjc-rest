@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class TagServiceImplTest {
     @Autowired
@@ -42,7 +40,7 @@ class TagServiceImplTest {
         Optional<Tag> tag = Optional.ofNullable(createTag());
         Mockito.when(tagDao.findById(1L)).thenReturn(tag);
         tagService.getTagById(1L);
-        Mockito.verify(tagDao).findById(Mockito.anyLong());
+        Mockito.verify(tagDao, Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
 
     @Test

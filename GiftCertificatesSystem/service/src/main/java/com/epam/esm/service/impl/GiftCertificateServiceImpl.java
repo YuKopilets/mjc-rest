@@ -37,11 +37,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException {
         if (id > 0) {
             Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(id);
-            if (giftCertificateById.isPresent()) {
-                return giftCertificateById.get();
-            } else {
-                throw new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found");
-            }
+            return giftCertificateById.orElseThrow(() ->
+                    new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found")
+            );
         } else {
             throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
