@@ -103,7 +103,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException {
         if (giftCertificateId > 0) {
-            giftCertificateDao.deleteGiftCertificateTagsByGiftCertificateId(giftCertificateId);
+            giftCertificateDao.deleteTagsFromGiftCertificateById(giftCertificateId);
         } else {
             throw new InvalidRequestedIdServiceException(giftCertificateId +
                     " does not fit the allowed gap. Expected gap: 0 > id");

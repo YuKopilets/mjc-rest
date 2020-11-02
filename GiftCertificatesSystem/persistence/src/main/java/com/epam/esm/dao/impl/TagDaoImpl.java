@@ -38,7 +38,10 @@ public class TagDaoImpl implements TagDao {
             ps.setString(1, tag.getName());
             return ps;
         }, keyHolder);
-        tag.setId(keyHolder.getKey().longValue());
+        Number key = keyHolder.getKey();
+        if (key != null) {
+            tag.setId(key.longValue());
+        }
         return tag;
     }
 
@@ -68,7 +71,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public void deleteGiftCertificateTagsByTagId(Long tagId) {
+    public void deleteTagFromGiftCertificatesById(Long tagId) {
         jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_TAGS, tagId);
     }
 }

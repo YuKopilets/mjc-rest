@@ -9,5 +9,5 @@ public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
 
     List<GiftCertificate> findAllGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery);
 
-    void deleteGiftCertificateTagsByGiftCertificateId(Long giftCertificateId);
+    void deleteTagsFromGiftCertificateById(Long giftCertificateId);
 }
