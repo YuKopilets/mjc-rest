@@ -28,11 +28,7 @@ public class TagServiceImpl implements TagService {
     public Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException {
         if (id > 0) {
             Optional<Tag> tagById = tagDao.findById(id);
-            if (tagById.isPresent()) {
-                return tagById.get();
-            } else {
-                throw new TagNotFoundServiceException("Tag with id=" + id + " not found!");
-            }
+            return tagById.orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id + " not found!"));
         } else {
             throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
         }
