@@ -9,11 +9,14 @@ import java.sql.SQLException;
 
 @Component
 public class TagMapper implements RowMapper<Tag> {
+    private static final String ID = "id";
+    private static final String NAME = "name";
+
     @Override
     public Tag mapRow(ResultSet rs, int rowNum) throws SQLException {
         Tag tag = Tag.builder()
-                .id(rs.getLong("id"))
-                .name(rs.getString("name"))
+                .id(rs.getLong(ID))
+                .name(rs.getString(NAME))
                 .build();
         return tag;
     }
