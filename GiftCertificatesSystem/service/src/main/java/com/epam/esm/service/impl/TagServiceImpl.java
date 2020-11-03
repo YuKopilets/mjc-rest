@@ -26,12 +26,9 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException {
-        if (id > 0) {
-            Optional<Tag> tagById = tagDao.findById(id);
-            return tagById.orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id + " not found!"));
-        } else {
-            throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
-        }
+        validateId(id);
+        Optional<Tag> tagById = tagDao.findById(id);
+        return tagById.orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id + " not found!"));
     }
 
     @Override
@@ -42,20 +39,21 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void removeTag(Long id) throws InvalidRequestedIdServiceException {
-        if (id > 0) {
-            tagDao.delete(id);
-            removeGiftCertificateTags(id);
-        } else {
-            throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
-        }
+        validateId(id);
+        tagDao.delete(id);
+        removeGiftCertificateTags(id);
     }
 
     @Override
     public void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException {
-        if (tagId > 0) {
-            tagDao.deleteTagFromGiftCertificatesById(tagId);
-        } else {
-            throw new InvalidRequestedIdServiceException(tagId + " does not fit the allowed gap. Expected gap: 0 > id");
+        validateId(tagId);
+        tagDao.deleteTagFromGiftCertificatesById(tagId);
+    }
+
+    private void validateId(Long id) throws InvalidRequestedIdServiceException {
+        if (id <= 0) {
+            throw new InvalidRequestedIdServiceException("Tag id: " + id
+                    + " does not fit the allowed gap. Expected gap: id > 0");
         }
     }
 }

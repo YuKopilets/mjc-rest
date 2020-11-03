@@ -1,14 +1,13 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.GiftCertificateNotFoundResponseStatusException;
 import com.epam.esm.exception.InvalidRequestedIdResponseStatusException;
-import com.epam.esm.dao.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,17 +56,9 @@ public class GiftCertificateController {
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(name = "order", required = false) String order
     ) {
-        if (StringUtils.isEmpty(tagName) && StringUtils.isEmpty(partOfName)
-                && StringUtils.isEmpty(partOfDescription) && StringUtils.isEmpty(sort)) {
-            return giftCertificateService.getAllGiftCertificates();
-        } else {
-            if (!StringUtils.isEmpty(sort) && !sort.equals("name") && !sort.equals("date")) {
-                sort = null;
-            }
-            return giftCertificateService.getGiftCertificatesByQueryParams(
-                    new GiftCertificateQuery(tagName, partOfName, partOfDescription, sort, order)
-            );
-        }
+        return giftCertificateService.getGiftCertificates(
+                new GiftCertificateQuery(tagName, partOfName, partOfDescription, sort, order)
+        );
     }
 
     @PutMapping

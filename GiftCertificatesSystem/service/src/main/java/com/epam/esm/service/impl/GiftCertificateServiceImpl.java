@@ -2,12 +2,13 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.dao.GiftCertificateQuery;
+import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,64 +36,42 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificate getGiftCertificateById(Long id)
             throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException {
-        if (id > 0) {
-            Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(id);
-            return giftCertificateById.orElseThrow(() ->
-                    new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found")
-            );
+        validateId(id);
+        Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(id);
+        return giftCertificateById.orElseThrow(() ->
+                new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found")
+        );
+    }
+
+    @Override
+    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery) {
+        if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
+            return giftCertificateDao.findAllGiftCertificatesByQueryParams(giftCertificateQuery);
         } else {
-            throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
+            return giftCertificateDao.findAll();
         }
-    }
-
-    @Override
-    public List<GiftCertificate> getAllGiftCertificates() {
-        return giftCertificateDao.findAll();
-    }
-
-    @Override
-    public List<GiftCertificate> getGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        return giftCertificateDao.findAllGiftCertificatesByQueryParams(giftCertificateQuery);
     }
 
     @Override
     public GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException {
         Optional<GiftCertificate> giftCertificateOptional = giftCertificateDao.findById(giftCertificate.getId());
-        if (giftCertificateOptional.isPresent()
-                && (giftCertificate.getName() != null || giftCertificate.getDescription() != null
-                || giftCertificate.getPrice() != null || giftCertificate.getDuration() != null)) {
-            LocalDateTime localDateTime = LocalDateTime.now();
-            GiftCertificate giftCertificateById = giftCertificateOptional.get();
-            if (giftCertificate.getName() != null) {
-                giftCertificateById.setName(giftCertificate.getName());
-            }
-            if (giftCertificate.getDescription() != null) {
-                giftCertificateById.setDescription(giftCertificate.getDescription());
-            }
-            if (giftCertificate.getPrice() != null) {
-                giftCertificateById.setPrice(giftCertificate.getPrice());
-            }
-            if (giftCertificate.getDuration() != null) {
-                giftCertificateById.setDuration(giftCertificate.getDuration());
-            }
-            giftCertificate.setLastUpdateDate(localDateTime);
-            return giftCertificateDao.update(giftCertificateById);
+        if (giftCertificateOptional.isPresent() && hasUpdateValues(giftCertificate)) {
+            GiftCertificate oldGiftCertificateById = giftCertificateOptional.get();
+            setUpdateValues(oldGiftCertificateById, giftCertificate);
+            return giftCertificateDao.update(oldGiftCertificateById);
         } else {
-            throw new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + giftCertificate.getId() +
-                    " not found");
+            throw new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + giftCertificate.getId()
+                    + " not found");
         }
     }
 
     @Override
     @Transactional
     public void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException {
-        if (id > 0) {
-            giftCertificateDao.delete(id);
-            removeGiftCertificateTags(id);
-        } else {
-            throw new InvalidRequestedIdServiceException(id + " does not fit the allowed gap. Expected gap: 0 > id");
-        }
+        validateId(id);
+        giftCertificateDao.delete(id);
+        removeGiftCertificateTags(id);
     }
 
     @Override
@@ -102,11 +81,58 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException {
-        if (giftCertificateId > 0) {
-            giftCertificateDao.deleteTagsFromGiftCertificateById(giftCertificateId);
+        validateId(giftCertificateId);
+        giftCertificateDao.deleteTagsFromGiftCertificateById(giftCertificateId);
+    }
+
+    private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {
+        if (!StringUtils.isEmpty(giftCertificateQuery.getTagName())
+                && !StringUtils.isEmpty(giftCertificateQuery.getPartOfName())
+                && !StringUtils.isEmpty(giftCertificateQuery.getPartOfDescription())
+                && !StringUtils.isEmpty(giftCertificateQuery.getSort())
+        ) {
+            return false;
         } else {
-            throw new InvalidRequestedIdServiceException(giftCertificateId +
-                    " does not fit the allowed gap. Expected gap: 0 > id");
+            String sort = giftCertificateQuery.getSort();
+            if (!StringUtils.isEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
+                giftCertificateQuery.setSort(null);
+            }
+            return true;
+        }
+    }
+
+    private boolean hasUpdateValues(GiftCertificate giftCertificate) {
+        if (giftCertificate.getName() != null
+                || giftCertificate.getDescription() != null
+                || giftCertificate.getPrice() != null
+                || giftCertificate.getDuration() != null
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void setUpdateValues(GiftCertificate oldGiftCertificate, GiftCertificate giftCertificate) {
+        if (giftCertificate.getName() != null) {
+            oldGiftCertificate.setName(giftCertificate.getName());
+        }
+        if (giftCertificate.getDescription() != null) {
+            oldGiftCertificate.setDescription(giftCertificate.getDescription());
+        }
+        if (giftCertificate.getPrice() != null) {
+            oldGiftCertificate.setPrice(giftCertificate.getPrice());
+        }
+        if (giftCertificate.getDuration() != null) {
+            oldGiftCertificate.setDuration(giftCertificate.getDuration());
+        }
+        oldGiftCertificate.setLastUpdateDate(LocalDateTime.now());
+    }
+
+    private void validateId(Long id) throws InvalidRequestedIdServiceException {
+        if (id <= 0) {
+            throw new InvalidRequestedIdServiceException("GiftCertificate id: " + id
+                    + " does not fit the allowed gap. Expected gap: id > 0");
         }
     }
 }

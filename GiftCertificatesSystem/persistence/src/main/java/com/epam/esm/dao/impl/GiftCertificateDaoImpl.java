@@ -1,16 +1,16 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.GiftCertificateOrderType;
-import com.epam.esm.dao.GiftCertificateQuery;
 import com.epam.esm.dao.mapper.GiftCertificateExtractor;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.util.GiftCertificateQuery;
+import com.epam.esm.util.QueryConditionUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -73,10 +73,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             ps.setInt(6, giftCertificate.getDuration());
             return ps;
         }, keyHolder);
-        Number key = keyHolder.getKey();
-        if (key != null) {
-            giftCertificate.setId(key.longValue());
-        }
+        Optional.ofNullable(keyHolder.getKey()).map(Number::longValue).ifPresent(giftCertificate::setId);
         return giftCertificate;
     }
 
@@ -87,11 +84,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 giftCertificateExtractor,
                 id
         );
-        if (giftCertificates != null && !giftCertificates.isEmpty()) {
-            return Optional.ofNullable(giftCertificates.get(0));
-        } else {
-            return Optional.empty();
-        }
+        return CollectionUtils.isEmpty(giftCertificates) ? Optional.empty()
+                : Optional.ofNullable(giftCertificates.get(0));
     }
 
     @Override
@@ -123,42 +117,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public void saveGiftCertificateTags(GiftCertificate giftCertificate) {
         Long giftCertificateId = giftCertificate.getId();
         List<Tag> tags = giftCertificate.getTags();
-        for (Tag tag : tags) {
-            jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tag.getId());
-        }
+        tags.forEach(tag -> jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tag.getId()));
     }
 
     @Override
     public List<GiftCertificate> findAllGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        StringBuilder condition = new StringBuilder();
-        if (!StringUtils.isEmpty(giftCertificateQuery.getTagName())) {
-            condition.append(" WHERE tag.name = '")
-                    .append(giftCertificateQuery.getTagName())
-                    .append("'");
-        }
-        if (!StringUtils.isEmpty(giftCertificateQuery.getPartOfName())) {
-            if (condition.length() > 0) {
-                condition.append(" AND ");
-            } else {
-                condition.append(" WHERE ");
-            }
-            condition.append("gift_certificate.name LIKE '%")
-                    .append(giftCertificateQuery.getPartOfName())
-                    .append("%'");
-        }
-        if (!StringUtils.isEmpty(giftCertificateQuery.getPartOfDescription())) {
-            if (condition.length() > 0) {
-                condition.append(" AND ");
-            } else {
-                condition.append(" WHERE ");
-            }
-            condition.append("gift_certificate.description LIKE '%")
-                    .append(giftCertificateQuery.getPartOfDescription())
-                    .append("%'");
-        }
-        if (!StringUtils.isEmpty(giftCertificateQuery.getSort())) {
-            condition.append(GiftCertificateOrderType.getSortCondition(giftCertificateQuery));
-        }
+        String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
         return jdbcTemplate.query(
                 SELECT_ALL_GIFT_CERTIFICATES_BY_QUERY_PARAMS + condition,
                 giftCertificateExtractor

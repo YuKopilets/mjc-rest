@@ -1,6 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dao.GiftCertificateQuery;
+import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
@@ -13,9 +13,7 @@ public interface GiftCertificateService {
     GiftCertificate getGiftCertificateById(Long id)
             throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException;
 
-    List<GiftCertificate> getAllGiftCertificates();
-
-    List<GiftCertificate> getGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery);
+    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery);
 
     GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException;
