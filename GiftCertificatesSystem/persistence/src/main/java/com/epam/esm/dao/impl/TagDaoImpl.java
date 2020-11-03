@@ -20,7 +20,10 @@ public class TagDaoImpl implements TagDao {
     private static final String SELECT_TAG = "SELECT id, name FROM tag WHERE id = ?";
     private static final String SELECT_ALL_TAGS = "SELECT id, name FROM tag";
     private static final String DELETE_TAG = "DELETE FROM tag WHERE id = ?";
+    private static final String INSERT_GIFT_CERTIFICATE_TAG = "INSERT INTO gift_certificate_has_tag " +
+            "(gift_certificate_id, tag_id) VALUES (?, ?)";
     private static final String DELETE_GIFT_CERTIFICATE_TAGS = "DELETE FROM gift_certificate_has_tag WHERE tag_id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
@@ -65,6 +68,11 @@ public class TagDaoImpl implements TagDao {
     public boolean delete(Long id) {
         int updatedRows = jdbcTemplate.update(DELETE_TAG, id);
         return updatedRows > 0;
+    }
+
+    @Override
+    public void saveTagToGiftCertificate(Long giftCertificateId, Long tagId) {
+        jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_TAG, giftCertificateId, tagId);
     }
 
     @Override
