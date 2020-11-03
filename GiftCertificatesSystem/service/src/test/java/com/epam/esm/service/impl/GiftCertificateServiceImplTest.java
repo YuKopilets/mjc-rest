@@ -1,17 +1,18 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.context.TestConfig;
 import com.epam.esm.service.exception.ServiceException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,26 +23,35 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestConfig.class)
-@ActiveProfiles("test")
 class GiftCertificateServiceImplTest {
-    @Autowired
+    @Mock
     private GiftCertificateDao giftCertificateDao;
-    @Autowired
     private GiftCertificateService giftCertificateService;
 
-    @Test
-    void addGiftCertificateTest() {
-        GiftCertificate giftCertificate = createGiftCertificate();
+    @BeforeEach
+    void setUp() {
+        giftCertificateDao = Mockito.mock(GiftCertificateDaoImpl.class);
+        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateDao);
+    }
+
+    @AfterEach
+    void tearDown() {
+        giftCertificateDao = null;
+        giftCertificateService = null;
+    }
+
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void addGiftCertificateTest(GiftCertificate giftCertificate) {
         giftCertificateService.addGiftCertificate(giftCertificate);
         Mockito.verify(giftCertificateDao).save(giftCertificate);
     }
 
-    @Test
-    void getGiftCertificateByIdTest() throws ServiceException {
-        Optional<GiftCertificate> giftCertificate = Optional.ofNullable(createGiftCertificate());
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificate);
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void getGiftCertificateByIdTest(GiftCertificate giftCertificate) throws ServiceException {
+        Optional<GiftCertificate> giftCertificateOptional = Optional.ofNullable(giftCertificate);
+        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
         giftCertificateService.getGiftCertificateById(1L);
         Mockito.verify(giftCertificateDao, Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
@@ -52,36 +62,40 @@ class GiftCertificateServiceImplTest {
         assertThrows(ServiceException.class, () -> giftCertificateService.getGiftCertificateById(1L));
     }
 
-    @Test
-    void getAllGiftCertificatesTest() {
-        List<GiftCertificate> exceptedGiftCertificates = createExpectedGiftCertificates();
+    @ParameterizedTest
+    @MethodSource("prepareExpectedGiftCertificates")
+    void getAllGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates) {
         Mockito.when(giftCertificateDao.findAll()).thenReturn(exceptedGiftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getAllGiftCertificates();
         assertEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
-    @Test
-    void getAllGiftCertificatesNegativeTest() {
-        List<GiftCertificate> exceptedGiftCertificates = createExpectedGiftCertificates();
+    @ParameterizedTest
+    @MethodSource("prepareExpectedGiftCertificates")
+    void getAllGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getAllGiftCertificates();
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
-    @Test
-    void updateGiftCertificateTest() throws ServiceException {
-        Optional<GiftCertificate> giftCertificate = Optional.ofNullable(createGiftCertificate());
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificate);
-        giftCertificateService.updateGiftCertificate(giftCertificate.get());
-        Mockito.verify(giftCertificateDao).update(giftCertificate.get());
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void updateGiftCertificateTest(GiftCertificate giftCertificate) throws ServiceException {
+        Optional<GiftCertificate> giftCertificateOptional = Optional.ofNullable(giftCertificate);
+        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
+        if (giftCertificateOptional.isPresent()) {
+            giftCertificateService.updateGiftCertificate(giftCertificateOptional.get());
+            Mockito.verify(giftCertificateDao).update(giftCertificateOptional.get());
+        }
     }
 
-    @Test
-    void updateGiftCertificateNegativeTest() {
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void updateGiftCertificateNegativeTest(GiftCertificate giftCertificate) {
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ServiceException.class,
-                () -> giftCertificateService.updateGiftCertificate(createGiftCertificate())
+                () -> giftCertificateService.updateGiftCertificate(giftCertificate)
         );
     }
 
@@ -97,9 +111,9 @@ class GiftCertificateServiceImplTest {
         assertThrows(ServiceException.class, () -> giftCertificateService.removeGiftCertificate(-1L));
     }
 
-    private GiftCertificate createGiftCertificate() {
+    private static Arguments[] prepareGiftCertificate() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        return GiftCertificate.builder()
+        GiftCertificate giftCertificate =GiftCertificate.builder()
                 .id(1L)
                 .name("test name")
                 .description("test description")
@@ -108,9 +122,10 @@ class GiftCertificateServiceImplTest {
                 .lastUpdateDate(localDateTime)
                 .duration(25)
                 .build();
+        return new Arguments[]{Arguments.of(giftCertificate)};
     }
 
-    private List<GiftCertificate> createExpectedGiftCertificates() {
+    private static Arguments[] prepareExpectedGiftCertificates() {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
@@ -145,6 +160,6 @@ class GiftCertificateServiceImplTest {
         expectedGiftCertificates.add(firstCertificate);
         expectedGiftCertificates.add(secondCertificate);
         expectedGiftCertificates.add(thirdCertificate);
-        return expectedGiftCertificates;
+        return new Arguments[]{Arguments.of(expectedGiftCertificates)};
     }
 }

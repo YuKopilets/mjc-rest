@@ -49,7 +49,7 @@ public class GiftCertificateController {
         }
     }
 
-    @GetMapping()
+    @GetMapping
     public List<GiftCertificate> getGiftCertificates(
             @RequestParam(name = "tag_name", required = false) String tagName,
             @RequestParam(name = "part_of_name", required = false) String partOfName,

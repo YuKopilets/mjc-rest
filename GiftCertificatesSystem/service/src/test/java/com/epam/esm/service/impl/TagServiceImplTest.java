@@ -1,17 +1,18 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.context.TestConfig;
 import com.epam.esm.service.exception.ServiceException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +20,35 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestConfig.class)
-@ActiveProfiles("test")
 class TagServiceImplTest {
-    @Autowired
+    @Mock
     private TagDao tagDao;
-    @Autowired
     private TagService tagService;
 
-    @Test
-    void addGiftCertificateTest() {
-        Tag tag = createTag();
+    @BeforeEach
+    void setUp() {
+        tagDao = Mockito.mock(TagDaoImpl.class);
+        tagService = new TagServiceImpl(tagDao);
+    }
+
+    @AfterEach
+    void tearDown() {
+        tagDao = null;
+        tagService = null;
+    }
+
+    @ParameterizedTest
+    @MethodSource("prepareTag")
+    void addGiftCertificateTest(Tag tag) {
         tagService.addTag(tag);
         Mockito.verify(tagDao).save(tag);
     }
 
-    @Test
-    void getTagByIdTest() throws ServiceException {
-        Optional<Tag> tag = Optional.ofNullable(createTag());
-        Mockito.when(tagDao.findById(1L)).thenReturn(tag);
+    @ParameterizedTest
+    @MethodSource("prepareTag")
+    void getTagByIdTest(Tag tag) throws ServiceException {
+        Optional<Tag> tagOptional = Optional.ofNullable(tag);
+        Mockito.when(tagDao.findById(1L)).thenReturn(tagOptional);
         tagService.getTagById(1L);
         Mockito.verify(tagDao, Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
@@ -49,17 +59,17 @@ class TagServiceImplTest {
         assertThrows(ServiceException.class, () -> tagService.getTagById(1L));
     }
 
-    @Test
-    void getAllTagsTest() {
-        List<Tag> exceptedTags = createExceptedTags();
+    @ParameterizedTest
+    @MethodSource("prepareExceptedTags")
+    void getAllTagsTest(List<Tag> exceptedTags) {
         Mockito.when(tagDao.findAll()).thenReturn(exceptedTags);
         List<Tag> actualTags = tagService.getAllTags();
         assertEquals(exceptedTags, actualTags);
     }
 
-    @Test
-    void getAllTagsNegativeTest() {
-        List<Tag> exceptedTags = createExceptedTags();
+    @ParameterizedTest
+    @MethodSource("prepareExceptedTags")
+    void getAllTagsNegativeTest(List<Tag> exceptedTags) {
         List<Tag> tags = new ArrayList<>();
         Mockito.when(tagDao.findAll()).thenReturn(tags);
         List<Tag> actualTags = tagService.getAllTags();
@@ -78,14 +88,15 @@ class TagServiceImplTest {
         assertThrows(ServiceException.class, () -> tagService.removeTag(-1L));
     }
 
-    private Tag createTag() {
-        return Tag.builder()
+    private static Arguments[] prepareTag() {
+        Tag tag = Tag.builder()
                 .id(1L)
                 .name("test tag")
                 .build();
+        return new Arguments[]{Arguments.of(tag)};
     }
 
-    private List<Tag> createExceptedTags() {
+    private static Arguments[] prepareExceptedTags() {
         List<Tag> tags = new ArrayList<>();
         Tag firstTag = Tag.builder()
                 .id(1L)
@@ -112,6 +123,6 @@ class TagServiceImplTest {
         tags.add(thirdTag);
         tags.add(fourthTag);
         tags.add(fifthTag);
-        return tags;
+        return new Arguments[]{Arguments.of(tags)};
     }
 }
