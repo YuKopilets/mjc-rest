@@ -18,6 +18,9 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler {
+    private static final String TIMESTAMP = "timestamp";
+    private static final String MESSAGE = "message";
+
     @ExceptionHandler(InvalidRequestedIdServiceException.class)
     public ResponseEntity<Object> handleInvalidRequestedIdServiceException(InvalidRequestedIdServiceException ex, WebRequest request) {
         return handleException(ex, HttpStatus.NOT_FOUND);
@@ -28,10 +31,15 @@ public class ControllerExceptionHandler {
         return handleException(ex, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
+        return handleException(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private ResponseEntity<Object> handleException(Exception ex, HttpStatus httpStatus) {
         Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", ex.getMessage());
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(MESSAGE, ex.getMessage());
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(body, httpStatus);
     }
