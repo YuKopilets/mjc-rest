@@ -114,14 +114,14 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public void saveGiftCertificateTags(GiftCertificate giftCertificate) {
+    public void saveTags(GiftCertificate giftCertificate) {
         Long giftCertificateId = giftCertificate.getId();
         List<Tag> tags = giftCertificate.getTags();
         tags.forEach(tag -> jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tag.getId()));
     }
 
     @Override
-    public List<GiftCertificate> findAllGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery) {
+    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
         return jdbcTemplate.query(
                 SELECT_ALL_GIFT_CERTIFICATES_BY_QUERY_PARAMS + condition,
@@ -130,7 +130,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public void deleteTagsFromGiftCertificateById(Long giftCertificateId) {
+    public void deleteTagsById(Long giftCertificateId) {
         jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_TAGS, giftCertificateId);
     }
 }

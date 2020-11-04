@@ -19,6 +19,10 @@ CREATE TABLE gift_certificate_has_tag
 (
   gift_certificate_id BIGINT NOT NULL,
   tag_id BIGINT NOT NULL,
-  FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate(id),
+  FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate(id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
   FOREIGN KEY (tag_id) REFERENCES tag(id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
 );

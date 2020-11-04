@@ -3,10 +3,13 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.context.TestConfig;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -23,19 +26,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-@Sql({"/create_gift_certificates_system_schema.sql", "/gift_certificates_system_inserts.sql"})
+@Sql({"/drop_gift_certificates_system_schema.sql", "/create_gift_certificates_system_schema.sql"})
+@Sql(scripts = "/gift_certificates_system_inserts.sql")
 class GiftCertificateDaoImplTest {
     @Autowired
     private GiftCertificateDao giftCertificateDao;
 
-    @Test
-    void saveTest() {
-        GiftCertificate certificate = createGiftCertificate();
-        giftCertificateDao.save(certificate);
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void saveTest(GiftCertificate giftCertificate) {
+        giftCertificateDao.save(giftCertificate);
         Long expected = 4L;
-        Long actual = certificate.getId();
+        Long actual = giftCertificate.getId();
         assertEquals(expected, actual);
     }
 
@@ -53,9 +56,9 @@ class GiftCertificateDaoImplTest {
         assertFalse(giftCertificateById.isPresent());
     }
 
-    @Test
-    void findAllGiftCertificatesTest() {
-        List<GiftCertificate> expectedGiftCertificates = createExpectedGiftCertificates();
+    @ParameterizedTest
+    @MethodSource("prepareExpectedGiftCertificates")
+    void findAllGiftCertificatesTest(List<GiftCertificate> expectedGiftCertificates) {
         List<GiftCertificate> actualGiftCertificates = giftCertificateDao.findAll();
         assertEquals(expectedGiftCertificates, actualGiftCertificates);
     }
@@ -67,13 +70,13 @@ class GiftCertificateDaoImplTest {
         assertFalse(isEmpty);
     }
 
-    @Test
-    void updateTest() {
-        GiftCertificate expectedCertificate = createGiftCertificate();
-        expectedCertificate.setId(1L);
-        giftCertificateDao.update(expectedCertificate);
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void updateTest(GiftCertificate expectedGiftCertificate) {
+        expectedGiftCertificate.setId(1L);
+        giftCertificateDao.update(expectedGiftCertificate);
         GiftCertificate actualGiftCertificate = giftCertificateDao.findById(1L).get();
-        assertEquals(expectedCertificate, actualGiftCertificate);
+        assertEquals(expectedGiftCertificate, actualGiftCertificate);
     }
 
     @Test
@@ -88,23 +91,27 @@ class GiftCertificateDaoImplTest {
         assertFalse(isDeleted);
     }
 
-    private GiftCertificate createGiftCertificate() {
+    private static Arguments[] prepareGiftCertificate() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        return GiftCertificate.builder()
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag(5L, "sport"));
+        GiftCertificate giftCertificate = GiftCertificate.builder()
                 .name("test name")
                 .description("test description")
                 .price(BigDecimal.valueOf(20.30).setScale(2, RoundingMode.HALF_UP))
                 .createDate(localDateTime)
                 .lastUpdateDate(localDateTime)
                 .duration(25)
+                .tags(tags)
                 .build();
+        return new Arguments[]{Arguments.of(giftCertificate)};
     }
 
-    private List<GiftCertificate> createExpectedGiftCertificates() {
+    private static Arguments[] prepareExpectedGiftCertificates() {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
-        LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
-        LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
+        List<Tag> firstTags = new ArrayList<>();
+        firstTags.add(new Tag(5L, "sport"));
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -113,7 +120,12 @@ class GiftCertificateDaoImplTest {
                 .createDate(firstCertificateDateTime)
                 .lastUpdateDate(firstCertificateDateTime)
                 .duration(10)
+                .tags(firstTags)
                 .build();
+        LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
+        List<Tag> secondTags = new ArrayList<>();
+        secondTags.add(new Tag(2L, "spa"));
+        secondTags.add(new Tag(3L, "holiday"));
         GiftCertificate secondCertificate = GiftCertificate.builder()
                 .id(2L)
                 .name("secondCertificate")
@@ -122,7 +134,12 @@ class GiftCertificateDaoImplTest {
                 .createDate(secondCertificateDateTime)
                 .lastUpdateDate(secondCertificateDateTime)
                 .duration(10)
+                .tags(secondTags)
                 .build();
+        LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
+        List<Tag> thirdTags = new ArrayList<>();
+        thirdTags.add(new Tag(1L, "rest"));
+        thirdTags.add(new Tag(6L, "tourism"));
         GiftCertificate thirdCertificate = GiftCertificate.builder()
                 .id(3L)
                 .name("thirdCertificate")
@@ -131,10 +148,11 @@ class GiftCertificateDaoImplTest {
                 .createDate(thirdCertificateDateTime)
                 .lastUpdateDate(thirdCertificateDateTime)
                 .duration(12)
+                .tags(thirdTags)
                 .build();
         expectedGiftCertificates.add(firstCertificate);
         expectedGiftCertificates.add(secondCertificate);
         expectedGiftCertificates.add(thirdCertificate);
-        return expectedGiftCertificates;
+        return new Arguments[]{Arguments.of(expectedGiftCertificates)};
     }
 }

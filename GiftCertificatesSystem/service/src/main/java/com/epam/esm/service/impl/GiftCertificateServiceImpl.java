@@ -46,7 +46,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery) {
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
-            return giftCertificateDao.findAllGiftCertificatesByQueryParams(giftCertificateQuery);
+            return giftCertificateDao.findAllByQueryParams(giftCertificateQuery);
         } else {
             return giftCertificateDao.findAll();
         }
@@ -76,28 +76,28 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public void addGiftCertificateTags(GiftCertificate giftCertificate) {
-        giftCertificateDao.saveGiftCertificateTags(giftCertificate);
+        giftCertificateDao.saveTags(giftCertificate);
     }
 
     @Override
     public void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException {
         validateId(giftCertificateId);
-        giftCertificateDao.deleteTagsFromGiftCertificateById(giftCertificateId);
+        giftCertificateDao.deleteTagsById(giftCertificateId);
     }
 
     private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        if (!StringUtils.isEmpty(giftCertificateQuery.getTagName())
-                && !StringUtils.isEmpty(giftCertificateQuery.getPartOfName())
-                && !StringUtils.isEmpty(giftCertificateQuery.getPartOfDescription())
-                && !StringUtils.isEmpty(giftCertificateQuery.getSort())
+        if (!(StringUtils.isEmpty(giftCertificateQuery.getTagName())
+                && StringUtils.isEmpty(giftCertificateQuery.getPartOfName())
+                && StringUtils.isEmpty(giftCertificateQuery.getPartOfDescription())
+                && StringUtils.isEmpty(giftCertificateQuery.getSort()))
         ) {
-            return false;
-        } else {
             String sort = giftCertificateQuery.getSort();
             if (!StringUtils.isEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
                 giftCertificateQuery.setSort(null);
             }
             return true;
+        } else {
+            return false;
         }
     }
 

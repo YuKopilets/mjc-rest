@@ -6,9 +6,9 @@ import com.epam.esm.util.GiftCertificateQuery;
 import java.util.List;
 
 public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
-    void saveGiftCertificateTags(GiftCertificate giftCertificate);
+    void saveTags(GiftCertificate giftCertificate);
 
-    List<GiftCertificate> findAllGiftCertificatesByQueryParams(GiftCertificateQuery giftCertificateQuery);
+    List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery);
 
-    void deleteTagsFromGiftCertificateById(Long giftCertificateId);
+    void deleteTagsById(Long giftCertificateId);
 }

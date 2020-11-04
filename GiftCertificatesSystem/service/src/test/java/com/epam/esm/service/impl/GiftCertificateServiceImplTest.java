@@ -5,6 +5,7 @@ import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.util.GiftCertificateQuery;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,18 +65,20 @@ class GiftCertificateServiceImplTest {
 
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
-    void getAllGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates) {
+    void getGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates,
+                                    GiftCertificateQuery giftCertificateQuery) {
         Mockito.when(giftCertificateDao.findAll()).thenReturn(exceptedGiftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getAllGiftCertificates();
+        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery);
         assertEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
-    void getAllGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates) {
+    void getGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates,
+                                            GiftCertificateQuery giftCertificateQuery) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         Mockito.when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getAllGiftCertificates();
+        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery);
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -113,7 +116,7 @@ class GiftCertificateServiceImplTest {
 
     private static Arguments[] prepareGiftCertificate() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        GiftCertificate giftCertificate =GiftCertificate.builder()
+        GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("test name")
                 .description("test description")
@@ -128,8 +131,6 @@ class GiftCertificateServiceImplTest {
     private static Arguments[] prepareExpectedGiftCertificates() {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
-        LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
-        LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -139,6 +140,7 @@ class GiftCertificateServiceImplTest {
                 .lastUpdateDate(firstCertificateDateTime)
                 .duration(10)
                 .build();
+        LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         GiftCertificate secondCertificate = GiftCertificate.builder()
                 .id(2L)
                 .name("secondCertificate")
@@ -148,6 +150,7 @@ class GiftCertificateServiceImplTest {
                 .lastUpdateDate(secondCertificateDateTime)
                 .duration(10)
                 .build();
+        LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
         GiftCertificate thirdCertificate = GiftCertificate.builder()
                 .id(3L)
                 .name("thirdCertificate")
@@ -160,6 +163,10 @@ class GiftCertificateServiceImplTest {
         expectedGiftCertificates.add(firstCertificate);
         expectedGiftCertificates.add(secondCertificate);
         expectedGiftCertificates.add(thirdCertificate);
-        return new Arguments[]{Arguments.of(expectedGiftCertificates)};
+        return new Arguments[]{Arguments.of(expectedGiftCertificates, prepareGiftCertificateQuery())};
+    }
+
+    private static GiftCertificateQuery prepareGiftCertificateQuery() {
+        return new GiftCertificateQuery(null, null, null, null, null);
     }
 }

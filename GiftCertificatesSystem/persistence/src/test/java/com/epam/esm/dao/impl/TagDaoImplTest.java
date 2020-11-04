@@ -3,13 +3,12 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.context.TestConfig;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -23,34 +22,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-@Sql({"/create_gift_certificates_system_schema.sql", "/gift_certificates_system_inserts.sql"})
+@Sql({"/drop_gift_certificates_system_schema.sql", "/create_gift_certificates_system_schema.sql"})
+@Sql(scripts = {"/gift_certificates_system_inserts.sql"})
 class TagDaoImplTest {
     @Autowired
     private TagDao tagDao;
 
-    /*@BeforeAll
-    @Sql("/create_gift_certificates_system_schema.sql")
-    static void start() {
-
-    }
-
-    @AfterAll
-    @Sql("/drop_gift_certificates_system_schema.sql")
-    static void finish() {
-
-    }
-
-    @BeforeEach
-    @Sql("/gift_certificates_system_inserts.sql")
-    void setUp() {
-
-    }*/
-
-    @Test
-    void saveTest() {
-        Tag tag = createTag();
+    @ParameterizedTest
+    @MethodSource("prepareTag")
+    void saveTest(Tag tag) {
         tagDao.save(tag);
         Long expected = 7L;
         Long actual = tag.getId();
@@ -60,20 +41,20 @@ class TagDaoImplTest {
     @Test
     void findTagByIdTest() {
         Optional<Tag> tagById = tagDao.findById(1L);
-        String expected = "firstTag";
+        String expected = "rest";
         String actual = tagById.get().getName();
         assertEquals(expected, actual);
     }
 
     @Test
     void findTagByIdNegativeTest() {
-        Optional<Tag> tagById = tagDao.findById(6L);
+        Optional<Tag> tagById = tagDao.findById(7L);
         assertFalse(tagById.isPresent());
     }
 
-    @Test
-    void findAllTagsTest() {
-        List<Tag> expectedTags = createExceptedTags();
+    @ParameterizedTest
+    @MethodSource("prepareExceptedTags")
+    void findAllTagsTest(List<Tag> expectedTags) {
         List<Tag> actualTags = tagDao.findAll();
         assertEquals(expectedTags, actualTags);
     }
@@ -97,39 +78,45 @@ class TagDaoImplTest {
         assertFalse(isDeleted);
     }
 
-    private Tag createTag() {
-        return Tag.builder()
+    private static Arguments[] prepareTag() {
+        Tag tag = Tag.builder()
                 .name("test tag")
                 .build();
+        return new Arguments[]{Arguments.of(tag)};
     }
 
-    private List<Tag> createExceptedTags() {
+    private static Arguments[] prepareExceptedTags() {
         List<Tag> tags = new ArrayList<>();
-        Tag firstTag = Tag.builder()
+        Tag rest = Tag.builder()
                 .id(1L)
-                .name("firstTag")
+                .name("rest")
                 .build();
-        Tag secondTag = Tag.builder()
+        Tag spa = Tag.builder()
                 .id(2L)
-                .name("secondTag")
+                .name("spa")
                 .build();
-        Tag thirdTag = Tag.builder()
+        Tag holiday = Tag.builder()
                 .id(3L)
-                .name("thirdTag")
+                .name("holiday")
                 .build();
-        Tag fourthTag = Tag.builder()
+        Tag feast = Tag.builder()
                 .id(4L)
-                .name("fourthTag")
+                .name("feast")
                 .build();
-        Tag fifthTag = Tag.builder()
+        Tag sport = Tag.builder()
                 .id(5L)
-                .name("fifthTag")
+                .name("sport")
                 .build();
-        tags.add(firstTag);
-        tags.add(secondTag);
-        tags.add(thirdTag);
-        tags.add(fourthTag);
-        tags.add(fifthTag);
-        return tags;
+        Tag tourism = Tag.builder()
+                .id(6L)
+                .name("tourism")
+                .build();
+        tags.add(rest);
+        tags.add(spa);
+        tags.add(holiday);
+        tags.add(feast);
+        tags.add(sport);
+        tags.add(tourism);
+        return new Arguments[]{Arguments.of(tags)};
     }
 }

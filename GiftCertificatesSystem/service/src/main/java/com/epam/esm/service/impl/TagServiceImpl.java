@@ -47,7 +47,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException {
         validateId(tagId);
-        tagDao.deleteTagFromGiftCertificatesById(tagId);
+        tagDao.deleteFromGiftCertificatesById(tagId);
     }
 
     private void validateId(Long id) throws InvalidRequestedIdServiceException {

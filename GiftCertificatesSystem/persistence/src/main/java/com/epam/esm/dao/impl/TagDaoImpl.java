@@ -71,12 +71,12 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public void saveTagToGiftCertificate(Long giftCertificateId, Long tagId) {
+    public void saveToGiftCertificate(Long giftCertificateId, Long tagId) {
         jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_TAG, giftCertificateId, tagId);
     }
 
     @Override
-    public void deleteTagFromGiftCertificatesById(Long tagId) {
+    public void deleteFromGiftCertificatesById(Long tagId) {
         jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_TAGS, tagId);
     }
 }

@@ -15,6 +15,12 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery);
 
+    /**
+     *
+     * @param giftCertificate
+     * @return
+     * @throws GiftCertificateNotFoundServiceException in case of {@code id}
+     */
     GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException;
 
