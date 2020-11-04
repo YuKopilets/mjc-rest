@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQuery;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,13 +48,15 @@ public class GiftCertificateController {
         );
     }
 
-    @PutMapping
-    public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
+    @PutMapping(value = "/{id}")
+    public GiftCertificate updateGiftCertificate(@PathVariable long id, @RequestBody GiftCertificate giftCertificate) {
+        giftCertificate.setId(id);
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteGiftCertificate(@PathVariable long id) {
+    public HttpStatus deleteGiftCertificate(@PathVariable long id) {
         giftCertificateService.removeGiftCertificate(id);
+        return HttpStatus.OK;
     }
 }

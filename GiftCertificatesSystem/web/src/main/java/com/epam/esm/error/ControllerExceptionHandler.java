@@ -1,9 +1,6 @@
 package com.epam.esm.error;
 
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.ServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.service.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +23,9 @@ public class ControllerExceptionHandler {
         return handleException(ex, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({GiftCertificateNotFoundServiceException.class, TagNotFoundServiceException.class})
+    @ExceptionHandler({DeleteByRequestedIdServiceException.class,
+            GiftCertificateNotFoundServiceException.class,
+            TagNotFoundServiceException.class})
     public ResponseEntity<Object> handleServiceException(ServiceException ex, WebRequest request) {
         return handleException(ex, HttpStatus.BAD_REQUEST);
     }

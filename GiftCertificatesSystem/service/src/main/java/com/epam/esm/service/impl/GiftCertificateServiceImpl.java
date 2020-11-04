@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
@@ -68,10 +69,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException {
-        validateId(id);
-        giftCertificateDao.delete(id);
-        removeGiftCertificateTags(id);
+    public void removeGiftCertificate(Long id)
+            throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
+        if (giftCertificateDao.delete(id)) {
+            removeGiftCertificateTags(id);
+        } else {
+            throw new DeleteByRequestedIdServiceException("Delete gift certificate by requested id: " + id
+                    + " not completed");
+        }
     }
 
     @Override

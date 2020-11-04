@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,8 @@ public class TagController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteTag(@PathVariable long id) {
+    public HttpStatus deleteTag(@PathVariable long id) {
         tagService.removeTag(id);
+        return HttpStatus.OK;
     }
 }

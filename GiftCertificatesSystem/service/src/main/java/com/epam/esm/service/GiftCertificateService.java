@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
@@ -24,7 +25,7 @@ public interface GiftCertificateService {
     GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException;
 
-    void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException;
+    void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
 
     void addGiftCertificateTags(GiftCertificate giftCertificate);
 

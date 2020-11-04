@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 import org.springframework.stereotype.Service;
@@ -38,10 +39,13 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public void removeTag(Long id) throws InvalidRequestedIdServiceException {
+    public void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
         validateId(id);
-        tagDao.delete(id);
-        removeGiftCertificateTags(id);
+        if (tagDao.delete(id)) {
+            removeGiftCertificateTags(id);
+        } else {
+            throw new DeleteByRequestedIdServiceException("Delete tag by requested id: " + id + " not completed");
+        }
     }
 
     @Override

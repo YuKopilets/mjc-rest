@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 
@@ -13,7 +14,7 @@ public interface TagService {
 
     List<Tag> getAllTags();
 
-    void removeTag(Long id) throws InvalidRequestedIdServiceException;
+    void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
 
     void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException;
 }
