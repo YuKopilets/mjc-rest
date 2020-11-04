@@ -6,6 +6,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.util.QueryConditionUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String INSERT_GIFT_CERTIFICATE = "INSERT INTO gift_certificate " +
             "(name, description, price, create_date, last_update_date, duration) " +
@@ -54,11 +56,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateExtractor giftCertificateExtractor;
-
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateExtractor giftCertificateExtractor) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.giftCertificateExtractor = giftCertificateExtractor;
-    }
 
     @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {

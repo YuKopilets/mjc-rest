@@ -1,5 +1,14 @@
 package com.epam.esm.service.exception;
 
+/**
+ *
+ * {@code ServiceException} and its subclasses are generated when exceptions
+ * occur in the business logic layer.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see RuntimeException
+ */
 public class ServiceException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its

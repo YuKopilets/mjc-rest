@@ -1,5 +1,14 @@
 package com.epam.esm.service.exception;
 
+/**
+ *
+ * {@code DeleteByRequestedIdServiceException} is generated when exceptions
+ * occur in the business logic layer.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see ServiceException
+ */
 public class DeleteByRequestedIdServiceException extends ServiceException {
     /**
      * Constructs a new runtime exception with {@code null} as its

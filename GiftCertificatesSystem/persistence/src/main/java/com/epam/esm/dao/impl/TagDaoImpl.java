@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.mapper.TagMapper;
 import com.epam.esm.entity.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class TagDaoImpl implements TagDao {
     private static final String INSERT_TAG = "INSERT INTO tag (name) VALUES (?)";
     private static final String SELECT_TAG = "SELECT id, name FROM tag WHERE id = ?";
@@ -24,14 +26,8 @@ public class TagDaoImpl implements TagDao {
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
     private static final String DELETE_GIFT_CERTIFICATE_TAGS = "DELETE FROM gift_certificate_has_tag WHERE tag_id = ?";
 
-
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
-
-    public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.tagMapper = tagMapper;
-    }
 
     @Override
     public Tag save(Tag tag) {

@@ -7,21 +7,19 @@ import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
-
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao) {
-        this.giftCertificateDao = giftCertificateDao;
-    }
 
     @Override
     @Transactional
@@ -91,13 +89,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        if (!(StringUtils.isEmpty(giftCertificateQuery.getTagName())
-                && StringUtils.isEmpty(giftCertificateQuery.getPartOfName())
-                && StringUtils.isEmpty(giftCertificateQuery.getPartOfDescription())
-                && StringUtils.isEmpty(giftCertificateQuery.getSort()))
+        if (StringUtils.isNotEmpty(giftCertificateQuery.getTagName())
+                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfName())
+                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfDescription())
+                || StringUtils.isNotEmpty(giftCertificateQuery.getSort())
         ) {
             String sort = giftCertificateQuery.getSort();
-            if (!StringUtils.isEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
+            if (StringUtils.isNotEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
                 giftCertificateQuery.setSort(null);
             }
             return true;
