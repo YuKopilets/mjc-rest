@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +25,9 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException {
         validateId(id);
-        Optional<Tag> tagById = tagDao.findById(id);
-        return tagById.orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id + " not found!"));
+        return tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException(
+                "Tag with id=" + id + " not found!")
+        );
     }
 
     @Override

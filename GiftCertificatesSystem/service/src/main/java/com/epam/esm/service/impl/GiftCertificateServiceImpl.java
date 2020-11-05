@@ -36,9 +36,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificate getGiftCertificateById(Long id)
             throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException {
         validateId(id);
-        Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(id);
-        return giftCertificateById.orElseThrow(() ->
-                new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found")
+        return giftCertificateDao.findById(id).orElseThrow(
+                () -> new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found")
         );
     }
 
@@ -89,15 +88,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        if (StringUtils.isNotEmpty(giftCertificateQuery.getTagName())
-                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfName())
-                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfDescription())
-                || StringUtils.isNotEmpty(giftCertificateQuery.getSort())
-        ) {
-            String sort = giftCertificateQuery.getSort();
-            if (StringUtils.isNotEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
-                giftCertificateQuery.setSort(null);
-            }
+        if (isValidQueryParams(giftCertificateQuery)) {
+            initSortParam(giftCertificateQuery);
             return true;
         } else {
             return false;
@@ -105,31 +97,30 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean hasUpdateValues(GiftCertificate giftCertificate) {
-        if (giftCertificate.getName() != null
-                || giftCertificate.getDescription() != null
-                || giftCertificate.getPrice() != null
-                || giftCertificate.getDuration() != null
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+        return  giftCertificate.getName() != null || giftCertificate.getDescription() != null
+                || giftCertificate.getPrice() != null || giftCertificate.getDuration() != null;
     }
 
     private void setUpdateValues(GiftCertificate oldGiftCertificate, GiftCertificate giftCertificate) {
-        if (giftCertificate.getName() != null) {
-            oldGiftCertificate.setName(giftCertificate.getName());
-        }
-        if (giftCertificate.getDescription() != null) {
-            oldGiftCertificate.setDescription(giftCertificate.getDescription());
-        }
-        if (giftCertificate.getPrice() != null) {
-            oldGiftCertificate.setPrice(giftCertificate.getPrice());
-        }
-        if (giftCertificate.getDuration() != null) {
-            oldGiftCertificate.setDuration(giftCertificate.getDuration());
-        }
+        Optional.ofNullable(giftCertificate.getName()).ifPresent(oldGiftCertificate::setName);
+        Optional.ofNullable(giftCertificate.getDescription()).ifPresent(oldGiftCertificate::setDescription);
+        Optional.ofNullable(giftCertificate.getPrice()).ifPresent(oldGiftCertificate::setPrice);
+        Optional.ofNullable(giftCertificate.getDuration()).ifPresent(oldGiftCertificate::setDuration);
         oldGiftCertificate.setLastUpdateDate(LocalDateTime.now());
+    }
+
+    private boolean isValidQueryParams(GiftCertificateQuery giftCertificateQuery) {
+        return StringUtils.isNotEmpty(giftCertificateQuery.getTagName())
+                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfName())
+                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfDescription())
+                || StringUtils.isNotEmpty(giftCertificateQuery.getSort());
+    }
+
+    private void initSortParam(GiftCertificateQuery giftCertificateQuery) {
+        String sort = giftCertificateQuery.getSort();
+        if (StringUtils.isNotEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
+            giftCertificateQuery.setSort(StringUtils.EMPTY);
+        }
     }
 
     private void validateId(Long id) throws InvalidRequestedIdServiceException {

@@ -20,14 +20,10 @@ public enum QueryOrderType {
                 .filter(value -> value.name().equalsIgnoreCase(giftCertificateQuery.getSort()))
                 .findFirst()
                 .map(value -> value.getCondition() + orderType)
-                .orElse("");
+                .orElse(StringUtils.EMPTY);
     }
 
     private static String generateOrderType(String order) {
-        if (StringUtils.isNotEmpty(order) && "desc".equals(order)) {
-            return " DESC";
-        } else {
-            return "";
-        }
+        return StringUtils.isNotEmpty(order) && "desc".equals(order) ? " DESC" : StringUtils.EMPTY;
     }
 }

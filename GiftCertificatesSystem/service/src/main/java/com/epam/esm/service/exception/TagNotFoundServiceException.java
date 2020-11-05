@@ -1,7 +1,6 @@
 package com.epam.esm.service.exception;
 
 /**
- *
  * {@code TagNotFoundServiceException} is generated when exceptions
  * occur in the business logic layer.
  *

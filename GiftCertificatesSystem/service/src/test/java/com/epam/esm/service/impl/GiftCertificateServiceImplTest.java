@@ -87,10 +87,10 @@ class GiftCertificateServiceImplTest {
     void updateGiftCertificateTest(GiftCertificate giftCertificate) throws ServiceException {
         Optional<GiftCertificate> giftCertificateOptional = Optional.ofNullable(giftCertificate);
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
-        if (giftCertificateOptional.isPresent()) {
-            giftCertificateService.updateGiftCertificate(giftCertificateOptional.get());
-            Mockito.verify(giftCertificateDao).update(giftCertificateOptional.get());
-        }
+        giftCertificateOptional.ifPresent(actualGiftCertificate -> {
+            giftCertificateService.updateGiftCertificate(actualGiftCertificate);
+            Mockito.verify(giftCertificateDao).update(actualGiftCertificate);
+        });
     }
 
     @ParameterizedTest

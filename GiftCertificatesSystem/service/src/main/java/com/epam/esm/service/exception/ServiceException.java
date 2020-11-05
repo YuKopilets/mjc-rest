@@ -1,7 +1,6 @@
 package com.epam.esm.service.exception;
 
 /**
- *
  * {@code ServiceException} and its subclasses are generated when exceptions
  * occur in the business logic layer.
  *
