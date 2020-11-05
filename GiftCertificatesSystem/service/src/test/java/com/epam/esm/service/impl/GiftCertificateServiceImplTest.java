@@ -104,13 +104,13 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void removeGiftCertificateTest() throws ServiceException {
+        Mockito.when(giftCertificateDao.delete(1L)).thenReturn(true);
         giftCertificateService.removeGiftCertificate(1L);
         Mockito.verify(giftCertificateDao).delete(Mockito.anyLong());
     }
 
     @Test
     void removeGiftCertificateNegativeTest() {
-        Mockito.when(giftCertificateDao.delete(-1L)).thenReturn(true);
         assertThrows(ServiceException.class, () -> giftCertificateService.removeGiftCertificate(-1L));
     }
 

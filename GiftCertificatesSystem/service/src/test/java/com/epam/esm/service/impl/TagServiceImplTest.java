@@ -78,13 +78,13 @@ class TagServiceImplTest {
 
     @Test
     void removeTagTest() throws ServiceException {
+        Mockito.when(tagDao.delete(1L)).thenReturn(true);
         tagService.removeTag(1L);
         Mockito.verify(tagDao).delete(Mockito.anyLong());
     }
 
     @Test
     void removeTagNegativeTest() {
-        Mockito.when(tagDao.delete(-1L)).thenReturn(true);
         assertThrows(ServiceException.class, () -> tagService.removeTag(-1L));
     }
 

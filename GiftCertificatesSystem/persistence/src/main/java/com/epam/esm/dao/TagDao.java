@@ -4,7 +4,7 @@ import com.epam.esm.entity.Tag;
 
 /**
  * The interface Tag dao is expansion of CrudDao for additional
- * operations with <i>tag<i/> table and <i>gift_Certificate_has_tag<i/>
+ * operations with <i>tag</i> table and <i>gift_Certificate_has_tag</i>
  * cross table.
  *
  * @author Yuriy Kopilets
@@ -14,7 +14,7 @@ import com.epam.esm.entity.Tag;
 public interface TagDao extends CrudDao<Tag> {
     /**
      * Save tag to gift certificate. Insert single record to
-     * <i>gift_Certificate_has_tag<i/> table.
+     * <i>gift_Certificate_has_tag</i> table.
      * Create operation (CRUD).
      *
      * @param giftCertificateId the gift certificate id
@@ -24,7 +24,7 @@ public interface TagDao extends CrudDao<Tag> {
 
     /**
      * Delete tag from gift certificates by tag id.
-     * Delete record from <i>gift_Certificate_has_tag<i/>.
+     * Delete record from <i>gift_Certificate_has_tag</i>.
      * Delete operation (CRUD).
      *
      * @param tagId the tag id
