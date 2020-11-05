@@ -48,9 +48,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery) {
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
             return giftCertificateDao.findAllByQueryParams(giftCertificateQuery);
-        } else {
-            return giftCertificateDao.findAll();
         }
+        return giftCertificateDao.findAll();
     }
 
     @Override
@@ -94,13 +93,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (isValidQueryParams(giftCertificateQuery)) {
             initSortParam(giftCertificateQuery);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     private boolean hasUpdateValues(GiftCertificate giftCertificate) {
-        return  giftCertificate.getName() != null || giftCertificate.getDescription() != null
+        return giftCertificate.getName() != null || giftCertificate.getDescription() != null
                 || giftCertificate.getPrice() != null || giftCertificate.getDuration() != null;
     }
 
