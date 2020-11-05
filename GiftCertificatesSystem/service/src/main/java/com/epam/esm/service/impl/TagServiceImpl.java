@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * The type Tag service.
+ */
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {

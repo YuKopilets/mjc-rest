@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Gift certificate service.
+ */
 @Service
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
@@ -118,9 +121,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private void initSortParam(GiftCertificateQuery giftCertificateQuery) {
         String sort = giftCertificateQuery.getSort();
-        if (StringUtils.isNotEmpty(sort) && !("name".equals(sort) || "date".equals(sort))) {
+        if (isNotValidSortParam(sort)) {
             giftCertificateQuery.setSort(StringUtils.EMPTY);
         }
+    }
+
+    private boolean isNotValidSortParam(String sort) {
+        return StringUtils.isNotEmpty(sort) && !("name".equals(sort) || "date".equals(sort));
     }
 
     private void validateId(Long id) throws InvalidRequestedIdServiceException {

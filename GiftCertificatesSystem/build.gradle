@@ -24,6 +24,10 @@ allprojects {
         implementation group: 'org.springframework', name: 'spring-beans', version: '5.2.9.RELEASE'
         // https://mvnrepository.com/artifact/org.springframework/spring-jdbc
         implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.2.9.RELEASE'
+        // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.3'
+        // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+        implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.3'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
 
         compileOnly 'org.projectlombok:lombok:1.18.16'
