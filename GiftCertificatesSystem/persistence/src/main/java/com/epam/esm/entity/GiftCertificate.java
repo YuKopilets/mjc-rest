@@ -1,5 +1,9 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.entity.converter.JsonDurationDeserializer;
+import com.epam.esm.entity.converter.JsonDurationSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,7 +41,9 @@ public class GiftCertificate {
     private LocalDateTime createDate;
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
-    private Integer duration;
+    @JsonSerialize(using = JsonDurationSerializer.class)
+    @JsonDeserialize(using = JsonDurationDeserializer.class)
+    private Duration duration;
     @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.REMOVE)
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
