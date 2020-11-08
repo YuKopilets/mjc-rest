@@ -9,8 +9,8 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum QueryOrderType {
-    NAME(" ORDER BY gift_certificate.name"),
-    DATE(" ORDER BY gift_certificate.create_date");
+    NAME(" ORDER BY name"),
+    DATE(" ORDER BY lastUpdateDate");
 
     private final String condition;
 

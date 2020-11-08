@@ -8,9 +8,9 @@ import java.util.function.UnaryOperator;
 
 @RequiredArgsConstructor
 public enum QueryConditionType {
-    TAG_NAME("tag.name = '{0}'"),
-    PART_OF_NAME("gift_certificate.name LIKE '%{0}%'"),
-    PART_OF_DESCRIPTION("gift_certificate.description LIKE '%{0}%'");
+    TAG_NAME("Tag.name = ''{0}''"),
+    PART_OF_NAME("name LIKE ''%{0}%''"),
+    PART_OF_DESCRIPTION("description LIKE ''%{0}%''");
 
     private final String condition;
 

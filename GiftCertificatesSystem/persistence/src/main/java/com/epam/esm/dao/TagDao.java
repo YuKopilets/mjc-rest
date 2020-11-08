@@ -21,13 +21,4 @@ public interface TagDao extends CrudDao<Tag> {
      * @param tagId             the tag id
      */
     void saveToGiftCertificate(Long giftCertificateId, Long tagId);
-
-    /**
-     * Delete tag from gift certificates by tag id.
-     * Delete record from <i>gift_Certificate_has_tag</i>.
-     * Delete operation (CRUD).
-     *
-     * @param tagId the tag id
-     */
-    void deleteFromGiftCertificatesById(Long tagId);
 }

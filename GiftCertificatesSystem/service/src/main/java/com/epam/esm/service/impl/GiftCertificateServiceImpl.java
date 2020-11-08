@@ -71,7 +71,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void removeGiftCertificate(Long id)
             throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
         if (giftCertificateDao.delete(id)) {
-            removeGiftCertificateTags(id);
+
         } else {
             throw new DeleteByRequestedIdServiceException("Delete gift certificate by requested id: " + id
                     + " not completed");
@@ -81,12 +81,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void addGiftCertificateTags(GiftCertificate giftCertificate) {
         giftCertificateDao.saveTags(giftCertificate);
-    }
-
-    @Override
-    public void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException {
-        validateId(giftCertificateId);
-        giftCertificateDao.deleteTagsById(giftCertificateId);
     }
 
     private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {

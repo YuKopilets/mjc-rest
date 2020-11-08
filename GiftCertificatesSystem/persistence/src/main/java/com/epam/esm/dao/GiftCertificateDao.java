@@ -31,12 +31,4 @@ public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
      * @return the list of all found gift certificates
      */
     List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery);
-
-    /**
-     * Delete tags by id from <i>gift_Certificate_has_tag</i> table.
-     * Delete operation (CRUD).
-     *
-     * @param giftCertificateId the gift certificate id
-     */
-    void deleteTagsById(Long giftCertificateId);
 }

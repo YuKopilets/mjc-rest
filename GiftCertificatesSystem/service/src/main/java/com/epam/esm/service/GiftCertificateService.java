@@ -75,13 +75,4 @@ public interface GiftCertificateService {
      * @param giftCertificate the gift certificate with required tags to add
      */
     void addGiftCertificateTags(GiftCertificate giftCertificate);
-
-    /**
-     * Remove gift certificate tags.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @throws InvalidRequestedIdServiceException in case of {@code id is not
-     * valid to do operation}
-     */
-    void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException;
 }

@@ -51,13 +51,4 @@ public interface TagService {
      * current id hasn't been deleted}
      */
     void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
-
-    /**
-     * Remove tag in gift certificates.
-     *
-     * @param tagId the tag id
-     * @throws InvalidRequestedIdServiceException in case of {@code id is not
-     * valid to do operation}
-     */
-    void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException;
 }
