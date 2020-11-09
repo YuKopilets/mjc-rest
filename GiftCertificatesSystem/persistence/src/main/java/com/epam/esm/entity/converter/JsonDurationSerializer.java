@@ -21,10 +21,6 @@ public class JsonDurationSerializer extends JsonSerializer<Duration> {
     @Override
     public void serialize(Duration value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         long days = value.toDays();
-        if (days == 1) {
-            gen.writeString(days + DAY);
-        } else {
-            gen.writeString(days + DAYS);
-        }
+        gen.writeString(days + (days == 1 ? DAY : DAYS));
     }
 }

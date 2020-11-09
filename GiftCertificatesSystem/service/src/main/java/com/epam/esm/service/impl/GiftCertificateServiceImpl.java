@@ -67,7 +67,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    @Transactional
     public void removeGiftCertificate(Long id)
             throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
         if (giftCertificateDao.delete(id)) {

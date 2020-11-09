@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:datasource.properties")
 @ComponentScan("com.epam.esm.dao")
 @RequiredArgsConstructor
 public class PersistenceConfig {

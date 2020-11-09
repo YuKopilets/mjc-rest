@@ -24,3 +24,6 @@ INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_
 INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (2, 3);
 INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 1);
 INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 6);
+
+INSERT INTO user_account (login) VALUES ('user');
+INSERT INTO user_account (login) VALUES ('yura');

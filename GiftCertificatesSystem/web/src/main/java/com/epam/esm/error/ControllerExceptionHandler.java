@@ -1,10 +1,7 @@
 package com.epam.esm.error;
 
 import com.epam.esm.exception.JsonDeserializeException;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.service.exception.*;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -30,15 +27,16 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({
             DeleteByRequestedIdServiceException.class,
             GiftCertificateNotFoundServiceException.class,
-            TagNotFoundServiceException.class,
+            TagNotFoundServiceException.class
     })
-    public ResponseEntity<Object> handleNotFound(InvalidRequestedIdServiceException ex, WebRequest request) {
+    public ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({
             ConstraintViolationException.class,
             InvalidRequestedIdServiceException.class,
+            LoginIsNotValidServiceException.class,
             JsonMappingException.class,
             JsonDeserializeException.class
     })
