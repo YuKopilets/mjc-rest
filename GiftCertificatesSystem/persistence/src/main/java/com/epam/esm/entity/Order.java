@@ -28,6 +28,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime date;
+
     @ManyToMany(targetEntity = GiftCertificate.class, cascade = CascadeType.REMOVE)
     @JoinTable(name = "order_has_gift_certificate",
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),

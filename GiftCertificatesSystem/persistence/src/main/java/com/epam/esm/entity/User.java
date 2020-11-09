@@ -26,6 +26,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
+
     @OneToMany(targetEntity = Order.class, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_account_id")
     private List<Order> orders;

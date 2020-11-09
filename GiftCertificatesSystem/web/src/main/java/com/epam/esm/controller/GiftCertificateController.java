@@ -1,5 +1,7 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.GiftCertificatePatchDto;
+import com.epam.esm.dto.GiftCertificatePostDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQuery;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -27,7 +30,14 @@ public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
 
     @PostMapping
-    public GiftCertificate createGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
+    public GiftCertificate createGiftCertificate(@RequestBody @Valid GiftCertificatePostDto dto) {
+        GiftCertificate giftCertificate = GiftCertificate.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .price(dto.getPrice())
+                .duration(dto.getDuration())
+                .tags(dto.getTags())
+                .build();
         return giftCertificateService.addGiftCertificate(giftCertificate);
     }
 
@@ -50,8 +60,14 @@ public class GiftCertificateController {
     }
 
     @PatchMapping(value = "/{id}")
-    public GiftCertificate updateGiftCertificate(@PathVariable long id, @RequestBody GiftCertificate giftCertificate) {
-        giftCertificate.setId(id);
+    public GiftCertificate updateGiftCertificate(@PathVariable long id, @RequestBody @Valid GiftCertificatePatchDto dto) {
+        GiftCertificate giftCertificate = GiftCertificate.builder()
+                .id(id)
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .price(dto.getPrice())
+                .duration(dto.getDuration())
+                .build();
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }
 

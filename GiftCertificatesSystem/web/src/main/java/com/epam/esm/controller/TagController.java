@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,7 +26,10 @@ public class TagController {
     private final TagService tagService;
 
     @PostMapping
-    public Tag createTag(@RequestBody Tag tag) {
+    public Tag createTag(@RequestBody @Valid TagDto dto) {
+        Tag tag = Tag.builder()
+                .name(dto.getName())
+                .build();
         return tagService.addTag(tag);
     }
 

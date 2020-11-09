@@ -1,53 +1,24 @@
 package com.epam.esm.error;
 
-import com.epam.esm.exception.JsonDeserializeException;
-import com.epam.esm.service.exception.*;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RestControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE)
-public class ControllerExceptionHandler {
-    private static final String TIMESTAMP = "timestamp";
-    private static final String MESSAGE = "message";
+public abstract class ControllerExceptionHandler {
+    private static final String ERROR_MESSAGE = "message";
+    private static final String ERROR_TIMESTAMP = "timestamp";
+    private static final String ERROR_CODE = "code";
 
-    @ExceptionHandler({
-            DeleteByRequestedIdServiceException.class,
-            GiftCertificateNotFoundServiceException.class,
-            TagNotFoundServiceException.class
-    })
-    public ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request) {
-        return handleException(ex, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({
-            ConstraintViolationException.class,
-            InvalidRequestedIdServiceException.class,
-            LoginIsNotValidServiceException.class,
-            JsonMappingException.class,
-            JsonDeserializeException.class
-    })
-    public ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
-        return handleException(ex, HttpStatus.BAD_REQUEST);
-    }
-
-    private ResponseEntity<Object> handleException(Exception ex, HttpStatus httpStatus) {
+    protected ResponseEntity<Object> handleException(Exception ex, HttpStatus httpStatus) {
         Map<String, Object> body = new HashMap<>();
-        body.put(TIMESTAMP, LocalDateTime.now());
-        body.put(MESSAGE, ex.getMessage());
+        body.put(ERROR_MESSAGE, ex.getMessage());
+        body.put(ERROR_TIMESTAMP, LocalDateTime.now());
+        body.put(ERROR_CODE, httpStatus.value());
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(body, httpStatus);
     }
