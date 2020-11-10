@@ -8,7 +8,6 @@ import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,12 +42,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional
     public void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
         validateId(id);
-        if (tagDao.delete(id)) {
-
-        } else {
+        if (!tagDao.delete(id)) {
             throw new DeleteByRequestedIdServiceException("Delete tag by requested id: " + id + " not completed");
         }
     }

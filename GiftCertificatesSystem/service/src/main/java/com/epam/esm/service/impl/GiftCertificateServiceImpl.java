@@ -12,9 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * The type implementation of Gift certificate service.
@@ -95,8 +99,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean hasUpdateValues(GiftCertificate giftCertificate) {
-        return giftCertificate.getName() != null || giftCertificate.getDescription() != null
-                || giftCertificate.getPrice() != null || giftCertificate.getDuration() != null;
+        String name = giftCertificate.getName();
+        String description = giftCertificate.getDescription();
+        BigDecimal price = giftCertificate.getPrice();
+        Duration duration = giftCertificate.getDuration();
+        return Stream.of(name, description, price, duration).anyMatch(Objects::nonNull);
     }
 
     private void setUpdateValues(GiftCertificate oldGiftCertificate, GiftCertificate giftCertificate) {
@@ -108,10 +115,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean isValidQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        return StringUtils.isNotEmpty(giftCertificateQuery.getTagName())
-                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfName())
-                || StringUtils.isNotEmpty(giftCertificateQuery.getPartOfDescription())
-                || StringUtils.isNotEmpty(giftCertificateQuery.getSort());
+        String tagName = giftCertificateQuery.getTagName();
+        String partOfName = giftCertificateQuery.getPartOfName();
+        String partOfDescription = giftCertificateQuery.getPartOfDescription();
+        String sort = giftCertificateQuery.getSort();
+        return Stream.of(tagName, partOfName, partOfDescription, sort).anyMatch(StringUtils::isNotEmpty);
     }
 
     private void initSortParam(GiftCertificateQuery giftCertificateQuery) {
