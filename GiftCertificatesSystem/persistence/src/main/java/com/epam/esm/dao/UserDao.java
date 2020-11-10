@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface UserDao {
     List<Order> findOrdersByLogin(String login);
+
+    Optional<Order> findOrderById(Long id);
 }

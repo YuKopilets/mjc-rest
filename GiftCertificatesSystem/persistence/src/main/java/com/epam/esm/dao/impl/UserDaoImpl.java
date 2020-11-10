@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends AbstractSessionDao implements UserDao {
-    private static final String SELECT_BY_LOGIN = "FROM User WHERE login = :login";
+    private static final String SELECT_BY_LOGIN = "SELECT u.orders FROM User u WHERE u.login = :login";
 
     public UserDaoImpl(LocalSessionFactoryBean localSessionFactory) {
         super(localSessionFactory);
@@ -20,12 +20,14 @@ public class UserDaoImpl extends AbstractSessionDao implements UserDao {
 
     @Override
     public List<Order> findOrdersByLogin(String login) {
-        return doWithSession(session -> {
-            User user = (User) session.createQuery(SELECT_BY_LOGIN)
-                            .setParameter("login", login)
-                            .setReadOnly(true)
-                            .getSingleResult();
-            return user.getOrders();
-        });
+        return doWithSession(session -> session.createQuery(SELECT_BY_LOGIN)
+                .setParameter("login", login)
+                .setReadOnly(true)
+                .list());
+    }
+
+    @Override
+    public Optional<Order> findOrderById(Long id) {
+        return Optional.ofNullable(doWithSession(session -> session.find(Order.class, id)));
     }
 }

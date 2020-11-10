@@ -63,7 +63,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `gift_certificates_system`.`order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gift_certificates_system`.`order` (
+CREATE TABLE IF NOT EXISTS `gift_certificates_system`.`user_order` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `date` DATETIME NOT NULL,
   `user_account_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `gift_certificates_system`.`order_has_gift_certificat
   PRIMARY KEY (`order_id`, `gift_certificate_id`),
   CONSTRAINT `fk_order_has_gift_certificate_order1`
     FOREIGN KEY (`order_id`)
-    REFERENCES `gift_certificates_system`.`order` (`id`)
+    REFERENCES `gift_certificates_system`.`user_order` (`id`)
     ON DELETE NO CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_has_gift_certificate_gift_certificate1`

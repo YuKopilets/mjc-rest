@@ -4,6 +4,7 @@ import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.exception.LoginIsNotValidServiceException;
+import com.epam.esm.service.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,11 @@ public class UserServiceImpl implements UserService {
             throw new LoginIsNotValidServiceException(login + " is not valid. Required login size not less 4 chars " +
                     "and not more then 50");
         }
+    }
+
+    @Override
+    public Order getUserOrderById(Long id) {
+        return userDao.findOrderById(id).orElseThrow(() -> new TagNotFoundServiceException("ORDER NOT FOUND"));
     }
 
     private boolean loginIsValid(String login) {

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface UserService {
     List<Order> getUserOrders(String login);
+
+    Order getUserOrderById(Long id);
 }
