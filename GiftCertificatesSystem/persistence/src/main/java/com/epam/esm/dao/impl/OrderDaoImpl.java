@@ -9,6 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type implementation of Order dao.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see OrderDao
+ * @see AbstractSessionDao
+ */
 @Repository
 public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     private static final String SELECT_BY_LOGIN = "SELECT orders FROM User WHERE login = :login";

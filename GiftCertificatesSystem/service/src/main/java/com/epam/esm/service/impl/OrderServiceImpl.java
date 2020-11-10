@@ -10,6 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type implementation of Order service.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see OrderService
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {

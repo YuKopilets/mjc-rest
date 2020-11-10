@@ -13,7 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * The type Tag service.
+ * The type implementation of Tag service.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see TagService
  */
 @Service
 @RequiredArgsConstructor

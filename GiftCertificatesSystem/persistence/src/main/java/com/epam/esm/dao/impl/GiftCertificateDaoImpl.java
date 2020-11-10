@@ -12,6 +12,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type implementation of Gift certificate dao.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see GiftCertificateDao
+ * @see AbstractSessionDao
+ */
 @Repository
 public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCertificateDao {
     private static final String SELECT_ALL_GIFT_CERTIFICATES = "FROM GiftCertificate";

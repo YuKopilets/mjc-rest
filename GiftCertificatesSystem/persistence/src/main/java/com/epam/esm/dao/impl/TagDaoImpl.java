@@ -9,6 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type implementation of Tag dao.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see TagDao
+ * @see AbstractSessionDao
+ */
 @Repository
 public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     private static final String SELECT_ALL_TAGS = "FROM Tag";

@@ -6,6 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.MessageFormat;
 import java.util.function.UnaryOperator;
 
+/**
+ * The enum {@code Query condition type} prepare <i>WHERE</i> conditions by
+ * query params.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 public enum QueryConditionType {
     TAG_NAME("Tag.name = ''{0}''"),
@@ -14,6 +21,12 @@ public enum QueryConditionType {
 
     private final String condition;
 
+    /**
+     * If defines a parameter as not empty, then adds it to the condition.
+     *
+     * @param param the param
+     * @return the unary operator
+     */
     public UnaryOperator<StringBuilder> generateCondition(String param) {
         return sb -> {
             if(StringUtils.isNotEmpty(param)) {

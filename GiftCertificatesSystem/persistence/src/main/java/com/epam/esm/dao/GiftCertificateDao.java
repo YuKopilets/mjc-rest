@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * The interface Gift certificate dao is expansion of CrudDao for additional
  * operations with <i>gift_Certificate</i> table and
- * <i>gift_Certificate_has_tag</i> cross table.
+ * <i>gift_Certificate_has_tag</i> associated table.
  *
  * @author Yuriy Kopilets
  * @version 1.0

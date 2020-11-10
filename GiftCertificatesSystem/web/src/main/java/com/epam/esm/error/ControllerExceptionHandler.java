@@ -8,6 +8,13 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The abstract type Controller exception handler for common handle operations
+ * and logging.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @Slf4j
 public abstract class ControllerExceptionHandler {
     private static final String ERROR_MESSAGE = "message";

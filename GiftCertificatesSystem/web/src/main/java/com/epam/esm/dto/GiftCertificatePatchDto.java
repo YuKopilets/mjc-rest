@@ -11,6 +11,13 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Duration;
 
+/**
+ * The {@code Gift certificate patch dto} is dto for transferring gift
+ * certificate data after request with <b>PATCH</b> http method.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @Value
 public class GiftCertificatePatchDto {
     @Size(min = 6, max = 255)

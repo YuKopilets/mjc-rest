@@ -1,8 +1,8 @@
 package com.epam.esm.service.exception;
 
 /**
- * {@code InvalidRequestedIdServiceException} is generated when exceptions
- * occur in the business logic layer.
+ * {@code InvalidRequestedIdServiceException} is generated while validation of
+ * id value (id must be > 0).
  *
  * @author Yuriy Kopilets
  * @version 1.0

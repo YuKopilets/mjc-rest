@@ -17,7 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The type Gift certificate service.
+ * The type implementation of Gift certificate service.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see GiftCertificateService
  */
 @Service
 @RequiredArgsConstructor
