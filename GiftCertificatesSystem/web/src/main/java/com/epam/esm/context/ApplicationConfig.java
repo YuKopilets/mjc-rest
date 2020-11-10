@@ -1,7 +1,6 @@
 package com.epam.esm.context;
 
 import com.epam.esm.service.context.ServiceConfig;
-import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
@@ -17,7 +16,6 @@ import java.util.Arrays;
 @EnableAutoConfiguration
 @ComponentScan("com.epam.esm")
 @Import({PersistenceConfig.class, ServiceConfig.class})
-@EnableAdminServer
 public class ApplicationConfig {
     public static void main(String[] args) {
         SpringApplication.run(ApplicationConfig.class, args);
