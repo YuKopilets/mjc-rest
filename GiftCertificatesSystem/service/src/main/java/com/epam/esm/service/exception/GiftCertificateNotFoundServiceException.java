@@ -1,8 +1,8 @@
 package com.epam.esm.service.exception;
 
 /**
- * {@code GiftCertificateNotFoundServiceException} is generated when exceptions
- * occur in the business logic layer.
+ * {@code GiftCertificateNotFoundServiceException} is generated when gift
+ * certificate not found in the database
  *
  * @author Yuriy Kopilets
  * @version 1.0

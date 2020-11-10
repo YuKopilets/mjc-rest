@@ -5,7 +5,7 @@ import com.epam.esm.entity.Tag;
 /**
  * The interface Tag dao is expansion of CrudDao for additional
  * operations with <i>tag</i> table and <i>gift_Certificate_has_tag</i>
- * cross table.
+ * associated table.
  *
  * @author Yuriy Kopilets
  * @version 1.0

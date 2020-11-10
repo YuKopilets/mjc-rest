@@ -17,9 +17,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * The type Special controller with highest priority {@code @Order}
+ * for defining exceptions and handling them.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see ControllerExceptionHandler
+ */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SpecialControllerExceptionHandler extends ControllerExceptionHandler {
+    /**
+     * {@code @ExceptionHandler} defines exceptions for handling like <i>not
+     * found</i> status
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler({
             DeleteByRequestedIdServiceException.class,
             GiftCertificateNotFoundServiceException.class,
@@ -30,6 +46,14 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
         return handleException(ex, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * {@code @ExceptionHandler} defines exceptions for handling like <i>bad
+     * request</i> status
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             InvalidRequestedIdServiceException.class,

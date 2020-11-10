@@ -18,6 +18,10 @@ import java.util.List;
 
 /**
  * The type Tag controller.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see RestController
  */
 @RestController
 @RequestMapping("/tags")

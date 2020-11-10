@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The interface Crud dao.
+ * The common interface Crud dao with CRUD operations to database.
  *
- * @param <T> the type parameter
+ * @param <T> the entity type parameter
+ * @author Yuriy Kopilets
+ * @version 1.0
  */
 public interface CrudDao<T> {
     /**
@@ -18,17 +20,17 @@ public interface CrudDao<T> {
     T save(T entity);
 
     /**
-     * Find by id.
+     * Find entity by id.
      *
      * @param id the id
-     * @return the optional
+     * @return the optional entity
      */
     Optional<T> findById(Long id);
 
     /**
-     * Find all list.
+     * Find list of all entities.
      *
-     * @return the list
+     * @return the entities list
      */
     List<T> findAll();
 
@@ -36,12 +38,12 @@ public interface CrudDao<T> {
      * Update entity.
      *
      * @param entity the entity
-     * @return the entity
+     * @return the updated entity
      */
     T update(T entity);
 
     /**
-     * Delete boolean.
+     * Delete entity.
      *
      * @param id the id
      * @return the entity has been deleted

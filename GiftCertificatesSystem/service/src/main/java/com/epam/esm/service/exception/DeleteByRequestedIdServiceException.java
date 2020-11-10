@@ -1,8 +1,8 @@
 package com.epam.esm.service.exception;
 
 /**
- * {@code DeleteByRequestedIdServiceException} is generated when exceptions
- * occur in the business logic layer.
+ * {@code DeleteByRequestedIdServiceException} is generated while trying to
+ * delete entity by non-existent id
  *
  * @author Yuriy Kopilets
  * @version 1.0

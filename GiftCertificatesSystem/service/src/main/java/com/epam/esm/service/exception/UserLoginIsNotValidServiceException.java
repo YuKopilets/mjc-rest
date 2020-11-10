@@ -1,8 +1,8 @@
 package com.epam.esm.service.exception;
 
 /**
- * {@code UserLoginIsNotValidServiceException} is generated when exceptions
- * occur in the business logic layer.
+ * {@code UserLoginIsNotValidServiceException} is generated while validation of
+ * user login value.
  *
  * @author Yuriy Kopilets
  * @version 1.0

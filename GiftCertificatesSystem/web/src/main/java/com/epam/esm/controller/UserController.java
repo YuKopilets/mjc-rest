@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The type User controller.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see RestController
+ */
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor

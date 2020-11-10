@@ -22,6 +22,10 @@ import java.util.List;
 
 /**
  * The type Gift certificate controller.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see RestController
  */
 @RestController
 @RequestMapping("/certificates")

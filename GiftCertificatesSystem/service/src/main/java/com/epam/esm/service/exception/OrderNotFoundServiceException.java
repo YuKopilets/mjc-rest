@@ -1,8 +1,8 @@
 package com.epam.esm.service.exception;
 
 /**
- * {@code OrderNotFoundServiceException} is generated when exceptions
- * occur in the business logic layer.
+ * {@code OrderNotFoundServiceException} is generated when order not found
+ * in the database
  *
  * @author Yuriy Kopilets
  * @version 1.0
