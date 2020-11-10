@@ -1,20 +1,20 @@
 package com.epam.esm.service.exception;
 
 /**
- * {@code UserNotFoundServiceException} is generated when exceptions
+ * {@code UserLoginIsNotValidServiceException} is generated when exceptions
  * occur in the business logic layer.
  *
  * @author Yuriy Kopilets
  * @version 1.0
  * @see ServiceException
  */
-public class LoginIsNotValidServiceException extends ServiceException {
+public class UserLoginIsNotValidServiceException extends ServiceException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public LoginIsNotValidServiceException() {
+    public UserLoginIsNotValidServiceException() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class LoginIsNotValidServiceException extends ServiceException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public LoginIsNotValidServiceException(String message) {
+    public UserLoginIsNotValidServiceException(String message) {
         super(message);
     }
 
@@ -43,7 +43,7 @@ public class LoginIsNotValidServiceException extends ServiceException {
      *                unknown.)
      * @since 1.4
      */
-    public LoginIsNotValidServiceException(String message, Throwable cause) {
+    public UserLoginIsNotValidServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -60,7 +60,7 @@ public class LoginIsNotValidServiceException extends ServiceException {
      *              unknown.)
      * @since 1.4
      */
-    public LoginIsNotValidServiceException(Throwable cause) {
+    public UserLoginIsNotValidServiceException(Throwable cause) {
         super(cause);
     }
 
@@ -78,7 +78,7 @@ public class LoginIsNotValidServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public LoginIsNotValidServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public UserLoginIsNotValidServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

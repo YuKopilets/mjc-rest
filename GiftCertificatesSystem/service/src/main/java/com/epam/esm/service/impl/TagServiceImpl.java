@@ -28,8 +28,8 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException {
         validateId(id);
-        return tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException(
-                "Tag with id=" + id + " not found!")
+        return tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id
+                + " not found!")
         );
     }
 

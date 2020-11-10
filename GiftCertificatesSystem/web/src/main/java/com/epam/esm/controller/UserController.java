@@ -1,9 +1,10 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.entity.Order;
-import com.epam.esm.service.UserService;
+import com.epam.esm.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +18,11 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final OrderService orderService;
 
     @GetMapping(value = "/{login}/orders")
     public CollectionModel<Order> getUserOrders(@PathVariable String login) {
-        List<Order> orders = userService.getUserOrders(login);
+        List<Order> orders = orderService.getUserOrders(login);
         orders.forEach(order -> {
             Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                     .slash(login)
@@ -34,9 +35,18 @@ public class UserController {
     }
 
     @GetMapping(value = "/{login}/orders/{id}")
-    public Order getUserOrderById(@PathVariable String login, @PathVariable long id) {
-        Order order = userService.getUserOrderById(id);
-
-        return order;
+    public EntityModel<Order> getUserOrderById(@PathVariable String login, @PathVariable long id) {
+        Order order = orderService.getUserOrderById(id);
+        order.getGiftCertificates().forEach(giftCertificate -> {
+            Link link = WebMvcLinkBuilder.linkTo(GiftCertificateController.class)
+                    .slash(giftCertificate.getId())
+                    .withRel("giftCertificates");
+            order.add(link);
+        });
+        Link link = WebMvcLinkBuilder.linkTo(UserController.class)
+                .slash(login)
+                .slash("orders")
+                .withRel("allUserOrders");
+        return EntityModel.of(order, link);
     }
 }

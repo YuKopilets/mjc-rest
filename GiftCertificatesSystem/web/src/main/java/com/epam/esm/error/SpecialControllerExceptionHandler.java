@@ -18,7 +18,8 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
     @ExceptionHandler({
             DeleteByRequestedIdServiceException.class,
             GiftCertificateNotFoundServiceException.class,
-            TagNotFoundServiceException.class
+            TagNotFoundServiceException.class,
+            OrderNotFoundServiceException.class
     })
     public ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.NOT_FOUND);
@@ -27,7 +28,7 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             InvalidRequestedIdServiceException.class,
-            LoginIsNotValidServiceException.class,
+            UserLoginIsNotValidServiceException.class,
             JsonMappingException.class,
             JsonDeserializeException.class
     })
