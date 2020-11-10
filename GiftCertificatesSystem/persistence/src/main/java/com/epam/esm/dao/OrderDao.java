@@ -16,13 +16,15 @@ import java.util.Optional;
  */
 public interface OrderDao {
     /**
-     * Find list of orders by user login.
+     * Find list of orders by user login. The {@code page number}
+     * can show which part of list needed to return.
      * Read operation (CRUD).
      *
      * @param login the login
+     * @param page  the page
      * @return the list
      */
-    List<Order> findOrdersByLogin(String login);
+    List<Order> findOrdersByLogin(String login, int page);
 
     /**
      * Find order by id.

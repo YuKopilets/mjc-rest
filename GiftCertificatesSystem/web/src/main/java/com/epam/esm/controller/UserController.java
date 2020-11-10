@@ -7,10 +7,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,8 +25,11 @@ public class UserController {
     private final OrderService orderService;
 
     @GetMapping(value = "/{login}/orders")
-    public CollectionModel<Order> getUserOrders(@PathVariable String login) {
-        List<Order> orders = orderService.getUserOrders(login);
+    public CollectionModel<Order> getUserOrders(
+            @PathVariable String login,
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page
+    ) {
+        List<Order> orders = orderService.getUserOrders(login, page);
         orders.forEach(order -> {
             Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                     .slash(login)

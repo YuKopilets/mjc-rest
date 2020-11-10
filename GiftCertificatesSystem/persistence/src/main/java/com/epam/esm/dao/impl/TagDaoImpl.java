@@ -25,7 +25,7 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
 
     public TagDaoImpl(LocalSessionFactoryBean sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, 15);
     }
 
     public Tag save(Tag tag) {
@@ -39,8 +39,10 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     }
 
     @Override
-    public List<Tag> findAll() {
+    public List<Tag> findAll(int page) {
         return doWithSession(session -> session.createQuery(SELECT_ALL_TAGS, Tag.class)
+                .setFirstResult(calculateStartElementPosition(page))
+                .setMaxResults(getPageSize())
                 .setReadOnly(true)
                 .list()
         );

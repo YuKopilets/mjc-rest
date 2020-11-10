@@ -27,11 +27,11 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
             "name = :name, description = :description, price = :price, " +
             "lastUpdateDate = :last_update_date, duration = :duration WHERE id = :id";
     private static final String DELETE_GIFT_CERTIFICATE = "DELETE FROM GiftCertificate WHERE id = :id";
-    private static final String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
+    private static final String INSERT_GIFT_CERTIFICATE_TAG = "INSERT INTO gift_certificate_has_tag " +
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
 
     public GiftCertificateDaoImpl(LocalSessionFactoryBean sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, 8);
     }
 
     public GiftCertificate save(GiftCertificate giftCertificate) {
@@ -45,8 +45,10 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
+    public List<GiftCertificate> findAll(int page) {
         return doWithSession(session -> session.createQuery(SELECT_ALL_GIFT_CERTIFICATES, GiftCertificate.class)
+                .setFirstResult(calculateStartElementPosition(page))
+                .setMaxResults(getPageSize())
                 .setReadOnly(true)
                 .list()
         );
@@ -80,7 +82,7 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
         Long giftCertificateId = giftCertificate.getId();
         List<Tag> tags = giftCertificate.getTags();
         doWithSessionTransaction(session -> tags.stream()
-                .mapToInt(tag -> session.createNativeQuery(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID)
+                .mapToInt(tag -> session.createNativeQuery(INSERT_GIFT_CERTIFICATE_TAG)
                     .setParameter(1, giftCertificateId)
                     .setParameter(2, tag.getId())
                     .executeUpdate())
@@ -89,10 +91,12 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     }
 
     @Override
-    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery) {
+    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery, int page) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
         return doWithSession(session -> session.createQuery(SELECT_ALL_GIFT_CERTIFICATES + condition,
                 GiftCertificate.class)
+                .setFirstResult(calculateStartElementPosition(page))
+                .setMaxResults(getPageSize())
                 .setReadOnly(true)
                 .list());
     }

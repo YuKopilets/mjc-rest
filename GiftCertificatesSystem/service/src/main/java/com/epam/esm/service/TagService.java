@@ -3,6 +3,7 @@ package com.epam.esm.service;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
+import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 
 import java.util.List;
@@ -37,9 +38,12 @@ public interface TagService {
     /**
      * Get list of all tags.
      *
+     * @param page the page number
      * @return the list of all exists tags
+     * @throws PageNumberNotValidServiceException in case of {@code page
+     * number is not valid to get list}
      */
-    List<Tag> getAllTags();
+    List<Tag> getAllTags(int page) throws PageNumberNotValidServiceException;
 
     /**
      * Remove tag.

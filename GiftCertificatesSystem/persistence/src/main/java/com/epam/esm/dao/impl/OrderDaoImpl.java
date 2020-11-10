@@ -22,13 +22,15 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     private static final String SELECT_BY_LOGIN = "SELECT orders FROM User WHERE login = :login";
 
     public OrderDaoImpl(LocalSessionFactoryBean localSessionFactory) {
-        super(localSessionFactory);
+        super(localSessionFactory, 10);
     }
 
     @Override
-    public List<Order> findOrdersByLogin(String login) {
+    public List<Order> findOrdersByLogin(String login, int page) {
         return doWithSession(session -> session.createQuery(SELECT_BY_LOGIN)
                 .setParameter("login", login)
+                .setFirstResult(calculateStartElementPosition(page))
+                .setMaxResults(getPageSize())
                 .setReadOnly(true)
                 .list()
         );

@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
@@ -53,11 +54,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery) {
+    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page)
+            throws PageNumberNotValidServiceException {
+        validatePageNumber(page);
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
-            return giftCertificateDao.findAllByQueryParams(giftCertificateQuery);
+            return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, page);
         }
-        return giftCertificateDao.findAll();
+        return giftCertificateDao.findAll(page);
     }
 
     @Override
@@ -77,9 +80,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void removeGiftCertificate(Long id)
             throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
-        if (giftCertificateDao.delete(id)) {
-
-        } else {
+        if (!giftCertificateDao.delete(id)) {
             throw new DeleteByRequestedIdServiceException("Delete gift certificate by requested id: " + id
                     + " not completed");
         }
@@ -137,6 +138,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (id <= 0) {
             throw new InvalidRequestedIdServiceException("GiftCertificate id: " + id
                     + " does not fit the allowed gap. Expected gap: id > 0");
+        }
+    }
+
+    private void validatePageNumber(int page) {
+        if (page < 0) {
+            throw new PageNumberNotValidServiceException("Gift certificates can't be load. " + page
+                    + " is not valid value. Page must be positive number");
         }
     }
 }

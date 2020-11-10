@@ -56,10 +56,16 @@ public class GiftCertificateController {
             @RequestParam(name = "part_of_name", required = false) String partOfName,
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
             @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(name = "order", required = false) String order
+            @RequestParam(name = "order", required = false) String order,
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page
     ) {
         return giftCertificateService.getGiftCertificates(
-                new GiftCertificateQuery(tagName, partOfName, partOfDescription, sort, order)
+                new GiftCertificateQuery(tagName,
+                        partOfName,
+                        partOfDescription,
+                        sort,
+                        order
+                ), page
         );
     }
 

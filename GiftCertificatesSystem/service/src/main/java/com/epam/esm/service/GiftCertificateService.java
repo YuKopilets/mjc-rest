@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
@@ -42,9 +43,13 @@ public interface GiftCertificateService {
      *
      * @param giftCertificateQuery the query params for finding list of
      *                             gift certificate
+     * @param page                 the page number
      * @return the list of gift certificates matching search parameters
+     * @throws PageNumberNotValidServiceException in case of {@code page
+     * number is not valid to get list}
      */
-    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery);
+    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page)
+            throws PageNumberNotValidServiceException;
 
     /**
      * Update gift certificate. Update values of gift certificate if there are

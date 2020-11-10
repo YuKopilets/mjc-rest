@@ -5,6 +5,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
+import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags() {
-        return tagDao.findAll();
+    public List<Tag> getAllTags(int page) throws PageNumberNotValidServiceException {
+        validatePageNumber(page);
+        return tagDao.findAll(page);
     }
 
     @Override
@@ -53,6 +55,13 @@ public class TagServiceImpl implements TagService {
         if (id <= 0) {
             throw new InvalidRequestedIdServiceException("Tag id: " + id
                     + " does not fit the allowed gap. Expected gap: id > 0");
+        }
+    }
+
+    private void validatePageNumber(int page) {
+        if (page < 0) {
+            throw new PageNumberNotValidServiceException("Tags can't be load. " + page
+                    + " is not valid value. Page must be positive number");
         }
     }
 }
