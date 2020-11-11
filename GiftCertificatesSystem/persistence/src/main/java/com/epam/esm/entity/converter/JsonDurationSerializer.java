@@ -19,8 +19,8 @@ public class JsonDurationSerializer extends JsonSerializer<Duration> {
     private static final String DAYS = " days";
 
     @Override
-    public void serialize(Duration value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(Duration value, JsonGenerator generator, SerializerProvider provider) throws IOException {
         long days = value.toDays();
-        gen.writeString(days + (days == 1 ? DAY : DAYS));
+        generator.writeString(days + (days == 1 ? DAY : DAYS));
     }
 }
