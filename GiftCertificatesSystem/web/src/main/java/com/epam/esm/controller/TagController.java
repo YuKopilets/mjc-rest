@@ -1,11 +1,18 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.converter.TagDtoConverter;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,12 +29,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagController {
     private final TagService tagService;
+    private final TagDtoConverter dtoConverter;
 
     @PostMapping
     public Tag createTag(@RequestBody @Valid TagDto dto) {
-        Tag tag = Tag.builder()
-                .name(dto.getName())
-                .build();
+        Tag tag = dtoConverter.convertToTag(dto);
         return tagService.addTag(tag);
     }
 
@@ -42,8 +48,7 @@ public class TagController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteTag(@PathVariable long id) {
+    public void deleteTag(@PathVariable long id) {
         tagService.removeTag(id);
-        return HttpStatus.OK;
     }
 }

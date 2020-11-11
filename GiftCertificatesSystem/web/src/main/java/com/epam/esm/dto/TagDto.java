@@ -1,6 +1,8 @@
 package com.epam.esm.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -13,10 +15,12 @@ import javax.validation.constraints.Size;
  * @author Yuriy Kopilets
  * @version 1.0
  */
-@Value
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TagDto {
     @NotNull
     @Pattern(regexp = "^[A-Za-z0-9]+(\\s[A-Za-z0-9]+)*$")
     @Size(min = 4, max = 255)
-    String name;
+    private String name;
 }

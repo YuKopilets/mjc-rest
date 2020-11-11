@@ -1,12 +1,12 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.converter.GiftCertificateDtoConverter;
 import com.epam.esm.dto.GiftCertificatePatchDto;
 import com.epam.esm.dto.GiftCertificatePostDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,16 +32,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
+    private final GiftCertificateDtoConverter dtoConverter;
 
     @PostMapping
     public GiftCertificate createGiftCertificate(@RequestBody @Valid GiftCertificatePostDto dto) {
-        GiftCertificate giftCertificate = GiftCertificate.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .price(dto.getPrice())
-                .duration(dto.getDuration())
-                .tags(dto.getTags())
-                .build();
+        GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto);
         return giftCertificateService.addGiftCertificate(giftCertificate);
     }
 
@@ -59,31 +54,23 @@ public class GiftCertificateController {
             @RequestParam(name = "order", required = false) String order,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page
     ) {
-        return giftCertificateService.getGiftCertificates(
-                new GiftCertificateQuery(tagName,
-                        partOfName,
-                        partOfDescription,
-                        sort,
-                        order
-                ), page
-        );
+        GiftCertificateQuery query = prepareGiftCertificateQuery(tagName, partOfName, partOfDescription, sort, order);
+        return giftCertificateService.getGiftCertificates(query, page);
     }
 
     @PatchMapping(value = "/{id}")
     public GiftCertificate updateGiftCertificate(@PathVariable long id, @RequestBody @Valid GiftCertificatePatchDto dto) {
-        GiftCertificate giftCertificate = GiftCertificate.builder()
-                .id(id)
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .price(dto.getPrice())
-                .duration(dto.getDuration())
-                .build();
+        GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto, id);
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteGiftCertificate(@PathVariable long id) {
+    public void deleteGiftCertificate(@PathVariable long id) {
         giftCertificateService.removeGiftCertificate(id);
-        return HttpStatus.OK;
+    }
+
+    private GiftCertificateQuery prepareGiftCertificateQuery(String name, String partOfName, String partOfDescription,
+                                                             String sort, String order) {
+        return new GiftCertificateQuery(name, partOfName, partOfDescription, sort, order);
     }
 }
