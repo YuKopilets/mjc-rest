@@ -1,7 +1,6 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.exception.OpenSessionException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

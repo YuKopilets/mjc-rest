@@ -13,7 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The {@code Gift certificate post dto} is dto for transferring gift
@@ -44,5 +44,5 @@ public class GiftCertificatePostDto {
     Duration duration;
 
     @NotEmpty
-    List<Tag> tags;
+    Set<Tag> tags;
 }

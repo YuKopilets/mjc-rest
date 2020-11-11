@@ -15,9 +15,9 @@ import java.util.function.UnaryOperator;
  */
 @RequiredArgsConstructor
 public enum QueryConditionType {
-    TAG_NAME("Tag.name = ''{0}''"),
-    PART_OF_NAME("name LIKE ''%{0}%''"),
-    PART_OF_DESCRIPTION("description LIKE ''%{0}%''");
+    TAG_NAME("t.name = ''{0}''"),
+    PART_OF_NAME("gc.name LIKE ''%{0}%''"),
+    PART_OF_DESCRIPTION("gc.description LIKE ''%{0}%''");
 
     private final String condition;
 

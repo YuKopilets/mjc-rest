@@ -17,9 +17,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,7 +89,7 @@ class GiftCertificateDaoImplTest {
 
     private static Arguments[] prepareGiftCertificate() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        List<Tag> tags = new ArrayList<>();
+        Set<Tag> tags = new HashSet<>();
         tags.add(new Tag(5L, "sport"));
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .name("test name")
@@ -108,7 +106,7 @@ class GiftCertificateDaoImplTest {
     private static Arguments[] prepareExpectedGiftCertificates() {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
-        List<Tag> firstTags = new ArrayList<>();
+        Set<Tag> firstTags = new HashSet<>();
         firstTags.add(new Tag(5L, "sport"));
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
@@ -121,7 +119,7 @@ class GiftCertificateDaoImplTest {
                 .tags(firstTags)
                 .build();
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
-        List<Tag> secondTags = new ArrayList<>();
+        Set<Tag> secondTags = new HashSet<>();
         secondTags.add(new Tag(2L, "spa"));
         secondTags.add(new Tag(3L, "holiday"));
         GiftCertificate secondCertificate = GiftCertificate.builder()
@@ -135,7 +133,7 @@ class GiftCertificateDaoImplTest {
                 .tags(secondTags)
                 .build();
         LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
-        List<Tag> thirdTags = new ArrayList<>();
+        Set<Tag> thirdTags = new HashSet<>();
         thirdTags.add(new Tag(1L, "rest"));
         thirdTags.add(new Tag(6L, "tourism"));
         GiftCertificate thirdCertificate = GiftCertificate.builder()

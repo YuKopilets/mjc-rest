@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * The type implementation of Gift certificate dao.
@@ -22,7 +23,7 @@ import java.util.Optional;
  */
 @Repository
 public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCertificateDao {
-    private static final String SELECT_ALL_GIFT_CERTIFICATES = "FROM GiftCertificate";
+    private static final String SELECT_ALL_GIFT_CERTIFICATES = "SELECT gc FROM GiftCertificate gc JOIN FETCH gc.tags t";
     private static final String UPDATE_GIFT_CERTIFICATE = "UPDATE GiftCertificate SET " +
             "name = :name, description = :description, price = :price, " +
             "lastUpdateDate = :last_update_date, duration = :duration WHERE id = :id";
@@ -80,7 +81,7 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     @Override
     public void saveTags(GiftCertificate giftCertificate) {
         Long giftCertificateId = giftCertificate.getId();
-        List<Tag> tags = giftCertificate.getTags();
+        Set<Tag> tags = giftCertificate.getTags();
         doWithSessionTransaction(session -> tags.stream()
                 .mapToInt(tag -> session.createNativeQuery(INSERT_GIFT_CERTIFICATE_TAG)
                     .setParameter(1, giftCertificateId)

@@ -16,8 +16,8 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum QueryOrderType {
-    NAME(" ORDER BY name"),
-    DATE(" ORDER BY lastUpdateDate");
+    NAME(" ORDER BY gc.name"),
+    DATE(" ORDER BY gc.lastUpdateDate");
 
     private final String condition;
 
