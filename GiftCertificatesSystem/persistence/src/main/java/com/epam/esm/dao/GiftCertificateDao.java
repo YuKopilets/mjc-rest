@@ -24,13 +24,13 @@ public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
     void saveTags(GiftCertificate giftCertificate);
 
     /**
-     * Find List of all gift certificates by query params. The {@code
-     * page number} can show which part of list needed to return.
+     * Find List of all gift certificates by query params. The {@code page
+     * request} can show which part of list needed to return.
      * Read operation (CRUD).
      *
      * @param giftCertificateQuery the gift certificate query
-     * @param page                 the page number
+     * @param pageRequest          the number and size of page
      * @return the list of all found gift certificates
      */
-    List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery, int page);
+    List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery, PageRequest pageRequest);
 }

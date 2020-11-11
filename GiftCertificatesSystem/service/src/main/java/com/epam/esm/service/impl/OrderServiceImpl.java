@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.OrderDao;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
@@ -22,6 +23,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+    private static final int PAGINATION_PAGE_SIZE = 10;
+
     private final OrderDao orderDao;
 
     @Override
@@ -29,7 +32,8 @@ public class OrderServiceImpl implements OrderService {
             throws UserLoginIsNotValidServiceException, PageNumberNotValidServiceException {
         validateLogin(userLogin);
         validatePageNumber(page);
-        return orderDao.findOrdersByLogin(userLogin, page);
+        PageRequest pageRequest = new PageRequest(page, PAGINATION_PAGE_SIZE);
+        return orderDao.findOrdersByLogin(userLogin, pageRequest);
     }
 
     @Override

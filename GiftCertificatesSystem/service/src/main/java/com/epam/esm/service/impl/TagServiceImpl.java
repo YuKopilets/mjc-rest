@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
@@ -22,6 +23,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
+    private static final int PAGINATION_PAGE_SIZE = 15;
+
     private final TagDao tagDao;
 
     @Override
@@ -40,7 +43,8 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getAllTags(int page) throws PageNumberNotValidServiceException {
         validatePageNumber(page);
-        return tagDao.findAll(page);
+        PageRequest pageRequest = new PageRequest(page, PAGINATION_PAGE_SIZE);
+        return tagDao.findAll(pageRequest);
     }
 
     @Override

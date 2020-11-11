@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.util.GiftCertificateQuery;
@@ -32,7 +33,7 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
 
     public GiftCertificateDaoImpl(LocalSessionFactoryBean sessionFactory) {
-        super(sessionFactory, 8);
+        super(sessionFactory);
     }
 
     public GiftCertificate save(GiftCertificate giftCertificate) {
@@ -46,10 +47,10 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     }
 
     @Override
-    public List<GiftCertificate> findAll(int page) {
+    public List<GiftCertificate> findAll(PageRequest pageRequest) {
         return doWithSession(session -> session.createQuery(SELECT_ALL_GIFT_CERTIFICATES, GiftCertificate.class)
-                .setFirstResult(calculateStartElementPosition(page))
-                .setMaxResults(getPageSize())
+                .setFirstResult(pageRequest.calculateStartElementPosition())
+                .setMaxResults(pageRequest.getPageSize())
                 .setReadOnly(true)
                 .list()
         );
@@ -92,12 +93,13 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     }
 
     @Override
-    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery, int page) {
+    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery,
+                                                      PageRequest pageRequest) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
         return doWithSession(session -> session.createQuery(SELECT_ALL_GIFT_CERTIFICATES + condition,
                 GiftCertificate.class)
-                .setFirstResult(calculateStartElementPosition(page))
-                .setMaxResults(getPageSize())
+                .setFirstResult(pageRequest.calculateStartElementPosition())
+                .setMaxResults(pageRequest.getPageSize())
                 .setReadOnly(true)
                 .list());
     }

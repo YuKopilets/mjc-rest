@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.PageNumberNotValidServiceException;
@@ -31,6 +32,8 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
+    private static final int PAGINATION_PAGE_SIZE = 8;
+
     private final GiftCertificateDao giftCertificateDao;
 
     @Override
@@ -57,10 +60,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page)
             throws PageNumberNotValidServiceException {
         validatePageNumber(page);
+        PageRequest pageRequest = new PageRequest(page, PAGINATION_PAGE_SIZE);
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
-            return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, page);
+            return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
         }
-        return giftCertificateDao.findAll(page);
+        return giftCertificateDao.findAll(pageRequest);
     }
 
     @Override

@@ -19,7 +19,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public abstract class AbstractSessionDao {
     private final LocalSessionFactoryBean localSessionFactory;
-    private final int pageSize;
 
     /**
      * Provides possibilities for working with hibernate session.
@@ -49,20 +48,6 @@ public abstract class AbstractSessionDao {
         session.getTransaction().commit();
         session.close();
         return updatedRows;
-    }
-
-    /**
-     * Calculate start element position. Based on number of page.
-     *
-     * @param page the page number
-     * @return the position
-     */
-    protected int calculateStartElementPosition(int page) {
-        return pageSize * (page - 1);
-    }
-
-    protected int getPageSize() {
-        return pageSize;
     }
 
     private Session openSession() {

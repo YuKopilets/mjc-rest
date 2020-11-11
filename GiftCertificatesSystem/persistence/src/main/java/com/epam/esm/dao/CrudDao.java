@@ -28,13 +28,13 @@ public interface CrudDao<T> {
     Optional<T> findById(Long id);
 
     /**
-     * Find all list of entity. The {@code page number}
+     * Find all list of entity. The {@code page request}
      * can show which part of list needed to return.
      *
-     * @param page the page number
+     * @param pageRequest the number and size of page
      * @return the list
      */
-    List<T> findAll(int page);
+    List<T> findAll(PageRequest pageRequest);
 
     /**
      * Update entity.

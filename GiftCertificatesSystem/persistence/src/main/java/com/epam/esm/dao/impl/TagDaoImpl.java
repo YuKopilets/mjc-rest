@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -25,7 +26,7 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
 
     public TagDaoImpl(LocalSessionFactoryBean sessionFactory) {
-        super(sessionFactory, 15);
+        super(sessionFactory);
     }
 
     public Tag save(Tag tag) {
@@ -39,10 +40,10 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     }
 
     @Override
-    public List<Tag> findAll(int page) {
+    public List<Tag> findAll(PageRequest pageRequest) {
         return doWithSession(session -> session.createQuery(SELECT_ALL_TAGS, Tag.class)
-                .setFirstResult(calculateStartElementPosition(page))
-                .setMaxResults(getPageSize())
+                .setFirstResult(pageRequest.calculateStartElementPosition())
+                .setMaxResults(pageRequest.getPageSize())
                 .setReadOnly(true)
                 .list()
         );
