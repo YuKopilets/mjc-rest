@@ -62,8 +62,8 @@ class TagServiceImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void getAllTagsTest(List<Tag> exceptedTags) {
-        Mockito.when(tagDao.findAll()).thenReturn(exceptedTags);
-        List<Tag> actualTags = tagService.getAllTags();
+        Mockito.when(tagDao.findAll(1)).thenReturn(exceptedTags);
+        List<Tag> actualTags = tagService.getAllTags(1);
         assertEquals(exceptedTags, actualTags);
     }
 
@@ -71,8 +71,8 @@ class TagServiceImplTest {
     @MethodSource("prepareExceptedTags")
     void getAllTagsNegativeTest(List<Tag> exceptedTags) {
         List<Tag> tags = new ArrayList<>();
-        Mockito.when(tagDao.findAll()).thenReturn(tags);
-        List<Tag> actualTags = tagService.getAllTags();
+        Mockito.when(tagDao.findAll(1)).thenReturn(tags);
+        List<Tag> actualTags = tagService.getAllTags(1);
         assertNotEquals(exceptedTags, actualTags);
     }
 
