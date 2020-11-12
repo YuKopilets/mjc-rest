@@ -1,18 +1,16 @@
 package com.epam.esm.dto;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.converter.JsonDurationDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Value;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.Set;
 
 /**
@@ -40,8 +38,8 @@ public class GiftCertificatePostDto {
     BigDecimal price;
 
     @NotNull
-    @JsonDeserialize(using = JsonDurationDeserializer.class)
-    Duration duration;
+    @Min(value = 1)
+    Integer duration;
 
     @NotEmpty
     Set<Tag> tags;

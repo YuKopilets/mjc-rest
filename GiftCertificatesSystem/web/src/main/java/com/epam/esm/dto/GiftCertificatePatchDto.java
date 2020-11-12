@@ -1,15 +1,13 @@
 package com.epam.esm.dto;
 
-import com.epam.esm.entity.converter.JsonDurationDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Value;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.Duration;
 
 /**
  * The {@code Gift certificate patch dto} is dto for transferring gift
@@ -32,6 +30,6 @@ public class GiftCertificatePatchDto {
     @Digits(integer = 10, fraction = 2)
     BigDecimal price;
 
-    @JsonDeserialize(using = JsonDurationDeserializer.class)
-    Duration duration;
+    @Min(value = 1)
+    Integer duration;
 }
