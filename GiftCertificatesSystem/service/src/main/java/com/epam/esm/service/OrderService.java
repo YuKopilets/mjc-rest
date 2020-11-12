@@ -16,6 +16,14 @@ import java.util.List;
  */
 public interface OrderService {
     /**
+     * Add new order.
+     *
+     * @param order the order
+     * @return the order
+     */
+    Order addOrder(Order order);
+
+    /**
      * Get list of all user's orders by user login value.
      *
      * @param userLogin the user login
@@ -40,4 +48,11 @@ public interface OrderService {
      * current id not found}
      */
     Order getUserOrderById(Long id) throws OrderNotFoundServiceException;
+
+    /**
+     * Add order gift certificates.
+     *
+     * @param order the order with required gift certificates to add
+     */
+    void addOrderGiftCertificates(Order order);
 }

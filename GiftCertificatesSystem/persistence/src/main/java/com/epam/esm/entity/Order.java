@@ -44,6 +44,9 @@ public class Order extends RepresentationModel<Order> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_account_id")
+    private Long userId;
+
     @Column(nullable = false)
     private BigDecimal cost;
 

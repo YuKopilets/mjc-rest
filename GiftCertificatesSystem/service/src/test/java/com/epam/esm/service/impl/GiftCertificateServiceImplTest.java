@@ -68,7 +68,7 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates,
                                     GiftCertificateQuery giftCertificateQuery) {
-        Mockito.when(giftCertificateDao.findAll(1)).thenReturn(exceptedGiftCertificates);
+        //Mockito.when(giftCertificateDao.findAll(1)).thenReturn(exceptedGiftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery, 1);
         assertEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
@@ -78,7 +78,7 @@ class GiftCertificateServiceImplTest {
     void getGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates,
                                             GiftCertificateQuery giftCertificateQuery) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
-        Mockito.when(giftCertificateDao.findAll(1)).thenReturn(giftCertificates);
+        //Mockito.when(giftCertificateDao.findAll(1)).thenReturn(giftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery, 1);
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
