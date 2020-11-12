@@ -28,8 +28,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private static final int PAGINATION_PAGE_SIZE = 10;
-
     private final OrderDao orderDao;
 
     @Override
@@ -43,11 +41,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getUserOrders(String userLogin, int page)
+    public List<Order> getUserOrders(String userLogin, int page, int pageSize)
             throws UserLoginIsNotValidServiceException, PageNumberNotValidServiceException {
         validateLogin(userLogin);
         validatePageNumber(page);
-        PageRequest pageRequest = new PageRequest(page, PAGINATION_PAGE_SIZE);
+        PageRequest pageRequest = new PageRequest(page, pageSize);
         return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
     }
 

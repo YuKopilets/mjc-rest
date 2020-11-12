@@ -42,13 +42,14 @@ public interface GiftCertificateService {
      * are empty, method will return list of all gift certificates
      *
      * @param giftCertificateQuery the query params for finding list of
-     *                             gift certificate
+     * gift certificate
      * @param page                 the page number
+     * @param pageSize             the page size
      * @return the list of gift certificates matching search parameters
      * @throws PageNumberNotValidServiceException in case of {@code page
-     * number is not valid to get list}
+     *                                         number is not valid to get list}
      */
-    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page)
+    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
             throws PageNumberNotValidServiceException;
 
     /**

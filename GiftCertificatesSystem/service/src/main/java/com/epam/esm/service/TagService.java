@@ -38,12 +38,13 @@ public interface TagService {
     /**
      * Get list of all tags.
      *
-     * @param page the page number
+     * @param page     the page number
+     * @param pageSize the page size
      * @return the list of all exists tags
      * @throws PageNumberNotValidServiceException in case of {@code page
-     * number is not valid to get list}
+     *                                        number is not valid to get list}
      */
-    List<Tag> getAllTags(int page) throws PageNumberNotValidServiceException;
+    List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException;
 
     /**
      * Remove tag.

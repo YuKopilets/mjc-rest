@@ -23,8 +23,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
-    private static final int PAGINATION_PAGE_SIZE = 15;
-
     private final TagDao tagDao;
 
     @Override
@@ -41,9 +39,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags(int page) throws PageNumberNotValidServiceException {
+    public List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException {
         validatePageNumber(page);
-        PageRequest pageRequest = new PageRequest(page, PAGINATION_PAGE_SIZE);
+        PageRequest pageRequest = new PageRequest(page, pageSize);
         return tagDao.findAll(pageRequest);
     }
 

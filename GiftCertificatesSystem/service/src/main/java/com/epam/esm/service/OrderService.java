@@ -28,15 +28,16 @@ public interface OrderService {
      *
      * @param userLogin the user login
      * @param page      the page number
+     * @param pageSize  the page size
      * @return the orders
      * @throws UserLoginIsNotValidServiceException in case of {@code the user
      *                                             login is not valid}
      * @throws InvalidRequestedIdServiceException  in case of {@code id is
-     * not valid to do operation}
-     * @throws PageNumberNotValidServiceException in case of {@code page
-     * number is not valid to get list}
+     *                                             not valid to do operation}
+     * @throws PageNumberNotValidServiceException  in case of {@code page
+     *                                         number is not valid to get list}
      */
-    List<Order> getUserOrders(String userLogin, int page) throws UserLoginIsNotValidServiceException,
+    List<Order> getUserOrders(String userLogin, int page, int pageSize) throws UserLoginIsNotValidServiceException,
             InvalidRequestedIdServiceException, PageNumberNotValidServiceException;
 
     /**

@@ -1,6 +1,5 @@
 package com.epam.esm.dao;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -11,9 +10,8 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class PageRequest {
-    private final int pageNumber;
-    @Getter
-    private final int pageSize;
+    private final int page;
+    private final int size;
 
     /**
      * Calculate position of start element. Based on number and size of page.
@@ -21,6 +19,10 @@ public class PageRequest {
      * @return the position
      */
     public int calculateStartElementPosition() {
-        return pageSize * (pageNumber - 1);
+        return size * (page - 1);
+    }
+
+    public int getPageSize() {
+        return this.size;
     }
 }

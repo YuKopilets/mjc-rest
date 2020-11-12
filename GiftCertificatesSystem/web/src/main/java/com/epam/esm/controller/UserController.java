@@ -27,9 +27,10 @@ public class UserController {
     @GetMapping(value = "/{login}/orders")
     public CollectionModel<Order> getUserOrders(
             @PathVariable String login,
-            @RequestParam(name = "page", required = false, defaultValue = "1") int page
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<Order> orders = orderService.getUserOrders(login, page);
+        List<Order> orders = orderService.getUserOrders(login, page, pageSize);
         orders.forEach(order -> {
             Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                     .slash(login)

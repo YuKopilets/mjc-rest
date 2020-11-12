@@ -43,8 +43,9 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> getAllTags(@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-        return tagService.getAllTags(page);
+    public List<Tag> getAllTags(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+                                @RequestParam(name = "page_size", required = false, defaultValue = "15") int pageSize) {
+        return tagService.getAllTags(page, pageSize);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -55,14 +55,16 @@ public class GiftCertificateController {
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(name = "order", required = false) String order,
-            @RequestParam(name = "page", required = false, defaultValue = "1") int page
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "page_size", required = false, defaultValue = "8") int pageSize
     ) {
         GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
-        return giftCertificateService.getGiftCertificates(query, page);
+        return giftCertificateService.getGiftCertificates(query, page, pageSize);
     }
 
     @PatchMapping(value = "/{id}")
-    public GiftCertificate updateGiftCertificate(@PathVariable long id, @RequestBody @Valid GiftCertificatePatchDto dto) {
+    public GiftCertificate updateGiftCertificate(@PathVariable long id,
+                                                 @RequestBody @Valid GiftCertificatePatchDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto, id);
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }

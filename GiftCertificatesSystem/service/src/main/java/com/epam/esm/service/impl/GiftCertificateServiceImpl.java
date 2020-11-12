@@ -33,7 +33,8 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
-    private static final int PAGINATION_PAGE_SIZE = 8;
+    private static final String NAME_SORT = "name";
+    private static final String DATE_SORT = "date";
 
     private final GiftCertificateDao giftCertificateDao;
 
@@ -58,10 +59,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page)
+    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
             throws PageNumberNotValidServiceException {
         validatePageNumber(page);
-        PageRequest pageRequest = new PageRequest(page, PAGINATION_PAGE_SIZE);
+        PageRequest pageRequest = new PageRequest(page, pageSize);
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
             return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
         }
@@ -136,7 +137,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean isNotValidSortParam(String sort) {
-        return StringUtils.isNotEmpty(sort) && !("name".equals(sort) || "date".equals(sort));
+        return StringUtils.isNotEmpty(sort) && !(NAME_SORT.equals(sort) || DATE_SORT.equals(sort));
     }
 
     private void validateId(Long id) throws InvalidRequestedIdServiceException {
