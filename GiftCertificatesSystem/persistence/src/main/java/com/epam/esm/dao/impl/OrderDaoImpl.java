@@ -8,6 +8,8 @@ import com.epam.esm.entity.Order;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,5 +96,15 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
                 .executeUpdate()
         );
         return updatedRows > 0;
+    }
+
+    @Override
+    public long countOrders() {
+        return doWithSession(session -> {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Long> query = builder.createQuery(Long.class);
+            query.select(builder.count(query.from(Order.class)));
+            return session.createQuery(query).getSingleResult();
+        });
     }
 }

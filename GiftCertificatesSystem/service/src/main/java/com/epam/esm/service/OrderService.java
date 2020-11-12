@@ -56,4 +56,9 @@ public interface OrderService {
      * @param order the order with required gift certificates to add
      */
     void addOrderGiftCertificates(Order order);
+
+    /**
+     * Scan orders without calculated cost and calculate it for them.
+     */
+    void reviewOrdersCost();
 }

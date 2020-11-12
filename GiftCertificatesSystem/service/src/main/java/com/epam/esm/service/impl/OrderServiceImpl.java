@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,10 +63,33 @@ public class OrderServiceImpl implements OrderService {
         orderDao.saveGiftCertificates(order);
     }
 
+    @Override
+    public void reviewOrdersCost() {
+        long countOfOrders = orderDao.countOrders();
+        final int pageSize = 50;
+        long countOfPages = countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1;
+        for (int i = 1; i <= countOfPages; i++) {
+            PageRequest pageRequest = new PageRequest(i, pageSize);
+            List<Order> orders = recalculateOrdersCost(orderDao.findAll(pageRequest));
+            updateOrdersCost(orders);
+        }
+    }
+
     private BigDecimal calculateOrderCost(Order order) {
         return order.getGiftCertificates().stream()
                 .map(GiftCertificate::getPrice)
                 .reduce(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP), BigDecimal::add);
+    }
+
+    private List<Order> recalculateOrdersCost(List<Order> orders) {
+        orders.stream()
+                .filter(order -> order.getCost().doubleValue() == 0.0)
+                .forEach(order -> order.setCost(calculateOrderCost(order)));
+        return orders;
+    }
+
+    private void updateOrdersCost(List<Order> orders) {
+        orders.forEach(orderDao::update);
     }
 
     private void validateLogin(String login) {
