@@ -1,6 +1,6 @@
 package com.epam.esm.util;
 
-public class QueryConditionConstant {
+public final class QueryConditionConstant {
     public static final String WHERE = " WHERE ";
     public static final String AND = " AND ";
     public static final String OR = " OR ";

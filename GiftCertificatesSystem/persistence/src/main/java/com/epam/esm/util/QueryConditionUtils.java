@@ -24,10 +24,12 @@ public class QueryConditionUtils {
     public static String generateConditionByQueryParams(GiftCertificateQuery query) {
         StringBuilder condition = new StringBuilder();
         Set<String> tagNames = query.getTagNames();
+
         tagNames.forEach(tagName -> QueryConditionType.TAG_NAME.generateCondition(tagName).apply(condition));
         QueryConditionType.PART_OF_NAME.generateCondition(query.getPartOfName()).apply(condition);
         QueryConditionType.PART_OF_DESCRIPTION.generateCondition(query.getPartOfDescription()).apply(condition);
         condition.append(QueryOrderType.generateSortCondition(query));
+
         setBracketsIntoCondition(condition);
         return condition.toString();
     }
