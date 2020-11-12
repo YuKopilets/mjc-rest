@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The type Gift certificate controller.
@@ -47,14 +50,14 @@ public class GiftCertificateController {
 
     @GetMapping
     public List<GiftCertificate> getGiftCertificates(
-            @RequestParam(name = "tag_name", required = false) String tagName,
+            @RequestParam(name = "tag_name", required = false) String[] tagNames,
             @RequestParam(name = "part_of_name", required = false) String partOfName,
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(name = "order", required = false) String order,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page
     ) {
-        GiftCertificateQuery query = prepareGiftCertificateQuery(tagName, partOfName, partOfDescription, sort, order);
+        GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
         return giftCertificateService.getGiftCertificates(query, page);
     }
 
@@ -69,8 +72,12 @@ public class GiftCertificateController {
         giftCertificateService.removeGiftCertificate(id);
     }
 
-    private GiftCertificateQuery prepareGiftCertificateQuery(String name, String partOfName, String partOfDescription,
-                                                             String sort, String order) {
-        return new GiftCertificateQuery(name, partOfName, partOfDescription, sort, order);
+    private GiftCertificateQuery prepareGiftCertificateQuery(String[] tagNames, String partOfName,
+                                                             String partOfDescription, String sort, String order) {
+        Set<String> names = new HashSet<>();
+        if (tagNames != null) {
+            Collections.addAll(names, tagNames);
+        }
+        return new GiftCertificateQuery(names, partOfName, partOfDescription, sort, order);
     }
 }

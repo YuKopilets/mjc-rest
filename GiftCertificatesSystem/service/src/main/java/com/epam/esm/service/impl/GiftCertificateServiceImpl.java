@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -120,11 +121,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private boolean isValidQueryParams(GiftCertificateQuery giftCertificateQuery) {
-        String tagName = giftCertificateQuery.getTagName();
+        Set<String> tagNames = giftCertificateQuery.getTagNames();
         String partOfName = giftCertificateQuery.getPartOfName();
         String partOfDescription = giftCertificateQuery.getPartOfDescription();
         String sort = giftCertificateQuery.getSort();
-        return Stream.of(tagName, partOfName, partOfDescription, sort).anyMatch(StringUtils::isNotEmpty);
+        return !tagNames.isEmpty() || Stream.of(partOfName, partOfDescription, sort).anyMatch(StringUtils::isNotEmpty);
     }
 
     private void initSortParam(GiftCertificateQuery giftCertificateQuery) {

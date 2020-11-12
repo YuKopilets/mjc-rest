@@ -30,10 +30,15 @@ public enum QueryConditionType {
     public UnaryOperator<StringBuilder> generateCondition(String param) {
         return sb -> {
             if(StringUtils.isNotEmpty(param)) {
-                sb.append(sb.length() > 0 ? " AND " : " WHERE ");
+                sb.append(sb.length() > 0 ? defineConnectionOperator(sb) : QueryConditionConstant.WHERE);
                 sb.append(MessageFormat.format(this.condition, param));
             }
             return sb;
         };
+    }
+
+    private String defineConnectionOperator(StringBuilder sb) {
+        return sb.indexOf(QueryConditionConstant.TAG_NAME) != -1 && this.equals(TAG_NAME) ? QueryConditionConstant.OR
+                : QueryConditionConstant.AND;
     }
 }

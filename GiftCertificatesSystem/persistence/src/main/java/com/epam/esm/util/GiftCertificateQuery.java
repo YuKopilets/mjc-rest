@@ -4,6 +4,8 @@ import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 
+import java.util.Set;
+
 /**
  * The type Gift certificate query is immutable type for holding params of
  * <b>GET</b> http method for finding appropriate gift certificates.
@@ -14,7 +16,7 @@ import lombok.experimental.NonFinal;
  */
 @Value
 public class GiftCertificateQuery {
-    String tagName;
+    Set<String> tagNames;
     String partOfName;
     String partOfDescription;
     @Setter
