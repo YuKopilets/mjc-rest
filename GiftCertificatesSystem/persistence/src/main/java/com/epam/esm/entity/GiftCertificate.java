@@ -22,6 +22,17 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * The {@code type Gift certificate} is domain representation of
+ * <i>gift_certificate</i> table.
+ * It used for mapping to relational database.
+ * The {@code tags} implements linking with table <i>tag</i> using an additional
+ * table <i>gift_certificate_has_tag</i>.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see Entity
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -32,17 +43,24 @@ public class GiftCertificate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(nullable = false, columnDefinition = "text")
     private String description;
+
+    @Column(nullable = false, columnDefinition = "decimal(10,2)")
     private BigDecimal price;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
 
-    @Column(name = "last_update_date")
+    @Column(name = "last_update_date", nullable = false)
     private LocalDateTime lastUpdateDate;
 
     @JsonSerialize(using = JsonDurationSerializer.class)
+    @Column(nullable = false)
     private Duration duration;
 
     @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.REMOVE)

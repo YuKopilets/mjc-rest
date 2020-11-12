@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The {@code type Order} is domain representation of <i>user_order</i> table.
+ * It used for mapping to relational database.
+ * The {@code gift certificates} implements linking
+ * with table <i>gift_certificates</i>
+ * using an additional table <i>order_has_gift_certificate</i>.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see Entity
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -32,8 +44,10 @@ public class Order extends RepresentationModel<Order> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private BigDecimal cost;
 
+    @Column(nullable = false)
     private LocalDateTime date;
 
     @ManyToMany(targetEntity = GiftCertificate.class, cascade = CascadeType.REMOVE)
