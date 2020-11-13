@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.Order;
+import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.OrderNotFoundServiceException;
 import com.epam.esm.service.exception.PageNumberNotValidServiceException;
@@ -20,8 +21,10 @@ public interface OrderService {
      *
      * @param order the order
      * @return the order
+     * @throws GiftCertificateNotFoundServiceException in case of {@code gift
+     * certificate in list not found by id}
      */
-    Order addOrder(Order order);
+    Order addOrder(Order order) throws GiftCertificateNotFoundServiceException;
 
     /**
      * Get list of all user's orders by user login value.
@@ -35,7 +38,7 @@ public interface OrderService {
      * @throws InvalidRequestedIdServiceException  in case of {@code id is
      *                                             not valid to do operation}
      * @throws PageNumberNotValidServiceException  in case of {@code page
-     *                                         number is not valid to get list}
+     *                                             number is not valid to get list}
      */
     List<Order> getUserOrders(String userLogin, int page, int pageSize) throws UserLoginIsNotValidServiceException,
             InvalidRequestedIdServiceException, PageNumberNotValidServiceException;
@@ -46,7 +49,7 @@ public interface OrderService {
      * @param id the order id
      * @return the user's order by id
      * @throws OrderNotFoundServiceException in case of {@code order with
-     * current id not found}
+     *                                       current id not found}
      */
     Order getUserOrderById(Long id) throws OrderNotFoundServiceException;
 

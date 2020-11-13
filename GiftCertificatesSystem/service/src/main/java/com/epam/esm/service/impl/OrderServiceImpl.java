@@ -1,14 +1,16 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.OrderService;
+import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
+import com.epam.esm.service.exception.OrderNotFoundServiceException;
 import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
-import com.epam.esm.service.exception.OrderNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type implementation of Order service.
@@ -30,11 +32,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;
+    private final GiftCertificateDao giftCertificateDao;
 
     @Override
     @Transactional
-    public Order addOrder(Order order) {
+    public Order addOrder(Order order) throws GiftCertificateNotFoundServiceException {
         order.setDate(LocalDateTime.now());
+        prepareOrderGiftCertificates(order);
         order.setCost(calculateOrderCost(order));
         orderDao.save(order);
         addOrderGiftCertificates(order);
@@ -73,6 +77,15 @@ public class OrderServiceImpl implements OrderService {
             List<Order> orders = recalculateOrdersCost(orderDao.findAll(pageRequest));
             updateOrdersCost(orders);
         }
+    }
+
+    private void prepareOrderGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {
+        order.setGiftCertificates(order.getGiftCertificates().stream()
+                .map(giftCertificate -> giftCertificateDao.findById(giftCertificate.getId())
+                        .orElseThrow(() -> new GiftCertificateNotFoundServiceException("Gift certificate with id="
+                                + giftCertificate.getId() + " not found!")))
+                .collect(Collectors.toList())
+        );
     }
 
     private BigDecimal calculateOrderCost(Order order) {
