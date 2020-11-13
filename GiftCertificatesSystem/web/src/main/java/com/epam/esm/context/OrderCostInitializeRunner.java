@@ -20,6 +20,6 @@ public class OrderCostInitializeRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //orderService.reviewOrdersCost();
+        orderService.reviewOrdersCost();
     }
 }
