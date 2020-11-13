@@ -1,5 +1,12 @@
 package com.epam.esm.util;
 
+/**
+ * The {@code Query condition constant} contains constant values for creating
+ * sql condition.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 public final class QueryConditionConstant {
     public static final String WHERE = " WHERE ";
     public static final String AND = " AND ";
