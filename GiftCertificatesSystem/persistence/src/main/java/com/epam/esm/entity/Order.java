@@ -19,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,4 +60,8 @@ public class Order extends RepresentationModel<Order> {
             inverseJoinColumns = @JoinColumn(name = "gift_certificate_id")
     )
     private List<GiftCertificate> giftCertificates;
+
+    public List<GiftCertificate> getGiftCertificates() {
+        return Collections.unmodifiableList(giftCertificates);
+    }
 }

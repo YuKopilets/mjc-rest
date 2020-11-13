@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -69,4 +70,8 @@ public class GiftCertificate {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id")
     )
     private Set<Tag> tags;
+
+    public Set<Tag> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
 }

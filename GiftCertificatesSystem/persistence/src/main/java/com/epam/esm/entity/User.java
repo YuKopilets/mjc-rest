@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,4 +45,8 @@ public class User {
     @JoinColumn(name = "user_account_id", referencedColumnName = "id")
     @ToString.Exclude
     private List<Order> orders;
+
+    public List<Order> getOrders() {
+        return Collections.unmodifiableList(orders);
+    }
 }
