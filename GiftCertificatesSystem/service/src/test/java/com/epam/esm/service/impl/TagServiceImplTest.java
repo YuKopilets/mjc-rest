@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
@@ -62,8 +63,9 @@ class TagServiceImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void getAllTagsTest(List<Tag> exceptedTags) {
-        Mockito.when(tagDao.findAll(1)).thenReturn(exceptedTags);
-        List<Tag> actualTags = tagService.getAllTags(1);
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedTags);
+        List<Tag> actualTags = tagService.getAllTags(1, 10);
         assertEquals(exceptedTags, actualTags);
     }
 
@@ -71,8 +73,9 @@ class TagServiceImplTest {
     @MethodSource("prepareExceptedTags")
     void getAllTagsNegativeTest(List<Tag> exceptedTags) {
         List<Tag> tags = new ArrayList<>();
-        Mockito.when(tagDao.findAll(1)).thenReturn(tags);
-        List<Tag> actualTags = tagService.getAllTags(1);
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(tags);
+        List<Tag> actualTags = tagService.getAllTags(1, 10);
         assertNotEquals(exceptedTags, actualTags);
     }
 

@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
@@ -19,9 +20,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,8 +67,10 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates,
                                     GiftCertificateQuery giftCertificateQuery) {
-        //Mockito.when(giftCertificateDao.findAll(1)).thenReturn(exceptedGiftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery, 1);
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
+        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
+                1, 10);
         assertEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -78,8 +79,10 @@ class GiftCertificateServiceImplTest {
     void getGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates,
                                             GiftCertificateQuery giftCertificateQuery) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
-        //Mockito.when(giftCertificateDao.findAll(1)).thenReturn(giftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery, 1);
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(giftCertificates);
+        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
+                1, 10);
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -168,6 +171,7 @@ class GiftCertificateServiceImplTest {
     }
 
     private static GiftCertificateQuery prepareGiftCertificateQuery() {
-        return new GiftCertificateQuery(null, null, null, null, null);
+        Set<String> tagNames = new HashSet<>();
+        return new GiftCertificateQuery(tagNames, null, null, null, null);
     }
 }
