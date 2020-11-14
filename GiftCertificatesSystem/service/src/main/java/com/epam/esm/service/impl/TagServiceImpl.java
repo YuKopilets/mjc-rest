@@ -48,6 +48,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Tag getMostWidelyUsedTag() {
+        return tagDao.findMostWidelyUsedTag();
+    }
+
+    @Override
     public void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
         validateId(id);
         if (!tagDao.delete(id)) {

@@ -12,6 +12,7 @@ import com.epam.esm.entity.Tag;
  * @see CrudDao
  */
 public interface TagDao extends CrudDao<Tag> {
+    Tag findMostWidelyUsedTag();
     /**
      * Save tag to gift certificate. Insert single record to
      * <i>gift_Certificate_has_tag</i> table.

@@ -46,6 +46,7 @@ public interface TagService {
      */
     List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException;
 
+    Tag getMostWidelyUsedTag();
     /**
      * Remove tag.
      *

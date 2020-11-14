@@ -48,6 +48,11 @@ public class TagController {
         return tagService.getAllTags(page, pageSize);
     }
 
+    @GetMapping("/most-used")
+    public Tag getUsed() {
+        return tagService.getMostWidelyUsedTag();
+    }
+
     @DeleteMapping(value = "/{id}")
     public void deleteTag(@PathVariable long id) {
         tagService.removeTag(id);
