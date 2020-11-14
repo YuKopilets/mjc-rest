@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 
 import java.util.Set;
 
-
 /**
  * The {@code Query condition utils} is utility class for working with params of
  * <b>GET</b> http method.

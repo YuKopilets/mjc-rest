@@ -1,7 +1,14 @@
 package com.epam.esm.error;
 
 import com.epam.esm.exception.JsonDeserializeException;
-import com.epam.esm.service.exception.*;
+import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
+import com.epam.esm.service.exception.OrderNotFoundServiceException;
+import com.epam.esm.service.exception.PageNumberNotValidServiceException;
+import com.epam.esm.service.exception.PageSizeNotValidServiceException;
+import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
