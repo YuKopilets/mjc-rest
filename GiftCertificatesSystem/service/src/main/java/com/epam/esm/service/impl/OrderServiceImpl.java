@@ -62,8 +62,7 @@ public class OrderServiceImpl implements OrderService {
         );
     }
 
-    @Override
-    public void addOrderGiftCertificates(Order order) {
+    private void addOrderGiftCertificates(Order order) {
         orderDao.saveGiftCertificates(order);
     }
 

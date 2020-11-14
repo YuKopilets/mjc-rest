@@ -74,11 +74,4 @@ public interface GiftCertificateService {
      * by current id hasn't been deleted}
      */
     void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
-
-    /**
-     * Add gift certificate tags.
-     *
-     * @param giftCertificate the gift certificate with required tags to add
-     */
-    void addGiftCertificateTags(GiftCertificate giftCertificate);
 }

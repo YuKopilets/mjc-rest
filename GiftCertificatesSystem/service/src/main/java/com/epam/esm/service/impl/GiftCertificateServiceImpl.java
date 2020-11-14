@@ -92,8 +92,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         }
     }
 
-    @Override
-    public void addGiftCertificateTags(GiftCertificate giftCertificate) {
+    private void addGiftCertificateTags(GiftCertificate giftCertificate) {
         giftCertificateDao.saveTags(giftCertificate);
     }
 
