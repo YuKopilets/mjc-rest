@@ -1,5 +1,6 @@
 package com.epam.esm.dao;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @author Yuriy Kopilets
  * @version 1.0
  */
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public class PageRequest {
     private final int page;
