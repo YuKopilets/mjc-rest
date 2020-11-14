@@ -4,10 +4,7 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.service.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +38,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException {
         validatePageNumber(page);
+        validatePageSize(pageSize);
         PageRequest pageRequest = new PageRequest(page, pageSize);
         return tagDao.findAll(pageRequest);
     }
@@ -63,6 +61,13 @@ public class TagServiceImpl implements TagService {
     private void validatePageNumber(int page) {
         if (page < 0) {
             throw new PageNumberNotValidServiceException("Tags can't be load. " + page
+                    + " is not valid value. Page must be positive number");
+        }
+    }
+
+    private void validatePageSize(int size) {
+        if (size < 0) {
+            throw new PageSizeNotValidServiceException("Tags can't be load. " + size
                     + " is not valid value. Page must be positive number");
         }
     }

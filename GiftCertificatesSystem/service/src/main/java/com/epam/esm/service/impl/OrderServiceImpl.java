@@ -6,11 +6,7 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.OrderService;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.OrderNotFoundServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
+import com.epam.esm.service.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
             throws UserLoginIsNotValidServiceException, PageNumberNotValidServiceException {
         validateLogin(userLogin);
         validatePageNumber(page);
+        validatePageSize(pageSize);
         PageRequest pageRequest = new PageRequest(page, pageSize);
         return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
     }
@@ -122,6 +119,13 @@ public class OrderServiceImpl implements OrderService {
     private void validatePageNumber(int page) {
         if (page < 0) {
             throw new PageNumberNotValidServiceException("Orders can't be load. " + page
+                    + " is not valid value. Page must be positive number");
+        }
+    }
+
+    private void validatePageSize(int size) {
+        if (size < 0) {
+            throw new PageSizeNotValidServiceException("Orders can't be load. " + size
                     + " is not valid value. Page must be positive number");
         }
     }

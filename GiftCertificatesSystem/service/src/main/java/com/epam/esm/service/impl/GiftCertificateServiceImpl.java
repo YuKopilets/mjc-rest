@@ -3,12 +3,9 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
+import com.epam.esm.service.exception.*;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -62,6 +59,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
             throws PageNumberNotValidServiceException {
         validatePageNumber(page);
+        validatePageSize(pageSize);
         PageRequest pageRequest = new PageRequest(page, pageSize);
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
             return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
@@ -149,6 +147,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private void validatePageNumber(int page) {
         if (page < 0) {
             throw new PageNumberNotValidServiceException("Gift certificates can't be load. " + page
+                    + " is not valid value. Page must be positive number");
+        }
+    }
+
+    private void validatePageSize(int size) {
+        if (size < 0) {
+            throw new PageSizeNotValidServiceException("Gift certificates can't be load. " + size
                     + " is not valid value. Page must be positive number");
         }
     }

@@ -1,12 +1,7 @@
 package com.epam.esm.error;
 
 import com.epam.esm.exception.JsonDeserializeException;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.OrderNotFoundServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
-import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
+import com.epam.esm.service.exception.*;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -58,6 +53,8 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
             MethodArgumentNotValidException.class,
             InvalidRequestedIdServiceException.class,
             UserLoginIsNotValidServiceException.class,
+            PageNumberNotValidServiceException.class,
+            PageSizeNotValidServiceException.class,
             JsonMappingException.class,
             JsonDeserializeException.class
     })
