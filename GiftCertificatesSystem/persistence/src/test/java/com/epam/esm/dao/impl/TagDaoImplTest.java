@@ -1,8 +1,10 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.context.TestConfig;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -39,7 +41,7 @@ class TagDaoImplTest {
     void findTagByIdTest() {
         Optional<Tag> tagById = tagDao.findById(1L);
         String expected = "rest";
-        String actual = tagById.get().getName();
+        String actual = tagById.isPresent() ? tagById.get().getName() : StringUtils.EMPTY;
         assertEquals(expected, actual);
     }
 
@@ -52,15 +54,17 @@ class TagDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void findAllTagsTest(List<Tag> expectedTags) {
-        //List<Tag> actualTags = tagDao.findAll();
-        //assertEquals(expectedTags, actualTags);
+        PageRequest pageRequest = new PageRequest(1, 6);
+        List<Tag> actualTags = tagDao.findAll(pageRequest);
+        assertEquals(expectedTags, actualTags);
     }
 
-    @Test
-    void findAllTagsNegativeTest() {
-        //List<Tag> actualTags = tagDao.findAll();
-        //boolean isEmpty = actualTags.isEmpty();
-        //assertFalse(isEmpty);
+    @ParameterizedTest
+    @MethodSource("prepareExceptedTags")
+    void findAllTagsNegativeTest(List<Tag> expectedTags) {
+        PageRequest pageRequest = new PageRequest(1, 3);
+        List<Tag> actualTags = tagDao.findAll(pageRequest);
+        assertNotEquals(expectedTags, actualTags);
     }
 
     @Test
