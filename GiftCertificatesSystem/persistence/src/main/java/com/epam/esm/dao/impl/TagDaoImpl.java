@@ -24,12 +24,18 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     private static final String DELETE_TAG = "DELETE FROM Tag WHERE id = :id";
     private static final String INSERT_GIFT_CERTIFICATE_TAG = "INSERT INTO gift_certificate_has_tag " +
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
-    private static final String SELECT_MOST_WIDELY_USED_TAG = "SELECT t FROM Order o " +
-            "JOIN o.giftCertificates gc " +
-            "JOIN gc.tags t " +
-            "WHERE o.cost = (SELECT max(cost) FROM Order) " +
-            "GROUP BY gc.id " +
-            "ORDER BY count(t) DESC";
+    private static final String SELECT_MOST_WIDELY_USED_TAG = "SELECT t.id, t.name FROM user_order o " +
+            "INNER JOIN order_has_gift_certificate ogc ON o.id = ogc.order_id " +
+            "AND o.user_account_id = (SELECT user_account_id FROM user_order o " +
+            "GROUP BY o.user_account_id " +
+            "            ORDER BY sum(cost) DESC " +
+            "            LIMIT 1) " +
+            "INNER JOIN gift_certificate gc ON ogc.gift_certificate_id = gc.id " +
+            "INNER JOIN gift_certificate_has_tag gct ON gc.id = gct.gift_certificate_id " +
+            "INNER JOIN tag t ON gct.tag_id = t.id " +
+            "GROUP BY t.id " +
+            "    ORDER BY count(t.id) DESC " +
+            "LIMIT 1";
 
     public TagDaoImpl(LocalSessionFactoryBean sessionFactory) {
         super(sessionFactory);
@@ -71,9 +77,8 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
 
     @Override
     public Tag findMostWidelyUsedTag() {
-        return doWithSession(session -> session.createQuery(SELECT_MOST_WIDELY_USED_TAG, Tag.class)
+        return doWithSession(session -> session.createNativeQuery(SELECT_MOST_WIDELY_USED_TAG, Tag.class)
                 .setReadOnly(true)
-                .setMaxResults(1)
                 .getSingleResult()
         );
     }

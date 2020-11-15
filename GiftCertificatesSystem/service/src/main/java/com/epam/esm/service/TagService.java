@@ -46,7 +46,13 @@ public interface TagService {
      */
     List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException;
 
+    /**
+     * Get most widely used tag of a user with the highest cost of all orders.
+     *
+     * @return the most widely used tag
+     */
     Tag getMostWidelyUsedTag();
+
     /**
      * Remove tag.
      *
