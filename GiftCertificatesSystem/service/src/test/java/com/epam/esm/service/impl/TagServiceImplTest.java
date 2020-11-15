@@ -5,6 +5,7 @@ import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.ServiceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,6 +81,12 @@ class TagServiceImplTest {
     }
 
     @Test
+    void getMostWidelyUsedTAgTest() {
+        tagService.getMostWidelyUsedTag();
+        Mockito.verify(tagDao).findMostWidelyUsedTag();
+    }
+
+    @Test
     void removeTagTest() throws ServiceException {
         Mockito.when(tagDao.delete(1L)).thenReturn(true);
         tagService.removeTag(1L);
@@ -88,6 +95,12 @@ class TagServiceImplTest {
 
     @Test
     void removeTagNegativeTest() {
+        Mockito.when(tagDao.delete(1L)).thenReturn(false);
+        assertThrows(DeleteByRequestedIdServiceException.class, () -> tagService.removeTag(1L));
+    }
+
+    @Test
+    void removeTagBadIdNegativeTest() {
         assertThrows(ServiceException.class, () -> tagService.removeTag(-1L));
     }
 

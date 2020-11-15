@@ -103,6 +103,16 @@ class OrderServiceImplTest {
         assertThrows(ServiceException.class, () -> orderService.getUserOrderById(1L));
     }
 
+    @ParameterizedTest
+    @MethodSource("prepareOrders")
+    void reviewOrdersCost(List<Order> orders) {
+        PageRequest pageRequest = new PageRequest(1, 50);
+        Mockito.when(orderDao.countOrders()).thenReturn(50L);
+        Mockito.when(orderDao.findAll(Mockito.eq(pageRequest))).thenReturn(orders);
+        orderService.reviewOrdersCost();
+        Mockito.verify(orderDao, Mockito.atLeastOnce()).update(Mockito.any());
+    }
+
     private static Arguments[] prepareOrder() {
         LocalDateTime localDateTime = LocalDateTime.parse("2009-10-04T15:42:20.134");
         Order order = Order.builder()

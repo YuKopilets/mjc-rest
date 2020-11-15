@@ -87,6 +87,21 @@ class GiftCertificateServiceImplTest {
     }
 
     @ParameterizedTest
+    @MethodSource("prepareExpectedGiftCertificates")
+    void getGiftCertificatesByQueryParamsTest(List<GiftCertificate> exceptedGiftCertificates,
+                                 GiftCertificateQuery giftCertificateQuery) {
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Set<String> tagNames = giftCertificateQuery.getTagNames();
+        tagNames.add("test tag");
+
+        Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
+        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
+                1, 10);
+        Mockito.verify(giftCertificateDao, Mockito.atLeastOnce())
+                .findAllByQueryParams(giftCertificateQuery, pageRequest);
+    }
+
+    @ParameterizedTest
     @MethodSource("prepareGiftCertificate")
     void updateGiftCertificateTest(GiftCertificate giftCertificate) throws ServiceException {
         Optional<GiftCertificate> giftCertificateOptional = Optional.ofNullable(giftCertificate);

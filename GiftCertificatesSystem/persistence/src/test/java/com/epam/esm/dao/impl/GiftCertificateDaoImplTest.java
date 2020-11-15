@@ -176,7 +176,6 @@ class GiftCertificateDaoImplTest {
     private static Arguments[] prepareGiftCertificateQuery() {
         Set<String> tags = new HashSet<>();
         tags.add("sport");
-        tags.add("spa");
         GiftCertificateQuery query = new GiftCertificateQuery(tags, null, null, null, null);
 
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
@@ -194,23 +193,7 @@ class GiftCertificateDaoImplTest {
                 .tags(firstTags)
                 .build();
 
-        LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
-        Set<Tag> secondTags = new HashSet<>();
-        secondTags.add(new Tag(2L, "spa"));
-        secondTags.add(new Tag(3L, "holiday"));
-        GiftCertificate secondCertificate = GiftCertificate.builder()
-                .id(2L)
-                .name("secondCertificate")
-                .description("The Second Certificate description")
-                .price(BigDecimal.valueOf(20.23).setScale(2, RoundingMode.HALF_UP))
-                .createDate(secondCertificateDateTime)
-                .lastUpdateDate(secondCertificateDateTime)
-                .duration(Duration.ofDays(10))
-                .tags(secondTags)
-                .build();
-
         expectedGiftCertificates.add(firstCertificate);
-        expectedGiftCertificates.add(secondCertificate);
         return new Arguments[]{Arguments.of(query, expectedGiftCertificates)};
     }
 }
