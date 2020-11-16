@@ -49,7 +49,7 @@ class GiftCertificateDaoImplTest {
     void findGiftCertificateByIdTest() {
         Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(1L);
         String expected = "firstCertificate";
-        String actual = giftCertificateById.isPresent() ? giftCertificateById.get().getName() : StringUtils.EMPTY;
+        String actual = giftCertificateById.map(GiftCertificate::getName).orElse(StringUtils.EMPTY);
         assertEquals(expected, actual);
     }
 

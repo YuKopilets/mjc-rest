@@ -11,7 +11,6 @@ import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.OrderNotFoundServiceException;
 import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.PageSizeNotValidServiceException;
-import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,8 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 /**
  * The type implementation of Order service.
@@ -48,8 +49,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getUserOrders(String userLogin, int page, int pageSize)
-            throws UserLoginIsNotValidServiceException, PageNumberNotValidServiceException {
-        validateLogin(userLogin);
+            throws PageNumberNotValidServiceException, PageSizeNotValidServiceException {
         validatePageNumber(page);
         validatePageSize(pageSize);
         PageRequest pageRequest = new PageRequest(page, pageSize);
@@ -72,20 +72,24 @@ public class OrderServiceImpl implements OrderService {
     public void reviewOrdersCost() {
         long countOfOrders = orderDao.countOrders();
         final int pageSize = 50;
-        long countOfPages = countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1;
-        for (int i = 1; i <= countOfPages; i++) {
+        IntStream.range(1, countPages(countOfOrders, pageSize)).forEach(i -> {
             PageRequest pageRequest = new PageRequest(i, pageSize);
             List<Order> orders = recalculateOrdersCost(orderDao.findAll(pageRequest));
             updateOrdersCost(orders);
-        }
+        });
     }
 
     private void prepareOrderGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {
         order.setGiftCertificates(order.getGiftCertificates().stream()
-                .map(giftCertificate -> giftCertificateDao.findById(giftCertificate.getId())
-                        .orElseThrow(() -> new GiftCertificateNotFoundServiceException("Gift certificate with id="
-                                + giftCertificate.getId() + " not found!")))
+                .map(this::findOrderGiftCertificate)
                 .collect(Collectors.toList())
+        );
+    }
+
+    private GiftCertificate findOrderGiftCertificate(GiftCertificate giftCertificate) {
+        return giftCertificateDao.findById(giftCertificate.getId()).orElseThrow(() ->
+                new GiftCertificateNotFoundServiceException("Gift certificate with id="
+                        + giftCertificate.getId() + " not found!")
         );
     }
 
@@ -93,6 +97,10 @@ public class OrderServiceImpl implements OrderService {
         return order.getGiftCertificates().stream()
                 .map(GiftCertificate::getPrice)
                 .reduce(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP), BigDecimal::add);
+    }
+
+    private int countPages(long countOfOrders, int pageSize) {
+        return (int)(countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1);
     }
 
     private List<Order> recalculateOrdersCost(List<Order> orders) {
@@ -104,14 +112,6 @@ public class OrderServiceImpl implements OrderService {
 
     private void updateOrdersCost(List<Order> orders) {
         orders.forEach(orderDao::update);
-    }
-
-    private void validateLogin(String login) {
-        int length = login.length();
-        if (!(length >= 4 && length <= 50)) {
-            throw new UserLoginIsNotValidServiceException(login
-                    + " is not valid. Required login size not less 4 chars and not more then 50");
-        }
     }
 
     private void validateId(Long id) throws InvalidRequestedIdServiceException {

@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class TagDto {
     @NotNull
-    @Pattern(regexp = "^[A-Za-z0-9]+(\\s[A-Za-z0-9]+)*$")
+    @Pattern(regexp = "^\\w*$", message = "Tag name can contain only letters, digits or underscore!")
     @Size(min = 4, max = 255)
     private String name;
 }

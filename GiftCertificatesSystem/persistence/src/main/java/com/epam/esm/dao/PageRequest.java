@@ -2,6 +2,7 @@ package com.epam.esm.dao;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * The Page request holds number and size of page for realizing pagination.
@@ -9,8 +10,9 @@ import lombok.RequiredArgsConstructor;
  * @author Yuriy Kopilets
  * @version 1.0
  */
-@EqualsAndHashCode
 @RequiredArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class PageRequest {
     private final int page;
     private final int size;

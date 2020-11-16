@@ -10,8 +10,8 @@ import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.ServiceException;
-import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,8 +84,8 @@ class OrderServiceImplTest {
 
     @Test
     void getUserOrdersNegativeTest() {
-        assertThrows(UserLoginIsNotValidServiceException.class, () ->
-                orderService.getUserOrders("log", 1, 10));
+        assertThrows(PageNumberNotValidServiceException.class, () ->
+                orderService.getUserOrders("log", -1, 10));
     }
 
     @ParameterizedTest

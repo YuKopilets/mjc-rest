@@ -19,11 +19,13 @@ import java.math.BigDecimal;
 @Value
 public class GiftCertificatePatchDto {
     @Size(min = 6, max = 255)
-    @Pattern(regexp = "^[A-Za-z0-9]+(\\s[A-Za-z0-9]+)*$")
+    @Pattern(regexp = "^[\\w]+(\\s[\\w]+)*$",
+            message = "Gift certificate name can contain only letters, digits or space! Can't start with space!")
     String name;
 
     @Size(min = 10)
-    @Pattern(regexp = "^[A-Za-z0-9]+(\\s[A-Za-z0-9]+)*$")
+    @Pattern(regexp = "^[\\w]+(\\s[\\w]+)*$",
+            message = "Gift certificate description can contain only letters, digits or space! Can't start with space!")
     String description;
 
     @PositiveOrZero

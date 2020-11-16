@@ -1,11 +1,8 @@
 package com.epam.esm.service;
 
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
+import com.epam.esm.service.exception.*;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 
 import java.util.List;
 
@@ -48,9 +45,11 @@ public interface GiftCertificateService {
      * @return the list of gift certificates matching search parameters
      * @throws PageNumberNotValidServiceException in case of {@code page
      *                                         number is not valid to get list}
+     * @throws PageSizeNotValidServiceException   in case of {@code page size
+     *                                            is not valid to get list}
      */
     List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
-            throws PageNumberNotValidServiceException;
+            throws PageNumberNotValidServiceException, PageSizeNotValidServiceException;
 
     /**
      * Update gift certificate. Update values of gift certificate if there are
