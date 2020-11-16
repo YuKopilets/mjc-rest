@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private int countPages(long countOfOrders, int pageSize) {
-        return (int) (countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1);
+        return (int)(countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1);
     }
 
     private List<Order> recalculateOrdersCost(List<Order> orders) {
