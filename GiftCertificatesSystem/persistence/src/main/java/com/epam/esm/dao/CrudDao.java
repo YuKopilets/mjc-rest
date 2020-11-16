@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The common interface Crud dao with CRUD operations to database.
+ * The interface Crud dao.
  *
  * @param <T> the entity type parameter
  * @author Yuriy Kopilets

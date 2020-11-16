@@ -48,7 +48,8 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
 
     @Override
     public Optional<Tag> findById(Long id) {
-        return Optional.ofNullable(doWithSession(session -> session.find(Tag.class, id)));
+        Tag tag = doWithSession(session -> session.find(Tag.class, id));
+        return Optional.ofNullable(tag);
     }
 
     @Override

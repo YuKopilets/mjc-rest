@@ -38,7 +38,7 @@ public enum QueryConditionType {
     }
 
     private String defineConnectionOperator(StringBuilder sb) {
-        return sb.indexOf(QueryConditionConstant.TAG_NAME) != -1 && this.equals(TAG_NAME) ? QueryConditionConstant.OR
+        return sb.indexOf(QueryConditionConstant.TAG_NAME) != -1 && this == (TAG_NAME) ? QueryConditionConstant.OR
                 : QueryConditionConstant.AND;
     }
 }

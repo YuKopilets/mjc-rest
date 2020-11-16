@@ -4,6 +4,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.PageNumberNotValidServiceException;
+import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 
 import java.util.List;
@@ -43,8 +44,11 @@ public interface TagService {
      * @return the list of all exists tags
      * @throws PageNumberNotValidServiceException in case of {@code page
      *                                        number is not valid to get list}
+     * @throws PageSizeNotValidServiceException   in case of {@code page size
+     *                                            is not valid to get list}
      */
-    List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException;
+    List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException,
+            PageSizeNotValidServiceException;
 
     /**
      * Get most widely used tag of a user with the highest cost of all orders.

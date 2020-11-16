@@ -41,7 +41,7 @@ class TagDaoImplTest {
     void findTagByIdTest() {
         Optional<Tag> tagById = tagDao.findById(1L);
         String expected = "rest";
-        String actual = tagById.isPresent() ? tagById.get().getName() : StringUtils.EMPTY;
+        String actual = tagById.map(Tag::getName).orElse(StringUtils.EMPTY);
         assertEquals(expected, actual);
     }
 

@@ -81,7 +81,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    void getMostWidelyUsedTAgTest() {
+    void getMostWidelyUsedTagTest() {
         tagService.getMostWidelyUsedTag();
         Mockito.verify(tagDao).findMostWidelyUsedTag();
     }

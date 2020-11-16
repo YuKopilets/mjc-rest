@@ -48,7 +48,7 @@ class OrderDaoImplTest {
     void findByIdTest() {
         Optional<Order> orderById = orderDao.findById(1L);
         Long expected = 1L;
-        Long actual = orderById.isPresent() ? orderById.get().getUserId() : 0;
+        Long actual = orderById.map(Order::getUserId).orElse(0L);
         assertEquals(expected, actual);
     }
 
@@ -81,7 +81,7 @@ class OrderDaoImplTest {
         orderDao.update(order);
         Optional<Order> orderById = orderDao.findById(2L);
         BigDecimal expected = order.getCost();
-        BigDecimal actual = orderById.isPresent() ? orderById.get().getCost() : BigDecimal.valueOf(0);
+        BigDecimal actual = orderById.map(Order::getCost).orElse(BigDecimal.valueOf(0));
         assertEquals(expected, actual);
     }
 

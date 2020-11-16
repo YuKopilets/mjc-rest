@@ -66,7 +66,8 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
 
     @Override
     public Optional<Order> findById(Long id) {
-        return Optional.ofNullable(doWithSession(session -> session.find(Order.class, id)));
+        Order order = doWithSession(session -> session.find(Order.class, id));
+        return Optional.ofNullable(order);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
-            throws PageNumberNotValidServiceException {
+            throws PageNumberNotValidServiceException, PageSizeNotValidServiceException {
         validatePageNumber(page);
         validatePageSize(pageSize);
         PageRequest pageRequest = new PageRequest(page, pageSize);

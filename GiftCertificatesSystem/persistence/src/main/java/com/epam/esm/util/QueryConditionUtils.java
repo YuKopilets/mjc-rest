@@ -34,12 +34,20 @@ public class QueryConditionUtils {
     }
 
     private static void setBracketsIntoCondition(StringBuilder condition) {
-        if (condition.indexOf(QueryConditionConstant.OR) != -1 && condition.indexOf(QueryConditionConstant.AND) != -1) {
+        if (conditionHasBothConnectOperators(condition)) {
             int startIndex = condition.indexOf(QueryConditionConstant.TAG_NAME);
             String temp = condition.substring(startIndex);
             String orCondition = temp.substring(0, temp.indexOf(QueryConditionConstant.AND));
-            condition.replace(startIndex, startIndex + orCondition.length(),
-                    QueryConditionConstant.OPEN_BRACKET + orCondition + QueryConditionConstant.CLOSE_BRACKET);
+            condition.replace(startIndex, startIndex + orCondition.length(), wrapToBrackets(orCondition));
         }
+    }
+
+    private static boolean conditionHasBothConnectOperators(StringBuilder condition) {
+        return condition.indexOf(QueryConditionConstant.OR) != -1
+                && condition.indexOf(QueryConditionConstant.AND) != -1;
+    }
+
+    private static String wrapToBrackets(String orCondition) {
+        return QueryConditionConstant.OPEN_BRACKET + orCondition + QueryConditionConstant.CLOSE_BRACKET;
     }
 }

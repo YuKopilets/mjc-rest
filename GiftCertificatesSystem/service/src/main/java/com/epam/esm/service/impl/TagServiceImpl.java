@@ -40,7 +40,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException {
+    public List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException,
+            PageSizeNotValidServiceException {
         validatePageNumber(page);
         validatePageSize(pageSize);
         PageRequest pageRequest = new PageRequest(page, pageSize);

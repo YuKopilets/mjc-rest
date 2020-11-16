@@ -43,7 +43,8 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
 
     @Override
     public Optional<GiftCertificate> findById(Long id) {
-        return Optional.ofNullable(doWithSession(session -> session.find(GiftCertificate.class, id)));
+        GiftCertificate giftCertificate = doWithSession(session -> session.find(GiftCertificate.class, id));
+        return Optional.ofNullable(giftCertificate);
     }
 
     @Override

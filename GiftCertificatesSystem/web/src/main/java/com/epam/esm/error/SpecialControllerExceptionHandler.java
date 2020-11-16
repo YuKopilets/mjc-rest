@@ -8,7 +8,6 @@ import com.epam.esm.service.exception.OrderNotFoundServiceException;
 import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
-import com.epam.esm.service.exception.UserLoginIsNotValidServiceException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -59,7 +58,6 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             InvalidRequestedIdServiceException.class,
-            UserLoginIsNotValidServiceException.class,
             PageNumberNotValidServiceException.class,
             PageSizeNotValidServiceException.class,
             JsonMappingException.class,
