@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
+import com.epam.esm.dao.ColumnNameConstant;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
@@ -37,7 +38,7 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     @Override
     public List<Order> findOrdersByUserLogin(String login, PageRequest pageRequest) {
         return doWithSession(session -> session.createQuery(SELECT_BY_LOGIN)
-                .setParameter("login", login)
+                .setParameter(ColumnNameConstant.USER_ACCOUNT_LOGIN, login)
                 .setFirstResult(pageRequest.calculateStartElementPosition())
                 .setMaxResults(pageRequest.getPageSize())
                 .setReadOnly(true)
@@ -83,8 +84,8 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     @Override
     public Order update(Order order) {
         doWithSessionTransaction(session -> session.createQuery(UPDATE_ORDER)
-                .setParameter("id", order.getId())
-                .setParameter("cost", order.getCost())
+                .setParameter(ColumnNameConstant.ORDER_ID, order.getId())
+                .setParameter(ColumnNameConstant.ORDER_COST, order.getCost())
                 .executeUpdate()
         );
         return order;
@@ -93,7 +94,7 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     @Override
     public boolean delete(Long id) {
         int updatedRows = doWithSessionTransaction(session -> session.createQuery(DELETE_ORDER)
-                .setParameter("id", id)
+                .setParameter(ColumnNameConstant.ORDER_ID, id)
                 .executeUpdate()
         );
         return updatedRows > 0;

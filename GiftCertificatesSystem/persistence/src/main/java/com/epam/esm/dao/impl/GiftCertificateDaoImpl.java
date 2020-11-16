@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
+import com.epam.esm.dao.ColumnNameConstant;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
@@ -60,12 +61,12 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
         doWithSessionTransaction(session -> session.createQuery(UPDATE_GIFT_CERTIFICATE)
-                .setParameter("id", giftCertificate.getId())
-                .setParameter("name", giftCertificate.getName())
-                .setParameter("description", giftCertificate.getDescription())
-                .setParameter("price", giftCertificate.getPrice())
-                .setParameter("last_update_date", giftCertificate.getLastUpdateDate())
-                .setParameter("duration", giftCertificate.getDuration())
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_ID, giftCertificate.getId())
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_NAME, giftCertificate.getName())
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_DESCRIPTION, giftCertificate.getDescription())
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_PRICE, giftCertificate.getPrice())
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_LAST_UPDATE_DATE, giftCertificate.getLastUpdateDate())
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_DURATION, giftCertificate.getDuration())
                 .executeUpdate()
         );
         return giftCertificate;
@@ -74,7 +75,7 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     @Override
     public boolean delete(Long id) {
         int updatedRows = doWithSessionTransaction(session -> session.createQuery(DELETE_GIFT_CERTIFICATE)
-                .setParameter("id", id)
+                .setParameter(ColumnNameConstant.GIFT_CERTIFICATE_ID, id)
                 .executeUpdate()
         );
         return updatedRows > 0;

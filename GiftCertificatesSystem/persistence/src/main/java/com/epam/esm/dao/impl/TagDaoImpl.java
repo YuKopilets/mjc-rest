@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
+import com.epam.esm.dao.ColumnNameConstant;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
@@ -70,7 +71,7 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     @Override
     public boolean delete(Long id) {
         int updatedRows = doWithSessionTransaction(session -> session.createQuery(DELETE_TAG)
-                .setParameter("id", id)
+                .setParameter(ColumnNameConstant.TAG_ID, id)
                 .executeUpdate()
         );
         return updatedRows > 0;
