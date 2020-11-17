@@ -7,6 +7,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +35,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/certificates")
+@Validated
 @RequiredArgsConstructor
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
@@ -44,7 +48,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping(value = "/{id}")
-    public GiftCertificate getGiftCertificateById(@PathVariable long id) {
+    public GiftCertificate getGiftCertificateById(@PathVariable @Min(value = 1) long id) {
         return giftCertificateService.getGiftCertificateById(id);
     }
 
@@ -55,22 +59,23 @@ public class GiftCertificateController {
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(name = "order", required = false) String order,
-            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(name = "page_size", required = false, defaultValue = "8") int pageSize
+            @RequestParam(name = "page", required = false, defaultValue = "1") @Min(value = 1) int page,
+            @RequestParam(name = "page_size", required = false, defaultValue = "8")
+            @Min(value = 6) @Max(value = 16) int pageSize
     ) {
         GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
         return giftCertificateService.getGiftCertificates(query, page, pageSize);
     }
 
     @PatchMapping(value = "/{id}")
-    public GiftCertificate updateGiftCertificate(@PathVariable long id,
+    public GiftCertificate updateGiftCertificate(@PathVariable @Min(value = 1) long id,
                                                  @RequestBody @Valid GiftCertificatePatchDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto, id);
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteGiftCertificate(@PathVariable long id) {
+    public void deleteGiftCertificate(@PathVariable @Min(value = 1) long id) {
         giftCertificateService.removeGiftCertificate(id);
     }
 

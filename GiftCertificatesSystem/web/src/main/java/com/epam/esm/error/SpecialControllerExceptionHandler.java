@@ -3,10 +3,7 @@ package com.epam.esm.error;
 import com.epam.esm.exception.JsonDeserializeException;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.OrderNotFoundServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.core.Ordered;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import javax.validation.ConstraintViolationException;
 
 /**
  * The type Special controller with highest priority {@code @Order}
@@ -57,9 +56,7 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
      */
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
-            InvalidRequestedIdServiceException.class,
-            PageNumberNotValidServiceException.class,
-            PageSizeNotValidServiceException.class,
+            ConstraintViolationException.class,
             JsonMappingException.class,
             JsonDeserializeException.class
     })

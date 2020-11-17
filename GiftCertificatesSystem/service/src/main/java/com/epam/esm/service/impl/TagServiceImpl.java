@@ -5,9 +5,6 @@ import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import com.epam.esm.service.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,18 +29,14 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException {
-        validateId(id);
+    public Tag getTagById(Long id) throws TagNotFoundServiceException {
         return tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id
                 + " not found!")
         );
     }
 
     @Override
-    public List<Tag> getAllTags(int page, int pageSize) throws PageNumberNotValidServiceException,
-            PageSizeNotValidServiceException {
-        validatePageNumber(page);
-        validatePageSize(pageSize);
+    public List<Tag> getAllTags(int page, int pageSize) {
         PageRequest pageRequest = new PageRequest(page, pageSize);
         return tagDao.findAll(pageRequest);
     }
@@ -54,31 +47,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
-        validateId(id);
+    public void removeTag(Long id) throws DeleteByRequestedIdServiceException {
         if (!tagDao.delete(id)) {
             throw new DeleteByRequestedIdServiceException("Delete tag by requested id: " + id + " not completed");
-        }
-    }
-
-    private void validateId(Long id) throws InvalidRequestedIdServiceException {
-        if (id <= 0) {
-            throw new InvalidRequestedIdServiceException("Tag id: " + id
-                    + " does not fit the allowed gap. Expected gap: id > 0");
-        }
-    }
-
-    private void validatePageNumber(int page) {
-        if (page < 0) {
-            throw new PageNumberNotValidServiceException("Tags can't be load. " + page
-                    + " is not valid value. Page must be positive number");
-        }
-    }
-
-    private void validatePageSize(int size) {
-        if (size < 0) {
-            throw new PageSizeNotValidServiceException("Tags can't be load. " + size
-                    + " is not valid value. Page must be positive number");
         }
     }
 }

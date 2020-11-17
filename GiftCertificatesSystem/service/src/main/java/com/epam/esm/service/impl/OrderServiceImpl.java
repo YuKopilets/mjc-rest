@@ -7,10 +7,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 import com.epam.esm.service.exception.OrderNotFoundServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,17 +44,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getUserOrders(String userLogin, int page, int pageSize)
-            throws PageNumberNotValidServiceException, PageSizeNotValidServiceException {
-        validatePageNumber(page);
-        validatePageSize(pageSize);
+    public List<Order> getUserOrders(String userLogin, int page, int pageSize) {
         PageRequest pageRequest = new PageRequest(page, pageSize);
         return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
     }
 
     @Override
-    public Order getUserOrderById(Long id) throws OrderNotFoundServiceException, InvalidRequestedIdServiceException {
-        validateId(id);
+    public Order getUserOrderById(Long id) throws OrderNotFoundServiceException {
         return orderDao.findById(id).orElseThrow(() -> new OrderNotFoundServiceException("Order with id=" + id
                 + " not found!")
         );
@@ -111,26 +104,5 @@ public class OrderServiceImpl implements OrderService {
 
     private void updateOrdersCost(List<Order> orders) {
         orders.forEach(orderDao::update);
-    }
-
-    private void validateId(Long id) throws InvalidRequestedIdServiceException {
-        if (id <= 0) {
-            throw new InvalidRequestedIdServiceException("Order id: " + id
-                    + " does not fit the allowed gap. Expected gap: id > 0");
-        }
-    }
-
-    private void validatePageNumber(int page) {
-        if (page < 0) {
-            throw new PageNumberNotValidServiceException("Orders can't be load. " + page
-                    + " is not valid value. Page must be positive number");
-        }
-    }
-
-    private void validatePageSize(int size) {
-        if (size < 0) {
-            throw new PageSizeNotValidServiceException("Orders can't be load. " + size
-                    + " is not valid value. Page must be positive number");
-        }
     }
 }

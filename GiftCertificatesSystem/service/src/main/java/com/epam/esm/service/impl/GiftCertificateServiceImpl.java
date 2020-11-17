@@ -5,9 +5,6 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
@@ -51,19 +48,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificate getGiftCertificateById(Long id)
-            throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException {
-        validateId(id);
+    public GiftCertificate getGiftCertificateById(Long id) throws GiftCertificateNotFoundServiceException {
         return giftCertificateDao.findById(id).orElseThrow(
                 () -> new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found")
         );
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
-            throws PageNumberNotValidServiceException, PageSizeNotValidServiceException {
-        validatePageNumber(page);
-        validatePageSize(pageSize);
+    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery,
+                                                     int page, int pageSize) {
         PageRequest pageRequest = new PageRequest(page, pageSize);
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
             return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
@@ -86,8 +79,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void removeGiftCertificate(Long id)
-            throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException {
+    public void removeGiftCertificate(Long id) throws DeleteByRequestedIdServiceException {
         if (!giftCertificateDao.delete(id)) {
             throw new DeleteByRequestedIdServiceException("Delete gift certificate by requested id: " + id
                     + " not completed");
@@ -139,26 +131,5 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private boolean isNotValidSortParam(String sort) {
         return StringUtils.isNotEmpty(sort) && !(NAME_SORT.equals(sort) || DATE_SORT.equals(sort));
-    }
-
-    private void validateId(Long id) throws InvalidRequestedIdServiceException {
-        if (id <= 0) {
-            throw new InvalidRequestedIdServiceException("GiftCertificate id: " + id
-                    + " does not fit the allowed gap. Expected gap: id > 0");
-        }
-    }
-
-    private void validatePageNumber(int page) {
-        if (page < 0) {
-            throw new PageNumberNotValidServiceException("Gift certificates can't be load. " + page
-                    + " is not valid value. Page must be positive number");
-        }
-    }
-
-    private void validatePageSize(int size) {
-        if (size < 0) {
-            throw new PageSizeNotValidServiceException("Gift certificates can't be load. " + size
-                    + " is not valid value. Page must be positive number");
-        }
     }
 }

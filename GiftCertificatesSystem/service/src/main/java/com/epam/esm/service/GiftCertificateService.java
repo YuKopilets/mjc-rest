@@ -2,9 +2,6 @@ package com.epam.esm.service;
 
 import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
-import com.epam.esm.service.exception.PageSizeNotValidServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 
@@ -32,11 +29,8 @@ public interface GiftCertificateService {
      * @return the gift certificate found by id
      * @throws GiftCertificateNotFoundServiceException in case of {@code gift
      * certificate with current id not found}
-     * @throws InvalidRequestedIdServiceException      in case of {@code id is
-     * not valid to do operation}
      */
-    GiftCertificate getGiftCertificateById(Long id)
-            throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException;
+    GiftCertificate getGiftCertificateById(Long id) throws GiftCertificateNotFoundServiceException;
 
     /**
      * Get list of gift certificates. If query params for finding certificates
@@ -47,13 +41,8 @@ public interface GiftCertificateService {
      * @param page                 the page number
      * @param pageSize             the page size
      * @return the list of gift certificates matching search parameters
-     * @throws PageNumberNotValidServiceException in case of {@code page
-     *                                         number is not valid to get list}
-     * @throws PageSizeNotValidServiceException   in case of {@code page size
-     *                                            is not valid to get list}
      */
-    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize)
-            throws PageNumberNotValidServiceException, PageSizeNotValidServiceException;
+    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, int page, int pageSize);
 
     /**
      * Update gift certificate. Update values of gift certificate if there are
@@ -71,10 +60,8 @@ public interface GiftCertificateService {
      * Remove gift certificate by id.
      *
      * @param id the gift certificate id
-     * @throws InvalidRequestedIdServiceException  in case of {@code id is not
-     * valid to do operation}
      * @throws DeleteByRequestedIdServiceException in case of {@code certificate
      * by current id hasn't been deleted}
      */
-    void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
+    void removeGiftCertificate(Long id) throws DeleteByRequestedIdServiceException;
 }

@@ -10,7 +10,6 @@ import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.PageNumberNotValidServiceException;
 import com.epam.esm.service.exception.ServiceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,12 +79,6 @@ class OrderServiceImplTest {
                 .thenReturn(exceptedOrders);
         List<Order> actualOrders = orderService.getUserOrders("login", 1, 10);
         assertEquals(exceptedOrders, actualOrders);
-    }
-
-    @Test
-    void getUserOrdersNegativeTest() {
-        assertThrows(PageNumberNotValidServiceException.class, () ->
-                orderService.getUserOrders("log", -1, 10));
     }
 
     @ParameterizedTest
