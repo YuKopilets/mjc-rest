@@ -76,8 +76,17 @@ class GiftCertificateDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("prepareGiftCertificateQuery")
-    void findAllGiftCertificatesByTags(GiftCertificateQuery giftCertificateQuery, List<GiftCertificate> expected) {
+    @MethodSource("prepareGiftCertificateQueryAndExpectedList")
+    void findAllGiftCertificatesByTagNamesTest(GiftCertificateQuery giftCertificateQuery, List<GiftCertificate> expected) {
+        PageRequest pageRequest = new PageRequest(1, 3);
+        List<GiftCertificate> actual = giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("prepareExpectedGiftCertificates")
+    void findAllGiftCertificatesByQueryParamsTest(List<GiftCertificate> expected) {
+        GiftCertificateQuery giftCertificateQuery = prepareGiftCertificateQuery();
         PageRequest pageRequest = new PageRequest(1, 3);
         List<GiftCertificate> actual = giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
         assertEquals(expected, actual);
@@ -173,9 +182,10 @@ class GiftCertificateDaoImplTest {
         return new Arguments[]{Arguments.of(expectedGiftCertificates)};
     }
 
-    private static Arguments[] prepareGiftCertificateQuery() {
+    private static Arguments[] prepareGiftCertificateQueryAndExpectedList() {
         Set<String> tags = new HashSet<>();
         tags.add("sport");
+        tags.add("spa");
         GiftCertificateQuery query = new GiftCertificateQuery(tags, null, null, null, null);
 
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
@@ -193,7 +203,31 @@ class GiftCertificateDaoImplTest {
                 .tags(firstTags)
                 .build();
 
+        LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
+        Set<Tag> secondTags = new HashSet<>();
+        secondTags.add(new Tag(2L, "spa"));
+        secondTags.add(new Tag(3L, "holiday"));
+        GiftCertificate secondCertificate = GiftCertificate.builder()
+                .id(2L)
+                .name("secondCertificate")
+                .description("The Second Certificate description")
+                .price(BigDecimal.valueOf(20.23).setScale(2, RoundingMode.HALF_UP))
+                .createDate(secondCertificateDateTime)
+                .lastUpdateDate(secondCertificateDateTime)
+                .duration(Duration.ofDays(10))
+                .tags(secondTags)
+                .build();
+
         expectedGiftCertificates.add(firstCertificate);
+        expectedGiftCertificates.add(secondCertificate);
         return new Arguments[]{Arguments.of(query, expectedGiftCertificates)};
+    }
+
+    private GiftCertificateQuery prepareGiftCertificateQuery() {
+        Set<String> tagNames = new HashSet<>();
+        tagNames.add("sport");
+        tagNames.add("spa");
+        tagNames.add("rest");
+        return new GiftCertificateQuery(tagNames, null, "Certificate", null, null);
     }
 }

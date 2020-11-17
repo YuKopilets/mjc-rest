@@ -11,6 +11,7 @@ import com.epam.esm.util.QueryConditionUtils;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Repository
 public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCertificateDao {
     private static final String SELECT_ALL_GIFT_CERTIFICATES = "SELECT gc FROM GiftCertificate gc JOIN FETCH gc.tags t";
+    private static final String SELECT_ALL_GIFT_CERTIFICATE_IDS = "SELECT gc.id FROM GiftCertificate gc JOIN gc.tags t";
     private static final String UPDATE_GIFT_CERTIFICATE = "UPDATE GiftCertificate SET " +
             "name = :name, description = :description, price = :price, " +
             "lastUpdateDate = :last_update_date, duration = :duration WHERE id = :id";
@@ -87,9 +89,9 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
         Set<Tag> tags = giftCertificate.getTags();
         doWithSessionTransaction(session -> tags.stream()
                 .mapToInt(tag -> session.createNativeQuery(INSERT_GIFT_CERTIFICATE_TAG)
-                    .setParameter(1, giftCertificateId)
-                    .setParameter(2, tag.getId())
-                    .executeUpdate())
+                        .setParameter(1, giftCertificateId)
+                        .setParameter(2, tag.getId())
+                        .executeUpdate())
                 .sum()
         );
     }
@@ -98,11 +100,17 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery,
                                                       PageRequest pageRequest) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
-        return doWithSession(session -> session.createQuery(SELECT_ALL_GIFT_CERTIFICATES + condition,
-                GiftCertificate.class)
-                .setFirstResult(pageRequest.calculateStartElementPosition())
-                .setMaxResults(pageRequest.getPageSize())
-                .setReadOnly(true)
-                .list());
+        List<Long> giftCertificateIds = doWithSession(session -> session.createQuery(
+                SELECT_ALL_GIFT_CERTIFICATE_IDS + condition)
+                        .setFirstResult(pageRequest.calculateStartElementPosition())
+                        .setMaxResults(pageRequest.getPageSize())
+                        .setReadOnly(true)
+                        .list());
+
+        List<GiftCertificate> giftCertificates = new ArrayList<>();
+        giftCertificateIds.stream()
+                .map(id -> doWithSession(session -> session.find(GiftCertificate.class, id)))
+                .forEach(giftCertificates::add);
+        return giftCertificates;
     }
 }
