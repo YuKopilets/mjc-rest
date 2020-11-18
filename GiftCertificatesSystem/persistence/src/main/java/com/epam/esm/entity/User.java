@@ -45,9 +45,10 @@ public class User extends RepresentationModel<User> {
     private String login;
 
     @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany
     @JoinColumn(name = "user_account_id", referencedColumnName = "id")
-    @ToString.Exclude
     private List<Order> orders;
 
     public List<Order> getOrders() {

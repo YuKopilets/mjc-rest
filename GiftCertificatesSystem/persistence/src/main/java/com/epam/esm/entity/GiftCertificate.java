@@ -3,10 +3,7 @@ package com.epam.esm.entity;
 import com.epam.esm.entity.converter.JsonDurationSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -75,6 +72,8 @@ public class GiftCertificate {
     private Set<Tag> tags;
 
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToMany(mappedBy = "giftCertificates", fetch = FetchType.LAZY)
     private List<Order> orders;
 

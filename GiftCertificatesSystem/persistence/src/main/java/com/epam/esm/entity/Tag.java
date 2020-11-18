@@ -1,10 +1,7 @@
 package com.epam.esm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,6 +37,8 @@ public class Tag {
     private String name;
 
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<GiftCertificate> giftCertificates;
 
