@@ -3,8 +3,10 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.PageRequest;
+import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
+import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
@@ -30,11 +32,14 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;
+    private final UserDao userDao;
     private final GiftCertificateDao giftCertificateDao;
 
     @Override
     @Transactional
-    public Order addOrder(Order order) throws GiftCertificateNotFoundServiceException {
+    public Order addOrder(Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException {
+        userDao.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException("User with id="
+                + order.getUserId() + " not found!"));
         order.setDate(LocalDateTime.now());
         prepareOrderGiftCertificates(order);
         order.setCost(calculateOrderCost(order));
@@ -44,7 +49,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getUserOrders(String userLogin, PageRequest pageRequest) {
+    public List<Order> getUserOrders(String userLogin, PageRequest pageRequest) throws UserNotFoundServiceException {
+        userDao.findByLogin(userLogin).orElseThrow(() -> new UserNotFoundServiceException("User with login="
+                + userLogin + " not found!"));
         return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
     }
 
