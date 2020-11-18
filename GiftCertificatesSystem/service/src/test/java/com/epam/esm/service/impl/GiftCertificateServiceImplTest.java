@@ -74,7 +74,7 @@ class GiftCertificateServiceImplTest {
         PageRequest pageRequest = new PageRequest(1, 10);
         Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
-                1, 10);
+                pageRequest);
         assertEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -86,7 +86,7 @@ class GiftCertificateServiceImplTest {
         PageRequest pageRequest = new PageRequest(1, 10);
         Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(giftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
-                1, 10);
+                pageRequest);
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -100,7 +100,7 @@ class GiftCertificateServiceImplTest {
 
         Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
-                1, 10);
+                pageRequest);
         Mockito.verify(giftCertificateDao, Mockito.atLeastOnce())
                 .findAllByQueryParams(giftCertificateQuery, pageRequest);
     }

@@ -100,17 +100,16 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
     public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery,
                                                       PageRequest pageRequest) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
-        List<Long> giftCertificateIds = doWithSession(session -> session.createQuery(
-                SELECT_ALL_GIFT_CERTIFICATE_IDS + condition)
-                        .setFirstResult(pageRequest.calculateStartElementPosition())
-                        .setMaxResults(pageRequest.getPageSize())
-                        .setReadOnly(true)
-                        .list());
+        String query = SELECT_ALL_GIFT_CERTIFICATE_IDS + condition;
+        @SuppressWarnings("unchecked") List<Long> certificateIds = doWithSession(session -> session.createQuery(query)
+                .setFirstResult(pageRequest.calculateStartElementPosition())
+                .setMaxResults(pageRequest.getPageSize())
+                .setReadOnly(true)
+                .list());
 
-        return doWithSession(session ->
-                giftCertificateIds.stream()
-                        .map(id -> session.find(GiftCertificate.class, id))
-                        .collect(Collectors.toList())
+        return doWithSession(session -> certificateIds.stream()
+                .map(id -> session.find(GiftCertificate.class, id))
+                .collect(Collectors.toList())
         );
     }
 }

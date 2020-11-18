@@ -45,7 +45,7 @@ public class GiftCertificateDtoConverter {
     public GiftCertificate convertToGiftCertificate(GiftCertificatePatchDto dto, long id) {
         GiftCertificate giftCertificate = modelMapper.map(dto, GiftCertificate.class);
         giftCertificate.setId(id);
-        if (dto.getDescription() != null) {
+        if (dto.getDuration() != null) {
             giftCertificate.setDuration(Duration.ofDays(dto.getDuration()));
         }
         return giftCertificate;

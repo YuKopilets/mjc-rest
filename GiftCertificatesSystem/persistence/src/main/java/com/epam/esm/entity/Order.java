@@ -17,6 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -45,6 +48,8 @@ public class Order extends RepresentationModel<Order> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Min(value = 1)
     @Column(name = "user_account_id")
     private Long userId;
 
@@ -54,6 +59,7 @@ public class Order extends RepresentationModel<Order> {
     @Column(nullable = false)
     private LocalDateTime date;
 
+    @NotEmpty
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "order_has_gift_certificate",
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),

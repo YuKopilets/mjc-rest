@@ -3,13 +3,8 @@ package com.epam.esm.dto;
 import com.epam.esm.entity.Tag;
 import lombok.Value;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -23,24 +18,15 @@ import java.util.Set;
 @Value
 public class GiftCertificatePostDto {
     @NotNull
-    @Size(min = 6, max = 255)
-    @Pattern(regexp = "^[\\w]+(\\s[\\w]+)*$",
-            message = "{certificate.name.contain}")
     String name;
 
     @NotNull
-    @Size(min = 10)
-    @Pattern(regexp = "^[\\w]+(\\s[\\w]+)*$",
-            message = "{certificate.description.contain}")
     String description;
 
     @NotNull
-    @PositiveOrZero
-    @Digits(integer = 10, fraction = 2)
     BigDecimal price;
 
     @NotNull
-    @Min(value = 1)
     Integer duration;
 
     @NotEmpty

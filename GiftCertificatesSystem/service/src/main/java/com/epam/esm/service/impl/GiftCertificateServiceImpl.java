@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public GiftCertificate addGiftCertificate(GiftCertificate giftCertificate) {
+    public GiftCertificate addGiftCertificate(@Valid GiftCertificate giftCertificate) {
         LocalDateTime localDateTime = LocalDateTime.now();
         giftCertificate.setCreateDate(localDateTime);
         giftCertificate.setLastUpdateDate(localDateTime);
@@ -64,21 +65,24 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
+    public GiftCertificate updateGiftCertificate(@Valid GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException {
-        Optional<GiftCertificate> giftCertificateOptional = giftCertificateDao.findById(giftCertificate.getId());
-        if (giftCertificateOptional.isPresent() && hasUpdateValues(giftCertificate)) {
-            GiftCertificate oldGiftCertificateById = giftCertificateOptional.get();
+        GiftCertificate oldGiftCertificateById = giftCertificateDao.findById(giftCertificate.getId())
+                .orElseThrow(() -> new GiftCertificateNotFoundServiceException("GiftCertificate with id="
+                        + giftCertificate.getId() + " not found"));
+
+        if (hasUpdateValues(giftCertificate)) {
             setUpdateValues(oldGiftCertificateById, giftCertificate);
-            return giftCertificateDao.update(oldGiftCertificateById);
-        } else {
-            throw new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + giftCertificate.getId()
-                    + " not found");
+            giftCertificateDao.update(oldGiftCertificateById);
         }
+        return oldGiftCertificateById;
     }
 
     @Override
-    public void removeGiftCertificate(Long id) throws DeleteByRequestedIdServiceException {
+    public void removeGiftCertificate(Long id) throws GiftCertificateNotFoundServiceException,
+            DeleteByRequestedIdServiceException {
+        giftCertificateDao.findById(id).orElseThrow(() ->
+                new GiftCertificateNotFoundServiceException("GiftCertificate with id=" + id + " not found"));
         if (!giftCertificateDao.delete(id)) {
             throw new DeleteByRequestedIdServiceException("Delete gift certificate by requested id: " + id
                     + " not completed");

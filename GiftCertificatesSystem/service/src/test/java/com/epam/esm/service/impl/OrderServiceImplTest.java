@@ -3,8 +3,10 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.PageRequest;
+import com.epam.esm.dao.UserDao;
 import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.dao.impl.OrderDaoImpl;
+import com.epam.esm.dao.impl.UserDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
@@ -37,13 +39,16 @@ class OrderServiceImplTest {
     private OrderDao orderDao;
     @Mock
     private GiftCertificateDao giftCertificateDao;
+    @Mock
+    private UserDao userDao;
     private OrderService orderService;
 
     @BeforeEach
     void setUp() {
         orderDao = Mockito.mock(OrderDaoImpl.class);
         giftCertificateDao = Mockito.mock(GiftCertificateDaoImpl.class);
-        orderService = new OrderServiceImpl(orderDao, giftCertificateDao);
+        userDao = Mockito.mock(UserDaoImpl.class);
+        orderService = new OrderServiceImpl(orderDao, userDao, giftCertificateDao);
     }
 
     @AfterEach
@@ -77,7 +82,7 @@ class OrderServiceImplTest {
         PageRequest pageRequest = new PageRequest(1, 10);
         Mockito.when(orderDao.findOrdersByUserLogin(Mockito.eq("login"), Mockito.eq(pageRequest)))
                 .thenReturn(exceptedOrders);
-        List<Order> actualOrders = orderService.getUserOrders("login", 1, 10);
+        List<Order> actualOrders = orderService.getUserOrders("login", pageRequest);
         assertEquals(exceptedOrders, actualOrders);
     }
 

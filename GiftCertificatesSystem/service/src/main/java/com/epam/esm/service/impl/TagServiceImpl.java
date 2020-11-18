@@ -9,6 +9,7 @@ import com.epam.esm.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
 
     @Override
-    public Tag addTag(Tag tag) {
+    public Tag addTag(@Valid Tag tag) {
         return tagDao.save(tag);
     }
 
@@ -46,7 +47,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void removeTag(Long id) throws DeleteByRequestedIdServiceException {
+    public void removeTag(Long id) throws TagNotFoundServiceException, DeleteByRequestedIdServiceException {
+        tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id + " not found!"));
         if (!tagDao.delete(id)) {
             throw new DeleteByRequestedIdServiceException("Delete tag by requested id: " + id + " not completed");
         }

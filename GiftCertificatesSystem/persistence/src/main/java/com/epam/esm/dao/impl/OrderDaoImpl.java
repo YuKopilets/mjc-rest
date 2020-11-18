@@ -37,13 +37,15 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
 
     @Override
     public List<Order> findOrdersByUserLogin(String login, PageRequest pageRequest) {
-        return doWithSession(session -> session.createQuery(SELECT_BY_LOGIN)
+        @SuppressWarnings("unchecked") List<Order> orders = doWithSession(session -> session.createQuery(
+                SELECT_BY_LOGIN)
                 .setParameter(ColumnNameConstant.USER_ACCOUNT_LOGIN, login)
                 .setFirstResult(pageRequest.calculateStartElementPosition())
                 .setMaxResults(pageRequest.getPageSize())
                 .setReadOnly(true)
                 .list()
         );
+        return orders;
     }
 
     @Override

@@ -1,9 +1,15 @@
 package com.epam.esm.entity;
 
 import com.epam.esm.entity.converter.JsonDurationSerializer;
+import com.epam.esm.entity.validator.ValidDaysDuration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +22,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -45,12 +55,18 @@ public class GiftCertificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 6, max = 255)
+    @Pattern(regexp = "^[\\w]+(\\s[\\w]+)*$", message = "{certificate.name.contain}")
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Size(min = 10)
+    @Pattern(regexp = "^[\\w]+(\\s[\\w]+)*$", message = "{certificate.description.contain}")
     @Column(nullable = false, columnDefinition = "text")
     private String description;
 
+    @PositiveOrZero
+    @Digits(integer = 10, fraction = 2)
     @Column(nullable = false, columnDefinition = "decimal(10,2)")
     private BigDecimal price;
 
@@ -60,6 +76,7 @@ public class GiftCertificate {
     @Column(name = "last_update_date", nullable = false)
     private LocalDateTime lastUpdateDate;
 
+    @ValidDaysDuration
     @JsonSerialize(using = JsonDurationSerializer.class)
     @Column(nullable = false)
     private Duration duration;

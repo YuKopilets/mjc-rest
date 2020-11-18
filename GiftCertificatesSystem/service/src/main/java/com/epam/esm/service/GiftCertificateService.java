@@ -62,6 +62,9 @@ public interface GiftCertificateService {
      * @param id the gift certificate id
      * @throws DeleteByRequestedIdServiceException in case of {@code certificate
      * by current id hasn't been deleted}
+     * @throws GiftCertificateNotFoundServiceException in case of {@code gift
+     * certificate with current id not found}
      */
-    void removeGiftCertificate(Long id) throws DeleteByRequestedIdServiceException;
+    void removeGiftCertificate(Long id) throws GiftCertificateNotFoundServiceException,
+            DeleteByRequestedIdServiceException;
 }

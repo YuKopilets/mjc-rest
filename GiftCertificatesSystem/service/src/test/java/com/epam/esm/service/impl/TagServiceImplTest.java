@@ -66,7 +66,7 @@ class TagServiceImplTest {
     void getAllTagsTest(List<Tag> exceptedTags) {
         PageRequest pageRequest = new PageRequest(1, 10);
         Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedTags);
-        List<Tag> actualTags = tagService.getAllTags(1, 10);
+        List<Tag> actualTags = tagService.getAllTags(pageRequest);
         assertEquals(exceptedTags, actualTags);
     }
 
@@ -76,7 +76,7 @@ class TagServiceImplTest {
         List<Tag> tags = new ArrayList<>();
         PageRequest pageRequest = new PageRequest(1, 10);
         Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(tags);
-        List<Tag> actualTags = tagService.getAllTags(1, 10);
+        List<Tag> actualTags = tagService.getAllTags(pageRequest);
         assertNotEquals(exceptedTags, actualTags);
     }
 

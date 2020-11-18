@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 /**
  * The type Order controller.
  *
@@ -31,7 +29,7 @@ public class OrderController {
 
     @PostMapping
     @ApiOperation(value = "add new order")
-    public Order createOrder(@RequestBody @Valid OrderDto dto) {
+    public Order createOrder(@RequestBody OrderDto dto) {
         Order order = dtoConverter.convertToOrder(dto);
         return orderService.addOrder(order);
     }

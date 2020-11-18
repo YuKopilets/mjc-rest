@@ -78,7 +78,7 @@ public class GiftCertificateController {
     @PatchMapping(value = "/{id}")
     @ApiOperation(value = "update certificate")
     public GiftCertificate updateGiftCertificate(@PathVariable @Min(value = 1) long id,
-                                                 @RequestBody @Valid GiftCertificatePatchDto dto) {
+                                                 @RequestBody GiftCertificatePatchDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto, id);
         return giftCertificateService.updateGiftCertificate(giftCertificate);
     }

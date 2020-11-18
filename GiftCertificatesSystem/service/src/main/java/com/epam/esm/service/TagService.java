@@ -53,6 +53,8 @@ public interface TagService {
      * @param id the tag id
      * @throws DeleteByRequestedIdServiceException in case of {@code tag by
      * current id hasn't been deleted}
+     * @throws TagNotFoundServiceException        in case of {@code tag with
+     * current id not found}
      */
-    void removeTag(Long id) throws DeleteByRequestedIdServiceException;
+    void removeTag(Long id) throws TagNotFoundServiceException, DeleteByRequestedIdServiceException;
 }

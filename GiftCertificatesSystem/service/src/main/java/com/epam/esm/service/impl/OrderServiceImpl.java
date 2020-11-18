@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -37,11 +38,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order addOrder(Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException {
+    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException {
         userDao.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException("User with id="
                 + order.getUserId() + " not found!"));
+
         order.setDate(LocalDateTime.now());
-        prepareOrderGiftCertificates(order);
+        initOrderByGiftCertificates(order);
         order.setCost(calculateOrderCost(order));
         orderDao.save(order);
         addOrderGiftCertificates(order);
@@ -62,10 +64,6 @@ public class OrderServiceImpl implements OrderService {
         );
     }
 
-    private void addOrderGiftCertificates(Order order) {
-        orderDao.saveGiftCertificates(order);
-    }
-
     @Override
     public void reviewOrdersCost() {
         long countOfOrders = orderDao.countOrders();
@@ -76,12 +74,15 @@ public class OrderServiceImpl implements OrderService {
                 .forEach(this::updateOrdersCost);
     }
 
-    private void prepareOrderGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {
-        order.setGiftCertificates(
-                order.getGiftCertificates().stream()
-                        .map(this::findOrderGiftCertificate)
-                        .collect(Collectors.toList())
-        );
+    private void addOrderGiftCertificates(Order order) {
+        orderDao.saveGiftCertificates(order);
+    }
+
+    private void initOrderByGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {
+        final List<GiftCertificate> giftCertificates = order.getGiftCertificates().stream()
+                .map(this::findOrderGiftCertificate)
+                .collect(Collectors.toList());
+        order.setGiftCertificates(giftCertificates);
     }
 
     private GiftCertificate findOrderGiftCertificate(GiftCertificate giftCertificate) {

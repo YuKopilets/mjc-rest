@@ -15,11 +15,15 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.nio.charset.StandardCharsets;
+
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan("com.epam.esm")
 @Import({PersistenceConfig.class, ServiceConfig.class})
 public class ApplicationConfig {
+    private static final String MESSAGE_SOURCE_BASE_NAME = "classpath:messages";
+
     public static void main(String[] args) {
         SpringApplication.run(ApplicationConfig.class, args);
     }
@@ -28,13 +32,13 @@ public class ApplicationConfig {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource
                 = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages");
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasename(MESSAGE_SOURCE_BASE_NAME);
+        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         return messageSource;
     }
 
     @Bean
-    public LocalValidatorFactoryBean getValidator() {
+    public LocalValidatorFactoryBean localValidatorFactoryBean() {
         LocalValidatorFactoryBean validatorFactory = new LocalValidatorFactoryBean();
         validatorFactory.setValidationMessageSource(messageSource());
         return validatorFactory;
