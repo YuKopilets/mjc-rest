@@ -54,7 +54,7 @@ public class Order extends RepresentationModel<Order> {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @ManyToMany(targetEntity = GiftCertificate.class, cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "order_has_gift_certificate",
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "gift_certificate_id")

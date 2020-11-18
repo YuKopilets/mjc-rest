@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +8,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The {@code type Tag} is domain representation of <i>tag</i> table.
@@ -33,6 +38,14 @@ public class Tag {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    private List<GiftCertificate> giftCertificates;
+
+    public List<GiftCertificate> getGiftCertificates() {
+        return Collections.unmodifiableList(giftCertificates);
+    }
 }
 
 
