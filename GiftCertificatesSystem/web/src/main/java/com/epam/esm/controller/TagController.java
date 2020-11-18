@@ -5,6 +5,8 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,23 +33,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/tags")
 @Validated
+@Api(value = "/tags", tags = "Gift certificate's tag operations")
 @RequiredArgsConstructor
 public class TagController {
     private final TagService tagService;
     private final TagDtoConverter dtoConverter;
 
     @PostMapping
+    @ApiOperation(value = "add new tag")
     public Tag createTag(@RequestBody @Valid TagDto dto) {
         Tag tag = dtoConverter.convertToTag(dto);
         return tagService.addTag(tag);
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "get tag by id")
     public Tag getTagById(@PathVariable @Min(value = 1) long id) {
         return tagService.getTagById(id);
     }
 
     @GetMapping
+    @ApiOperation(value = "get list of tags")
     public List<Tag> getAllTags(
             @RequestParam(name = "page", required = false, defaultValue = "1") @Min(value = 1) int page,
             @RequestParam(name = "page_size", required = false, defaultValue = "15")
@@ -58,11 +64,13 @@ public class TagController {
     }
 
     @GetMapping("/most-used")
+    @ApiOperation(value = "get the most widely used tag")
     public Tag getUsed() {
         return tagService.getMostWidelyUsedTag();
     }
 
     @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "delete tag")
     public void deleteTag(@PathVariable @Min(value = 1) long id) {
         tagService.removeTag(id);
     }

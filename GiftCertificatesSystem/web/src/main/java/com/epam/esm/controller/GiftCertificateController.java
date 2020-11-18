@@ -7,6 +7,8 @@ import com.epam.esm.dto.GiftCertificatePostDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQuery;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,23 +39,27 @@ import java.util.Set;
 @RestController
 @RequestMapping("/certificates")
 @Validated
+@Api(value = "/certificates", tags = "Gift certificate operations")
 @RequiredArgsConstructor
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
     private final GiftCertificateDtoConverter dtoConverter;
 
     @PostMapping
+    @ApiOperation(value = "add new certificate")
     public GiftCertificate createGiftCertificate(@RequestBody @Valid GiftCertificatePostDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto);
         return giftCertificateService.addGiftCertificate(giftCertificate);
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "get certificate by id")
     public GiftCertificate getGiftCertificateById(@PathVariable @Min(value = 1) long id) {
         return giftCertificateService.getGiftCertificateById(id);
     }
 
     @GetMapping
+    @ApiOperation(value = "get list of certificates")
     public List<GiftCertificate> getGiftCertificates(
             @RequestParam(name = "tag_name", required = false) String[] tagNames,
             @RequestParam(name = "part_of_name", required = false) String partOfName,
@@ -70,6 +76,7 @@ public class GiftCertificateController {
     }
 
     @PatchMapping(value = "/{id}")
+    @ApiOperation(value = "update certificate")
     public GiftCertificate updateGiftCertificate(@PathVariable @Min(value = 1) long id,
                                                  @RequestBody @Valid GiftCertificatePatchDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto, id);
@@ -77,6 +84,7 @@ public class GiftCertificateController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "delete certificate")
     public void deleteGiftCertificate(@PathVariable @Min(value = 1) long id) {
         giftCertificateService.removeGiftCertificate(id);
     }
