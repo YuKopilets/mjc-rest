@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.converter.GiftCertificateDtoConverter;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dto.GiftCertificatePatchDto;
 import com.epam.esm.dto.GiftCertificatePostDto;
 import com.epam.esm.entity.GiftCertificate;
@@ -64,7 +65,8 @@ public class GiftCertificateController {
             @Min(value = 6) @Max(value = 16) int pageSize
     ) {
         GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
-        return giftCertificateService.getGiftCertificates(query, page, pageSize);
+        PageRequest pageRequest = new PageRequest(page, pageSize);
+        return giftCertificateService.getGiftCertificates(query, pageRequest);
     }
 
     @PatchMapping(value = "/{id}")

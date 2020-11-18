@@ -1,20 +1,20 @@
-package com.epam.esm.service.exception;
+package com.epam.esm.exception;
 
 /**
- * {@code ServiceException} and its subclasses are generated when exceptions
- * occur in the business logic layer.
+ * {@code GiftCertificateNotFoundServiceException} is generated when gift
+ * certificate not found in the database
  *
  * @author Yuriy Kopilets
  * @version 1.0
- * @see RuntimeException
+ * @see ServiceException
  */
-public class ServiceException extends RuntimeException {
+public class GiftCertificateNotFoundServiceException extends ServiceException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public ServiceException() {
+    public GiftCertificateNotFoundServiceException() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class ServiceException extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public ServiceException(String message) {
+    public GiftCertificateNotFoundServiceException(String message) {
         super(message);
     }
 
@@ -43,7 +43,7 @@ public class ServiceException extends RuntimeException {
      *                unknown.)
      * @since 1.4
      */
-    public ServiceException(String message, Throwable cause) {
+    public GiftCertificateNotFoundServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -60,7 +60,7 @@ public class ServiceException extends RuntimeException {
      *              unknown.)
      * @since 1.4
      */
-    public ServiceException(Throwable cause) {
+    public GiftCertificateNotFoundServiceException(Throwable cause) {
         super(cause);
     }
 
@@ -78,7 +78,7 @@ public class ServiceException extends RuntimeException {
      *                           be writable
      * @since 1.7
      */
-    public ServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public GiftCertificateNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

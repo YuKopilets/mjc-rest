@@ -6,8 +6,8 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.OrderService;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.OrderNotFoundServiceException;
+import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.exception.OrderNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +44,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getUserOrders(String userLogin, int page, int pageSize) {
-        PageRequest pageRequest = new PageRequest(page, pageSize);
+    public List<Order> getUserOrders(String userLogin, PageRequest pageRequest) {
         return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
     }
 
@@ -63,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void reviewOrdersCost() {
         long countOfOrders = orderDao.countOrders();
-        final int pageSize = 50;
+        int pageSize = 50;
         IntStream.range(1, countPages(countOfOrders, pageSize) + 1)
                 .mapToObj(i -> new PageRequest(i, pageSize))
                 .map(pageRequest -> recalculateOrdersCost(orderDao.findAll(pageRequest)))

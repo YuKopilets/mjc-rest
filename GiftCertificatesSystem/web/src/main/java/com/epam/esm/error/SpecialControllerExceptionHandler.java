@@ -1,10 +1,11 @@
 package com.epam.esm.error;
 
+import com.epam.esm.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.JsonDeserializeException;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.OrderNotFoundServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.exception.OrderNotFoundServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
+import com.epam.esm.exception.UserNotFoundServiceException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -40,7 +41,8 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
             DeleteByRequestedIdServiceException.class,
             GiftCertificateNotFoundServiceException.class,
             TagNotFoundServiceException.class,
-            OrderNotFoundServiceException.class
+            OrderNotFoundServiceException.class,
+            UserNotFoundServiceException.class
     })
     public ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.NOT_FOUND);

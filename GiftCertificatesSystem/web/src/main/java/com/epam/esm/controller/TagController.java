@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.converter.TagDtoConverter;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
@@ -52,7 +53,8 @@ public class TagController {
             @RequestParam(name = "page_size", required = false, defaultValue = "15")
             @Min(value = 12) @Max(value = 25) int pageSize
     ) {
-        return tagService.getAllTags(page, pageSize);
+        PageRequest pageRequest = new PageRequest(page, pageSize);
+        return tagService.getAllTags(pageRequest);
     }
 
     @GetMapping("/most-used")

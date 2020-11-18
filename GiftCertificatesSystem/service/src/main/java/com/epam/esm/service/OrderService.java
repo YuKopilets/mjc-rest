@@ -1,8 +1,9 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Order;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.OrderNotFoundServiceException;
+import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.exception.OrderNotFoundServiceException;
 
 import java.util.List;
 
@@ -26,12 +27,11 @@ public interface OrderService {
     /**
      * Get list of all user's orders by user login value.
      *
-     * @param userLogin the user login
-     * @param page      the page number
-     * @param pageSize  the page size
+     * @param userLogin   the user login
+     * @param pageRequest the page number and size
      * @return the orders
      */
-    List<Order> getUserOrders(String userLogin, int page, int pageSize);
+    List<Order> getUserOrders(String userLogin, PageRequest pageRequest);
 
     /**
      * Get user's order by order id.

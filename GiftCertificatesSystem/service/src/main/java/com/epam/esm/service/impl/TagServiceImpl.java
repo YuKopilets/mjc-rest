@@ -4,8 +4,8 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +36,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags(int page, int pageSize) {
-        PageRequest pageRequest = new PageRequest(page, pageSize);
+    public List<Tag> getAllTags(PageRequest pageRequest) {
         return tagDao.findAll(pageRequest);
     }
 

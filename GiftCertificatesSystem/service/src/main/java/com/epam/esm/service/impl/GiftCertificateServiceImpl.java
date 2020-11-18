@@ -3,8 +3,8 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
@@ -56,8 +56,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery,
-                                                     int page, int pageSize) {
-        PageRequest pageRequest = new PageRequest(page, pageSize);
+                                                     PageRequest pageRequest) {
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
             return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
         }

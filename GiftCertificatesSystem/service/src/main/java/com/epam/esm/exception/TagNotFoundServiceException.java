@@ -1,4 +1,4 @@
-package com.epam.esm.service.exception;
+package com.epam.esm.exception;
 
 /**
  * {@code TagNotFoundServiceException} is generated when tag not found

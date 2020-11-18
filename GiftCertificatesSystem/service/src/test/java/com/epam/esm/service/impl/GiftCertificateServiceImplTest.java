@@ -5,7 +5,7 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.exception.ServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

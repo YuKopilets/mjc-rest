@@ -1,8 +1,9 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
 
 import java.util.List;
 
@@ -34,11 +35,10 @@ public interface TagService {
     /**
      * Get list of all tags.
      *
-     * @param page     the page number
-     * @param pageSize the page size
+     * @param pageRequest the page number and size
      * @return the list of all exists tags
      */
-    List<Tag> getAllTags(int page, int pageSize);
+    List<Tag> getAllTags(PageRequest pageRequest);
 
     /**
      * Get most widely used tag of a user with the highest cost of all orders.

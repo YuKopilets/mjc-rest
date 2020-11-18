@@ -1,7 +1,10 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.User;
 import com.epam.esm.service.OrderService;
+import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -31,7 +34,30 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
     private final OrderService orderService;
+
+    @GetMapping("/id/{id}")
+    public User getUserById(@PathVariable @Min(value = 1) long id) {
+        User user = userService.getUserById(id);
+        Link link = WebMvcLinkBuilder.linkTo(UserController.class)
+                .slash(user.getLogin())
+                .slash("orders")
+                .withRel("orders");
+        user.add(link);
+        return user;
+    }
+
+    @GetMapping("/login/{login}")
+    public User getUserByLogin(@PathVariable @Size(min = 4, max = 50) String login) {
+        User user = userService.getUserByLogin(login);
+        Link link = WebMvcLinkBuilder.linkTo(UserController.class)
+                .slash(login)
+                .slash("orders")
+                .withRel("orders");
+        user.add(link);
+        return user;
+    }
 
     @GetMapping(value = "/{login}/orders")
     public CollectionModel<Order> getUserOrders(
@@ -40,7 +66,8 @@ public class UserController {
             @RequestParam(name = "page_size", required = false, defaultValue = "10")
             @Min(value = 8) @Max(value = 20) int pageSize
     ) {
-        List<Order> orders = orderService.getUserOrders(login, page, pageSize);
+        PageRequest pageRequest = new PageRequest(page, pageSize);
+        List<Order> orders = orderService.getUserOrders(login, pageRequest);
         orders.forEach(order -> {
             Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                     .slash(login)

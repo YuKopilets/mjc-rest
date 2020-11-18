@@ -1,10 +1,13 @@
 package com.epam.esm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,9 +33,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "user_account")
-public class User {
+public class User extends RepresentationModel<User> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,6 +44,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 50)
     private String login;
 
+    @JsonIgnore
     @OneToMany
     @JoinColumn(name = "user_account_id", referencedColumnName = "id")
     @ToString.Exclude

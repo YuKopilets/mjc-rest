@@ -1,20 +1,20 @@
-package com.epam.esm.service.exception;
+package com.epam.esm.exception;
 
 /**
- * {@code DeleteByRequestedIdServiceException} is generated while trying to
- * delete entity by non-existent id
+ * {@code ServiceException} and its subclasses are generated when exceptions
+ * occur in the business logic layer.
  *
  * @author Yuriy Kopilets
  * @version 1.0
- * @see ServiceException
+ * @see RuntimeException
  */
-public class DeleteByRequestedIdServiceException extends ServiceException {
+public class ServiceException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public DeleteByRequestedIdServiceException() {
+    public ServiceException() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class DeleteByRequestedIdServiceException extends ServiceException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public DeleteByRequestedIdServiceException(String message) {
+    public ServiceException(String message) {
         super(message);
     }
 
@@ -43,7 +43,7 @@ public class DeleteByRequestedIdServiceException extends ServiceException {
      *                unknown.)
      * @since 1.4
      */
-    public DeleteByRequestedIdServiceException(String message, Throwable cause) {
+    public ServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -60,7 +60,7 @@ public class DeleteByRequestedIdServiceException extends ServiceException {
      *              unknown.)
      * @since 1.4
      */
-    public DeleteByRequestedIdServiceException(Throwable cause) {
+    public ServiceException(Throwable cause) {
         super(cause);
     }
 
@@ -78,7 +78,7 @@ public class DeleteByRequestedIdServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public DeleteByRequestedIdServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

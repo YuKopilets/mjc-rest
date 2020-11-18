@@ -1,20 +1,20 @@
-package com.epam.esm.service.exception;
+package com.epam.esm.exception;
 
 /**
- * {@code OrderNotFoundServiceException} is generated when order not found
- * in the database
+ * {@code DeleteByRequestedIdServiceException} is generated while trying to
+ * delete entity by non-existent id
  *
  * @author Yuriy Kopilets
  * @version 1.0
  * @see ServiceException
  */
-public class OrderNotFoundServiceException extends ServiceException {
+public class DeleteByRequestedIdServiceException extends ServiceException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public OrderNotFoundServiceException() {
+    public DeleteByRequestedIdServiceException() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class OrderNotFoundServiceException extends ServiceException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public OrderNotFoundServiceException(String message) {
+    public DeleteByRequestedIdServiceException(String message) {
         super(message);
     }
 
@@ -43,7 +43,7 @@ public class OrderNotFoundServiceException extends ServiceException {
      *                unknown.)
      * @since 1.4
      */
-    public OrderNotFoundServiceException(String message, Throwable cause) {
+    public DeleteByRequestedIdServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -60,7 +60,7 @@ public class OrderNotFoundServiceException extends ServiceException {
      *              unknown.)
      * @since 1.4
      */
-    public OrderNotFoundServiceException(Throwable cause) {
+    public DeleteByRequestedIdServiceException(Throwable cause) {
         super(cause);
     }
 
@@ -78,7 +78,7 @@ public class OrderNotFoundServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public OrderNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DeleteByRequestedIdServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
