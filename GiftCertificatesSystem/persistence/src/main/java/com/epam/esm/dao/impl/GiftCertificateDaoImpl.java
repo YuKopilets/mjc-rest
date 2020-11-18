@@ -11,10 +11,10 @@ import com.epam.esm.util.QueryConditionUtils;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type implementation of Gift certificate dao.
@@ -107,10 +107,10 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
                         .setReadOnly(true)
                         .list());
 
-        List<GiftCertificate> giftCertificates = new ArrayList<>();
-        giftCertificateIds.stream()
-                .map(id -> doWithSession(session -> session.find(GiftCertificate.class, id)))
-                .forEach(giftCertificates::add);
-        return giftCertificates;
+        return doWithSession(session ->
+                giftCertificateIds.stream()
+                        .map(id -> session.find(GiftCertificate.class, id))
+                        .collect(Collectors.toList())
+        );
     }
 }
