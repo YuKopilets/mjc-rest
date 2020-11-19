@@ -18,18 +18,6 @@ public class UserNotFoundServiceException extends ServiceException {
     }
 
     /**
-     * Constructs a new runtime exception with the specified detail message.
-     * The cause is not initialized, and may subsequently be initialized by a
-     * call to {@link #initCause}.
-     *
-     * @param message the detail message. The detail message is saved for
-     *                later retrieval by the {@link #getMessage()} method.
-     */
-    public UserNotFoundServiceException(String message) {
-        super(message);
-    }
-
-    /**
      * Constructs a new runtime exception with the specified detail message and
      * cause.  <p>Note that the detail message associated with
      * {@code cause} is <i>not</i> automatically incorporated in
@@ -80,5 +68,13 @@ public class UserNotFoundServiceException extends ServiceException {
      */
     public UserNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public UserNotFoundServiceException(Long id) {
+        super("User with id=" + id + " not found!");
+    }
+
+    public UserNotFoundServiceException(String login) {
+        super("User with login=" + login + " not found!");
     }
 }

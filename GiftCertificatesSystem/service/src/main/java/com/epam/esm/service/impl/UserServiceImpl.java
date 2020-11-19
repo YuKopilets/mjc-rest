@@ -21,15 +21,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) throws UserNotFoundServiceException {
-        return userDao.findById(id).orElseThrow(() -> new UserNotFoundServiceException("User with id=" + id
-                + " not found!")
-        );
+        return userDao.findById(id).orElseThrow(() -> new UserNotFoundServiceException(id));
     }
 
     @Override
     public User getUserByLogin(String login) throws UserNotFoundServiceException {
-        return userDao.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException("User with login=" + login
-                + " not found!")
-        );
+        return userDao.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
     }
 }

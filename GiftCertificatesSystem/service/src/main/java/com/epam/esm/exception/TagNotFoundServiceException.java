@@ -81,4 +81,8 @@ public class TagNotFoundServiceException extends ServiceException {
     public TagNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
+    public TagNotFoundServiceException(Long id) {
+        super("Tag with id=" + id + " not found!");
+    }
 }

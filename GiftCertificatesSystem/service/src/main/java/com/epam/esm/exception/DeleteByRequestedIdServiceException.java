@@ -81,4 +81,8 @@ public class DeleteByRequestedIdServiceException extends ServiceException {
     public DeleteByRequestedIdServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
+    public DeleteByRequestedIdServiceException(Long id) {
+        super("Delete tag by requested id: " + id + " not completed");
+    }
 }

@@ -39,9 +39,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException {
-        userDao.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException("User with id="
-                + order.getUserId() + " not found!"));
+    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException,
+            UserNotFoundServiceException {
+        userDao.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException(order.getUserId()));
 
         order.setDate(LocalDateTime.now());
         initOrderByGiftCertificates(order);
@@ -53,15 +53,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getUserOrders(String userLogin, PageRequest pageRequest) throws UserNotFoundServiceException {
-        userDao.findByLogin(userLogin).orElseThrow(() -> new UserNotFoundServiceException("User with login="
-                + userLogin + " not found!"));
+        userDao.findByLogin(userLogin).orElseThrow(() -> new UserNotFoundServiceException(userLogin));
         return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
     }
 
     @Override
     public Order getUserOrderById(Long id) throws OrderNotFoundServiceException {
-        return orderDao.findById(id).orElseThrow(() -> new OrderNotFoundServiceException("Order with id=" + id
-                + " not found!")
+        return orderDao.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id)
         );
     }
 
@@ -78,8 +76,7 @@ public class OrderServiceImpl implements OrderService {
 
     private GiftCertificate findOrderGiftCertificate(GiftCertificate giftCertificate) {
         return giftCertificateDao.findById(giftCertificate.getId()).orElseThrow(() ->
-                new GiftCertificateNotFoundServiceException("Gift certificate with id="
-                        + giftCertificate.getId() + " not found!")
+                new GiftCertificateNotFoundServiceException(giftCertificate.getId())
         );
     }
 

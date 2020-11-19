@@ -33,9 +33,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagById(Long id) throws TagNotFoundServiceException {
-        return tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id
-                + " not found!")
-        );
+        return tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException(id));
     }
 
     @Override
@@ -50,9 +48,9 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void removeTag(Long id) throws TagNotFoundServiceException, DeleteByRequestedIdServiceException {
-        tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException("Tag with id=" + id + " not found!"));
+        tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException(id));
         if (!tagDao.delete(id)) {
-            throw new DeleteByRequestedIdServiceException("Delete tag by requested id: " + id + " not completed");
+            throw new DeleteByRequestedIdServiceException(id);
         }
     }
 }

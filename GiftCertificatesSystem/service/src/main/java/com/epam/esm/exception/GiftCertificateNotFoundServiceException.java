@@ -81,4 +81,8 @@ public class GiftCertificateNotFoundServiceException extends ServiceException {
     public GiftCertificateNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
+    public GiftCertificateNotFoundServiceException(Long id) {
+        super("Gift certificate with id=" + id + " not found!");
+    }
 }
