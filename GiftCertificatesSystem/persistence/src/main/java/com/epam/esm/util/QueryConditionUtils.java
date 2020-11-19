@@ -2,6 +2,7 @@ package com.epam.esm.util;
 
 import lombok.experimental.UtilityClass;
 
+import java.text.MessageFormat;
 import java.util.Set;
 
 /**
@@ -13,6 +14,8 @@ import java.util.Set;
  */
 @UtilityClass
 public class QueryConditionUtils {
+    private static final String CONDITION_BRACKETS_PATTERN = "({0})";
+
     /**
      * Generate condition for hql query to <i>gift_certificate</i> table
      * by query params.
@@ -48,6 +51,6 @@ public class QueryConditionUtils {
     }
 
     private static String wrapToBrackets(String orCondition) {
-        return QueryConditionConstant.OPEN_BRACKET + orCondition + QueryConditionConstant.CLOSE_BRACKET;
+        return MessageFormat.format(CONDITION_BRACKETS_PATTERN, orCondition);
     }
 }
