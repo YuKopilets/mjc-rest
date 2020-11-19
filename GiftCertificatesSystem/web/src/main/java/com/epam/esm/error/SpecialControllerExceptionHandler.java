@@ -2,7 +2,6 @@ package com.epam.esm.error;
 
 import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.exception.JsonDeserializeException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.exception.UserNotFoundServiceException;
@@ -59,8 +58,7 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             ConstraintViolationException.class,
-            JsonMappingException.class,
-            JsonDeserializeException.class
+            JsonMappingException.class
     })
     public ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.BAD_REQUEST);

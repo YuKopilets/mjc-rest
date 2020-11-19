@@ -21,7 +21,6 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * The type implementation of Order service.
@@ -66,16 +65,6 @@ public class OrderServiceImpl implements OrderService {
         );
     }
 
-    @Override
-    public void reviewOrdersCost() {
-        long countOfOrders = orderDao.countOrders();
-        int pageSize = 50;
-        IntStream.range(1, countPages(countOfOrders, pageSize) + 1)
-                .mapToObj(i -> new PageRequest(i, pageSize))
-                .map(pageRequest -> recalculateOrdersCost(orderDao.findAll(pageRequest)))
-                .forEach(this::updateOrdersCost);
-    }
-
     private void addOrderGiftCertificates(Order order) {
         orderDao.saveGiftCertificates(order);
     }
@@ -98,20 +87,5 @@ public class OrderServiceImpl implements OrderService {
         return order.getGiftCertificates().stream()
                 .map(GiftCertificate::getPrice)
                 .reduce(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP), BigDecimal::add);
-    }
-
-    private int countPages(long countOfOrders, int pageSize) {
-        return (int)(countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1);
-    }
-
-    private List<Order> recalculateOrdersCost(List<Order> orders) {
-        orders.stream()
-                .filter(order -> order.getCost().doubleValue() == 0.0)
-                .forEach(order -> order.setCost(calculateOrderCost(order)));
-        return orders;
-    }
-
-    private void updateOrdersCost(List<Order> orders) {
-        orders.forEach(orderDao::update);
     }
 }

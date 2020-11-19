@@ -49,9 +49,4 @@ public interface OrderService {
      *                                            current id not found}
      */
     Order getUserOrderById(Long id) throws OrderNotFoundServiceException;
-
-    /**
-     * Scan orders without calculated cost and calculate it for them.
-     */
-    void reviewOrdersCost();
 }

@@ -99,8 +99,7 @@ class GiftCertificateServiceImplTest {
         tagNames.add("test tag");
 
         Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
-                pageRequest);
+        giftCertificateService.getGiftCertificates(giftCertificateQuery, pageRequest);
         Mockito.verify(giftCertificateDao, Mockito.atLeastOnce())
                 .findAllByQueryParams(giftCertificateQuery, pageRequest);
     }

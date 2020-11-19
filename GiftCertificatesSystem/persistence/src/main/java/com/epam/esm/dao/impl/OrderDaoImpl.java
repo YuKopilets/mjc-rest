@@ -9,8 +9,6 @@ import com.epam.esm.entity.Order;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +24,6 @@ import java.util.Optional;
 public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     private static final String SELECT_BY_LOGIN = "SELECT orders FROM User WHERE login = :login";
     private static final String SELECT_ALL_ORDERS = "SELECT o FROM Order o";
-    private static final String UPDATE_ORDER = "UPDATE Order SET cost = :cost WHERE id = :id";
     private static final String DELETE_ORDER = "DELETE FROM Order WHERE id = :id";
     private static final String INSERT_ORDER_GIFT_CERTIFICATE = "INSERT INTO order_has_gift_certificate " +
             "(order_id, gift_certificate_id) VALUES (?, ?)";
@@ -88,11 +85,6 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
 
     @Override
     public Order update(Order order) {
-        doWithSessionTransaction(session -> session.createQuery(UPDATE_ORDER)
-                .setParameter(ColumnNameConstant.ORDER_ID, order.getId())
-                .setParameter(ColumnNameConstant.ORDER_COST, order.getCost())
-                .executeUpdate()
-        );
         return order;
     }
 
@@ -103,15 +95,5 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
                 .executeUpdate()
         );
         return updatedRows > 0;
-    }
-
-    @Override
-    public long countOrders() {
-        return doWithSession(session -> {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Long> query = builder.createQuery(Long.class);
-            query.select(builder.count(query.from(Order.class)));
-            return session.createQuery(query).getSingleResult();
-        });
     }
 }

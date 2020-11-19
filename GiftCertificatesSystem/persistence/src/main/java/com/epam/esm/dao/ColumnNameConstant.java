@@ -11,7 +11,6 @@ public final class ColumnNameConstant {
     public static final String USER_ACCOUNT_LOGIN = "login";
 
     public static final String ORDER_ID = "id";
-    public static final String ORDER_COST = "cost";
 
     public static final String TAG_ID = "id";
 }

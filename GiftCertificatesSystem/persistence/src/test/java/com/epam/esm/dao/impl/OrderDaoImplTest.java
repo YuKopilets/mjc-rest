@@ -74,17 +74,6 @@ class OrderDaoImplTest {
         assertNotEquals(expectedOrders, actualOrders);
     }
 
-    @ParameterizedTest
-    @MethodSource("prepareOrder")
-    void updateTest(Order order) {
-        order.setId(2L);
-        orderDao.update(order);
-        Optional<Order> orderById = orderDao.findById(2L);
-        BigDecimal expected = order.getCost();
-        BigDecimal actual = orderById.map(Order::getCost).orElse(BigDecimal.valueOf(0));
-        assertEquals(expected, actual);
-    }
-
     @Test
     void deleteTest() {
         boolean isDeleted = orderDao.delete(1L);
@@ -95,13 +84,6 @@ class OrderDaoImplTest {
     void deleteNegativeTest() {
         boolean isDeleted = orderDao.delete(3L);
         assertFalse(isDeleted);
-    }
-
-    @Test
-    void countOrdersTest() {
-        long expected = 2;
-        long actual = orderDao.countOrders();
-        assertEquals(expected, actual);
     }
 
     private static Arguments[] prepareOrder() {

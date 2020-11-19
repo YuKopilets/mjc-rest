@@ -32,11 +32,4 @@ public interface OrderDao extends CrudDao<Order> {
      * @param order the order with certificates
      */
     void saveGiftCertificates(Order order);
-
-    /**
-     * Count of all orders from <i>user_order</i> table.
-     *
-     * @return the count
-     */
-    long countOrders();
 }
