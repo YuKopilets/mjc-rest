@@ -10,8 +10,9 @@ import com.epam.esm.dao.impl.UserDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.User;
+import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.service.OrderService;
-import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.ServiceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,32 +57,41 @@ class OrderServiceImplTest {
         orderDao = null;
         giftCertificateDao = null;
         orderService = null;
+        userDao = null;
     }
 
     @ParameterizedTest
     @MethodSource("prepareOrder")
-    void addOrderTest(Order order) {
+    void addOrderTest(Order order, User user) {
+        Optional<User> userOptional = Optional.of(user);
+        Mockito.when(userDao.findById(1L)).thenReturn(userOptional);
+
         GiftCertificate giftCertificate = new GiftCertificate();
         giftCertificate.setPrice(BigDecimal.valueOf(0));
         Optional<GiftCertificate> optionalCertificate = Optional.of(giftCertificate);
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(optionalCertificate);
         Mockito.when(giftCertificateDao.findById(2L)).thenReturn(optionalCertificate);
+
         orderService.addOrder(order);
         Mockito.verify(orderDao).save(order);
     }
 
     @ParameterizedTest
     @MethodSource("prepareOrder")
-    void addOrderNegativeTest(Order order) {
-        assertThrows(GiftCertificateNotFoundServiceException.class, ()-> orderService.addOrder(order));
+    void addOrderNegativeTest(Order order, User user) {
+        assertThrows(UserNotFoundServiceException.class, ()-> orderService.addOrder(order));
     }
 
     @ParameterizedTest
     @MethodSource("prepareOrders")
-    void getUserOrdersTest(List<Order> exceptedOrders) {
+    void getUserOrdersTest(List<Order> exceptedOrders, User user) {
+        Optional<User> userOptional = Optional.of(user);
+        Mockito.when(userDao.findByLogin("login")).thenReturn(userOptional);
+
         PageRequest pageRequest = new PageRequest(1, 10);
         Mockito.when(orderDao.findOrdersByUserLogin(Mockito.eq("login"), Mockito.eq(pageRequest)))
                 .thenReturn(exceptedOrders);
+
         List<Order> actualOrders = orderService.getUserOrders("login", pageRequest);
         assertEquals(exceptedOrders, actualOrders);
     }
@@ -119,7 +129,11 @@ class OrderServiceImplTest {
                 .date(localDateTime)
                 .giftCertificates(prepareOrderGiftCertificates())
                 .build();
-        return new Arguments[]{Arguments.of(order)};
+        User user = User.builder()
+                .id(1L)
+                .login("user")
+                .build();
+        return new Arguments[]{Arguments.of(order, user)};
     }
 
     private static List<GiftCertificate> prepareOrderGiftCertificates() {
@@ -196,6 +210,11 @@ class OrderServiceImplTest {
 
         orders.add(firstOrder);
         orders.add(secondOrder);
-        return new Arguments[]{Arguments.of(orders)};
+
+        User user = User.builder()
+                .id(1L)
+                .login("user")
+                .build();
+        return new Arguments[]{Arguments.of(orders, user)};
     }
 }

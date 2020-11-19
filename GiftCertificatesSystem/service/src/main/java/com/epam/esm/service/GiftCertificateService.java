@@ -6,6 +6,7 @@ import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface GiftCertificateService {
      * @param giftCertificate the gift certificate
      * @return the gift certificate
      */
-    GiftCertificate addGiftCertificate(GiftCertificate giftCertificate);
+    GiftCertificate addGiftCertificate(@Valid GiftCertificate giftCertificate);
 
     /**
      * Get single gift certificate by id.
@@ -53,7 +54,7 @@ public interface GiftCertificateService {
      * @throws GiftCertificateNotFoundServiceException in case of {@code gift
      * certificate with current id not found}
      */
-    GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
+    GiftCertificate updateGiftCertificate(@Valid GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException;
 
     /**

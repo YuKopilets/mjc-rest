@@ -28,7 +28,7 @@ public class UserDaoImpl extends AbstractSessionDao implements UserDao {
     @Override
     public Optional<User> findById(Long id) {
         User user = doWithSession(session -> session.find(User.class, id));
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class UserDaoImpl extends AbstractSessionDao implements UserDao {
                 .setReadOnly(true)
                 .getSingleResult()
         );
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 }

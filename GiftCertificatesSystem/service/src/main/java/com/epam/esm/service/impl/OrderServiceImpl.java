@@ -13,6 +13,7 @@ import com.epam.esm.exception.OrderNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ import java.util.stream.IntStream;
  * @see OrderService
  */
 @Service
+@Validated
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;

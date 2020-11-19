@@ -8,6 +8,7 @@ import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  * @see TagService
  */
 @Service
+@Validated
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
     private final TagDao tagDao;

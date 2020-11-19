@@ -6,6 +6,7 @@ import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
 import com.epam.esm.exception.UserNotFoundServiceException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public interface OrderService {
      * @throws UserNotFoundServiceException            in case of {@code user with
      *                                                 current id not found}
      */
-    Order addOrder(Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException;
+    Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException;
 
     /**
      * Get list of all user's orders by user login value.

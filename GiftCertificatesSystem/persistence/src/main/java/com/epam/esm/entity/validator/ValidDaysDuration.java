@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface ValidDaysDuration {
-    String message() default "Number of days for duration isn't positive!";
+    String message() default "{days.duration.default.massage}";
 
     Class<?>[] groups() default { };
 

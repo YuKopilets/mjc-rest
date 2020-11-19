@@ -5,6 +5,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface TagService {
      * @param tag the tag
      * @return the tag
      */
-    Tag addTag(Tag tag);
+    Tag addTag(@Valid Tag tag);
 
     /**
      * Get single tag by id.

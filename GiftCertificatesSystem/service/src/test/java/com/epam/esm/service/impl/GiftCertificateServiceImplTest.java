@@ -125,8 +125,11 @@ class GiftCertificateServiceImplTest {
         );
     }
 
-    @Test
-    void removeGiftCertificateTest() throws ServiceException {
+    @ParameterizedTest
+    @MethodSource("prepareGiftCertificate")
+    void removeGiftCertificateTest(GiftCertificate giftCertificate) throws ServiceException {
+        Optional<GiftCertificate> giftCertificateOptional = Optional.of(giftCertificate);
+        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
         Mockito.when(giftCertificateDao.delete(1L)).thenReturn(true);
         giftCertificateService.removeGiftCertificate(1L);
         Mockito.verify(giftCertificateDao).delete(Mockito.anyLong());

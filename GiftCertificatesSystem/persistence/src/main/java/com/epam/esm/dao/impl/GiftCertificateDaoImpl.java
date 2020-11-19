@@ -101,6 +101,9 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
                                                       PageRequest pageRequest) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
         String query = SELECT_ALL_GIFT_CERTIFICATE_IDS + condition;
+        // This cast is correct, because the list we're creating is of the same
+        // type as the one passed after operation with session. We're selecting
+        // the list of gift certificate identifiers.
         @SuppressWarnings("unchecked") List<Long> certificateIds = doWithSession(session -> session.createQuery(query)
                 .setFirstResult(pageRequest.calculateStartElementPosition())
                 .setMaxResults(pageRequest.getPageSize())

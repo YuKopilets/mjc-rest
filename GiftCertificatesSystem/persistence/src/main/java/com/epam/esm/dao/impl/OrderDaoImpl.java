@@ -37,6 +37,9 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
 
     @Override
     public List<Order> findOrdersByUserLogin(String login, PageRequest pageRequest) {
+        // This cast is correct, because the list we're creating is of the same
+        // type as the one passed after operation with session. We're selecting
+        // the list of orders.
         @SuppressWarnings("unchecked") List<Order> orders = doWithSession(session -> session.createQuery(
                 SELECT_BY_LOGIN)
                 .setParameter(ColumnNameConstant.USER_ACCOUNT_LOGIN, login)

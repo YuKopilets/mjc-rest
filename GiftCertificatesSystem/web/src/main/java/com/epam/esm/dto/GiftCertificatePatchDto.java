@@ -1,10 +1,8 @@
 package com.epam.esm.dto;
 
-import com.epam.esm.entity.Tag;
-import lombok.Getter;
+import lombok.Value;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 /**
  * The {@code Gift certificate patch dto} is dto for transferring gift
@@ -13,11 +11,10 @@ import java.util.Set;
  * @author Yuriy Kopilets
  * @version 1.0
  */
-@Getter
+@Value
 public class GiftCertificatePatchDto {
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Integer duration;
-    private Set<Tag> tags;
+    String name;
+    String description;
+    BigDecimal price;
+    Integer duration;
 }

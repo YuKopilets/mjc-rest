@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ import java.util.stream.Stream;
  * @see GiftCertificateService
  */
 @Service
+@Validated
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private static final String NAME_SORT = "name";

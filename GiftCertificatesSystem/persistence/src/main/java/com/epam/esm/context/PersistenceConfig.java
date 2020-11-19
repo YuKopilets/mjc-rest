@@ -16,8 +16,8 @@ import java.util.Properties;
 @PropertySource("classpath:hibernate.properties")
 @RequiredArgsConstructor
 public class PersistenceConfig {
-    private static final String PACKAGE_TO_SCAN = "com.epam.esm.entity";
     private static final String DDL_AUTO_PROPERTY = "hibernate.hbm2ddl.auto";
+    private static final String SCAN_PACKAGE_PROPERTY = "hibernate.scan.package";
     private static final String DIALECT_PROPERTY = "hibernate.dialect";
     private static final String SHOW_SQL_PROPERTY = "hibernate.show_sql";
     private static final String FORMAT_SQL_PROPERTY = "hibernate.format_sql";
@@ -28,7 +28,7 @@ public class PersistenceConfig {
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
-        sessionFactory.setPackagesToScan(PACKAGE_TO_SCAN);
+        sessionFactory.setPackagesToScan(environment.getProperty(SCAN_PACKAGE_PROPERTY));
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }

@@ -42,7 +42,7 @@ public class Tag {
     private Long id;
 
     @NotNull
-    @Size(min = 4, max = 255)
+    @Size(min = 3, max = 255)
     @Pattern(regexp = "^\\w*$", message = "{tag.name.contain}")
     @Column(nullable = false, unique = true)
     private String name;

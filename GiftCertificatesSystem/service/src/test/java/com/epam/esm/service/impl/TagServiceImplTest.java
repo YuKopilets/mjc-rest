@@ -4,8 +4,8 @@ import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.ServiceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,8 +86,11 @@ class TagServiceImplTest {
         Mockito.verify(tagDao).findMostWidelyUsedTag();
     }
 
-    @Test
-    void removeTagTest() throws ServiceException {
+    @ParameterizedTest
+    @MethodSource("prepareTag")
+    void removeTagTest(Tag tag) throws ServiceException {
+        Optional<Tag> tagOptional = Optional.of(tag);
+        Mockito.when(tagDao.findById(1L)).thenReturn(tagOptional);
         Mockito.when(tagDao.delete(1L)).thenReturn(true);
         tagService.removeTag(1L);
         Mockito.verify(tagDao).delete(Mockito.anyLong());
@@ -95,8 +98,9 @@ class TagServiceImplTest {
 
     @Test
     void removeTagNegativeTest() {
+        Mockito.when(tagDao.findById(1L)).thenReturn(Optional.empty());
         Mockito.when(tagDao.delete(1L)).thenReturn(false);
-        assertThrows(DeleteByRequestedIdServiceException.class, () -> tagService.removeTag(1L));
+        assertThrows(TagNotFoundServiceException.class, () -> tagService.removeTag(1L));
     }
 
     @Test

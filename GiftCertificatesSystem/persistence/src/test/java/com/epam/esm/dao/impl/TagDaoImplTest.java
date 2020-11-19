@@ -81,7 +81,7 @@ class TagDaoImplTest {
 
     private static Arguments[] prepareTag() {
         Tag tag = Tag.builder()
-                .name("test tag")
+                .name("test_tag")
                 .build();
         return new Arguments[]{Arguments.of(tag)};
     }
