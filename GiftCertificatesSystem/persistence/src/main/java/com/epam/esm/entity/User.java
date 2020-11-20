@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,10 +32,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "user_account")
-public class User extends RepresentationModel<User> {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

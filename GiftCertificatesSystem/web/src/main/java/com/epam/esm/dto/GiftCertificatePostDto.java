@@ -6,6 +6,7 @@ import lombok.Value;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -31,4 +32,8 @@ public class GiftCertificatePostDto {
 
     @NotEmpty
     Set<Tag> tags;
+
+    public Set<Tag> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
 }

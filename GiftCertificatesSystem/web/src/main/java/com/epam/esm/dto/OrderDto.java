@@ -3,6 +3,7 @@ package com.epam.esm.dto;
 import com.epam.esm.entity.GiftCertificate;
 import lombok.Value;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,4 +17,8 @@ import java.util.List;
 public class OrderDto {
     Long userId;
     List<GiftCertificate> giftCertificates;
+
+    public List<GiftCertificate> getGiftCertificates() {
+        return Collections.unmodifiableList(giftCertificates);
+    }
 }

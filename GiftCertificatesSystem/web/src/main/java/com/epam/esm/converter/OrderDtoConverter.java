@@ -1,13 +1,14 @@
 package com.epam.esm.converter;
 
 import com.epam.esm.dto.OrderDto;
+import com.epam.esm.dto.OrderRepresentationDto;
 import com.epam.esm.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 /**
- * The {@code Order dto converter} converts dto to order.
+ * The {@code Order dto converter} converts dto to order and conversely.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -26,5 +27,15 @@ public class OrderDtoConverter {
      */
     public Order convertToOrder(OrderDto dto) {
         return modelMapper.map(dto, Order.class);
+    }
+
+    /**
+     * Convert order to representation dto before preparing response.
+     *
+     * @param order the order
+     * @return the order representation dto
+     */
+    public OrderRepresentationDto convertToRepresentationDto(Order order) {
+        return modelMapper.map(order, OrderRepresentationDto.class);
     }
 }

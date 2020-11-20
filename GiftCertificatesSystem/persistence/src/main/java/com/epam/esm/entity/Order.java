@@ -3,9 +3,7 @@ package com.epam.esm.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,10 +38,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "user_order")
-public class Order extends RepresentationModel<Order> {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

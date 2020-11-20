@@ -1,6 +1,10 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.converter.OrderDtoConverter;
+import com.epam.esm.converter.UserDtoConverter;
 import com.epam.esm.dao.PageRequest;
+import com.epam.esm.dto.OrderRepresentationDto;
+import com.epam.esm.dto.UserRepresentationDto;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
 import com.epam.esm.service.OrderService;
@@ -8,8 +12,6 @@ import com.epam.esm.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type User controller.
@@ -39,34 +42,38 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
+    private final UserDtoConverter userDtoConverter;
+    private final OrderDtoConverter orderDtoConverter;
 
     @GetMapping("/id/{id}")
     @ApiOperation(value = "get user by id")
-    public User getUserById(@PathVariable @Min(value = 1) long id) {
+    public UserRepresentationDto getUserById(@PathVariable @Min(value = 1) long id) {
         User user = userService.getUserById(id);
+        UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                 .slash(user.getLogin())
                 .slash("orders")
                 .withRel("orders");
-        user.add(link);
-        return user;
+        dto.add(link);
+        return dto;
     }
 
     @GetMapping("/login/{login}")
     @ApiOperation(value = "get user by login")
-    public User getUserByLogin(@PathVariable @Size(min = 4, max = 50) String login) {
+    public UserRepresentationDto getUserByLogin(@PathVariable @Size(min = 4, max = 50) String login) {
         User user = userService.getUserByLogin(login);
+        UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                 .slash(login)
                 .slash("orders")
                 .withRel("orders");
-        user.add(link);
-        return user;
+        dto.add(link);
+        return dto;
     }
 
     @GetMapping(value = "/{login}/orders")
     @ApiOperation(value = "get list of user's orders by login")
-    public CollectionModel<Order> getUserOrders(
+    public List<OrderRepresentationDto> getUserOrders(
             @PathVariable @Size(min = 4, max = 50) String login,
             @RequestParam(name = "page", required = false, defaultValue = "1") @Min(value = 1) int page,
             @RequestParam(name = "page_size", required = false, defaultValue = "10")
@@ -74,32 +81,42 @@ public class UserController {
     ) {
         PageRequest pageRequest = new PageRequest(page, pageSize);
         List<Order> orders = orderService.getUserOrders(login, pageRequest);
-        orders.forEach(order -> {
+        List<OrderRepresentationDto> dtoList = convertOrdersToDtoList(orders);
+
+        dtoList.forEach(dto -> {
             Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                     .slash(login)
                     .slash("orders")
-                    .slash(order.getId())
+                    .slash(dto.getId())
                     .withSelfRel();
-            order.add(link);
+            dto.add(link);
         });
-        return CollectionModel.of(orders);
+        return dtoList;
     }
 
     @GetMapping(value = "/{login}/orders/{id}")
     @ApiOperation(value = "get user's order by id")
-    public EntityModel<Order> getUserOrderById(@PathVariable @Size(min = 4, max = 50) String login,
-                                               @PathVariable @Min(value = 1) long id) {
+    public OrderRepresentationDto getUserOrderById(@PathVariable @Size(min = 4, max = 50) String login,
+                                                                @PathVariable @Min(value = 1) long id) {
         Order order = orderService.getUserOrderById(id);
-        order.getGiftCertificates().forEach(giftCertificate -> {
+        OrderRepresentationDto dto = orderDtoConverter.convertToRepresentationDto(order);
+        dto.getGiftCertificates().forEach(giftCertificate -> {
             Link link = WebMvcLinkBuilder.linkTo(GiftCertificateController.class)
                     .slash(giftCertificate.getId())
                     .withRel("giftCertificates");
-            order.add(link);
+            dto.add(link);
         });
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                 .slash(login)
                 .slash("orders")
                 .withRel("allUserOrders");
-        return EntityModel.of(order, link);
+        dto.add(link);
+        return dto;
+    }
+
+    private List<OrderRepresentationDto> convertOrdersToDtoList(List<Order> orders) {
+        return orders.stream()
+                .map(orderDtoConverter::convertToRepresentationDto)
+                .collect(Collectors.toList());
     }
 }
