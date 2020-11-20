@@ -69,14 +69,9 @@ class TagDaoImplTest {
 
     @Test
     void deleteTest() {
-        boolean isDeleted = tagDao.delete(1L);
-        assertTrue(isDeleted);
-    }
-
-    @Test
-    void deleteNegativeTest() {
-        boolean isDeleted = tagDao.delete(7L);
-        assertFalse(isDeleted);
+        tagDao.delete(1L);
+        Optional<Tag> tag = tagDao.findById(1L);
+        assertFalse(tag.isPresent());
     }
 
     private static Arguments[] prepareTag() {

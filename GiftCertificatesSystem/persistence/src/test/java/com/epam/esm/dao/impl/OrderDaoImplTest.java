@@ -76,14 +76,9 @@ class OrderDaoImplTest {
 
     @Test
     void deleteTest() {
-        boolean isDeleted = orderDao.delete(1L);
-        assertTrue(isDeleted);
-    }
-
-    @Test
-    void deleteNegativeTest() {
-        boolean isDeleted = orderDao.delete(3L);
-        assertFalse(isDeleted);
+        orderDao.delete(1L);
+        Optional<Order> order = orderDao.findById(1L);
+        assertFalse(order.isPresent());
     }
 
     private static Arguments[] prepareOrder() {

@@ -45,10 +45,9 @@ public interface CrudDao<T> {
     T update(T entity);
 
     /**
-     * Delete entity.
+     * Delete entity by id.
      *
      * @param id the id
-     * @return the entity has been deleted
      */
-    boolean delete(Long id);
+    void delete(Long id);
 }

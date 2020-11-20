@@ -1,7 +1,6 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
-import com.epam.esm.dao.ColumnNameConstant;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
@@ -22,7 +21,6 @@ import java.util.Optional;
 @Repository
 public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     private static final String SELECT_ALL_TAGS = "SELECT t FROM Tag t";
-    private static final String DELETE_TAG = "DELETE FROM Tag WHERE id = :id";
     private static final String INSERT_GIFT_CERTIFICATE_TAG = "INSERT INTO gift_certificate_has_tag " +
             "(gift_certificate_id, tag_id) VALUES (?, ?)";
     private static final String SELECT_MOST_WIDELY_USED_TAG = "SELECT t.id, t.name FROM user_order o " +
@@ -43,7 +41,7 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     }
 
     public Tag save(Tag tag) {
-        doWithSession(session -> session.save(tag));
+        doWithSessionTransaction(session -> session.save(tag));
         return tag;
     }
 
@@ -69,12 +67,11 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     }
 
     @Override
-    public boolean delete(Long id) {
-        int updatedRows = doWithSessionTransaction(session -> session.createQuery(DELETE_TAG)
-                .setParameter(ColumnNameConstant.TAG_ID, id)
-                .executeUpdate()
-        );
-        return updatedRows > 0;
+    public void delete(Long id) {
+        doWithSessionTransaction(session -> {
+            Tag tag = session.find(Tag.class, id);
+            session.delete(tag);
+        });
     }
 
     @Override

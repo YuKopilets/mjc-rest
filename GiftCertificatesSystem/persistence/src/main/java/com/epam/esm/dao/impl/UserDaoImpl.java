@@ -1,7 +1,6 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
-import com.epam.esm.dao.ColumnNameConstant;
 import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.User;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -20,6 +19,7 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl extends AbstractSessionDao implements UserDao {
     private static final String SELECT_USER_BY_LOGIN = "SELECT u FROM User u WHERE u.login = :login";
+    private static final String USER_ACCOUNT_LOGIN_COLUMN = "login";
 
     public UserDaoImpl(LocalSessionFactoryBean localSessionFactory) {
         super(localSessionFactory);
@@ -34,7 +34,7 @@ public class UserDaoImpl extends AbstractSessionDao implements UserDao {
     @Override
     public Optional<User> findByLogin(String login) {
         User user = doWithSession(session -> session.createQuery(SELECT_USER_BY_LOGIN, User.class)
-                .setParameter(ColumnNameConstant.USER_ACCOUNT_LOGIN, login)
+                .setParameter(USER_ACCOUNT_LOGIN_COLUMN, login)
                 .setReadOnly(true)
                 .getSingleResult()
         );

@@ -104,14 +104,9 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void deleteTest() {
-        boolean isDeleted = giftCertificateDao.delete(1L);
-        assertTrue(isDeleted);
-    }
-
-    @Test
-    void deleteNegativeTest() {
-        boolean isDeleted = giftCertificateDao.delete(4L);
-        assertFalse(isDeleted);
+        giftCertificateDao.delete(1L);
+        Optional<GiftCertificate> giftCertificate = giftCertificateDao.findById(1L);
+        assertFalse(giftCertificate.isPresent());
     }
 
     private static Arguments[] prepareGiftCertificate() {

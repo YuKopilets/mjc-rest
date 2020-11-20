@@ -1,10 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.AbstractSessionDao;
-import com.epam.esm.dao.ColumnNameConstant;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.PageRequest;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -24,9 +22,7 @@ import java.util.Optional;
 public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     private static final String SELECT_BY_LOGIN = "SELECT orders FROM User WHERE login = :login";
     private static final String SELECT_ALL_ORDERS = "SELECT o FROM Order o";
-    private static final String DELETE_ORDER = "DELETE FROM Order WHERE id = :id";
-    private static final String INSERT_ORDER_GIFT_CERTIFICATE = "INSERT INTO order_has_gift_certificate " +
-            "(order_id, gift_certificate_id) VALUES (?, ?)";
+    private static final String USER_ACCOUNT_LOGIN_COLUMN = "login";
 
     public OrderDaoImpl(LocalSessionFactoryBean localSessionFactory) {
         super(localSessionFactory);
@@ -39,7 +35,7 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
         // the list of orders.
         @SuppressWarnings("unchecked") List<Order> orders = doWithSession(session -> session.createQuery(
                 SELECT_BY_LOGIN)
-                .setParameter(ColumnNameConstant.USER_ACCOUNT_LOGIN, login)
+                .setParameter(USER_ACCOUNT_LOGIN_COLUMN, login)
                 .setFirstResult(pageRequest.calculateStartElementPosition())
                 .setMaxResults(pageRequest.getPageSize())
                 .setReadOnly(true)
@@ -49,21 +45,8 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     }
 
     @Override
-    public void saveGiftCertificates(Order order) {
-        Long orderId = order.getId();
-        List<GiftCertificate> giftCertificates = order.getGiftCertificates();
-        doWithSessionTransaction(session -> giftCertificates.stream()
-                .mapToInt(giftCertificate -> session.createNativeQuery(INSERT_ORDER_GIFT_CERTIFICATE)
-                        .setParameter(1, orderId)
-                        .setParameter(2, giftCertificate.getId())
-                        .executeUpdate())
-                .sum()
-        );
-    }
-
-    @Override
     public Order save(Order order) {
-        doWithSession(session -> session.save(order));
+        doWithSessionTransaction(session -> session.save(order));
         return order;
     }
 
@@ -89,11 +72,10 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     }
 
     @Override
-    public boolean delete(Long id) {
-        int updatedRows = doWithSessionTransaction(session -> session.createQuery(DELETE_ORDER)
-                .setParameter(ColumnNameConstant.ORDER_ID, id)
-                .executeUpdate()
-        );
-        return updatedRows > 0;
+    public void delete(Long id) {
+        doWithSessionTransaction(session -> {
+            Order order = session.find(Order.class, id);
+            session.delete(order);
+        });
     }
 }

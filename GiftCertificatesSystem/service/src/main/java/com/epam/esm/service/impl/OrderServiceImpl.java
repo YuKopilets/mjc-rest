@@ -12,7 +12,6 @@ import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -38,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
     private final GiftCertificateDao giftCertificateDao;
 
     @Override
-    @Transactional
     public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException,
             UserNotFoundServiceException {
         userDao.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException(order.getUserId()));
@@ -47,7 +45,6 @@ public class OrderServiceImpl implements OrderService {
         initOrderByGiftCertificates(order);
         order.setCost(calculateOrderCost(order));
         orderDao.save(order);
-        addOrderGiftCertificates(order);
         return order;
     }
 
@@ -59,12 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getUserOrderById(Long id) throws OrderNotFoundServiceException {
-        return orderDao.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id)
-        );
-    }
-
-    private void addOrderGiftCertificates(Order order) {
-        orderDao.saveGiftCertificates(order);
+        return orderDao.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
     }
 
     private void initOrderByGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {

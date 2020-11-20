@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,6 +37,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tag")
+@Audited
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

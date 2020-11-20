@@ -1,8 +1,8 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dao.PageRequest;
-import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
 
@@ -21,8 +21,10 @@ public interface GiftCertificateService {
      *
      * @param giftCertificate the gift certificate
      * @return the gift certificate
+     * @throws TagNotFoundServiceException in case of {@code tag with
+     *                                     current id not found}
      */
-    GiftCertificate addGiftCertificate(@Valid GiftCertificate giftCertificate);
+    GiftCertificate addGiftCertificate(@Valid GiftCertificate giftCertificate) throws TagNotFoundServiceException;
 
     /**
      * Get single gift certificate by id.
@@ -61,11 +63,8 @@ public interface GiftCertificateService {
      * Remove gift certificate by id.
      *
      * @param id the gift certificate id
-     * @throws DeleteByRequestedIdServiceException in case of {@code certificate
-     * by current id hasn't been deleted}
      * @throws GiftCertificateNotFoundServiceException in case of {@code gift
      * certificate with current id not found}
      */
-    void removeGiftCertificate(Long id) throws GiftCertificateNotFoundServiceException,
-            DeleteByRequestedIdServiceException;
+    void removeGiftCertificate(Long id) throws GiftCertificateNotFoundServiceException;
 }

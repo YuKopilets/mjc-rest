@@ -91,7 +91,6 @@ class TagServiceImplTest {
     void removeTagTest(Tag tag) throws ServiceException {
         Optional<Tag> tagOptional = Optional.of(tag);
         Mockito.when(tagDao.findById(1L)).thenReturn(tagOptional);
-        Mockito.when(tagDao.delete(1L)).thenReturn(true);
         tagService.removeTag(1L);
         Mockito.verify(tagDao).delete(Mockito.anyLong());
     }
@@ -99,7 +98,6 @@ class TagServiceImplTest {
     @Test
     void removeTagNegativeTest() {
         Mockito.when(tagDao.findById(1L)).thenReturn(Optional.empty());
-        Mockito.when(tagDao.delete(1L)).thenReturn(false);
         assertThrows(TagNotFoundServiceException.class, () -> tagService.removeTag(1L));
     }
 

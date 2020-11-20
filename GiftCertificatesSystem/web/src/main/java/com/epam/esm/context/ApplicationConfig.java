@@ -30,8 +30,7 @@ public class ApplicationConfig {
 
     @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource
-                = new ReloadableResourceBundleMessageSource();
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename(MESSAGE_SOURCE_BASE_NAME);
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         return messageSource;

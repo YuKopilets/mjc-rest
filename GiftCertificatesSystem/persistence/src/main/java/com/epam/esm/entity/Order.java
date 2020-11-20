@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +41,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_order")
+@Audited
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,14 +16,6 @@ import java.util.List;
  */
 public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
     /**
-     * Save tags to <i>gift_Certificate_has_tag</i> table.
-     * Create operation (CRUD).
-     *
-     * @param giftCertificate the gift certificate
-     */
-    void saveTags(GiftCertificate giftCertificate);
-
-    /**
      * Find List of all gift certificates by query params. The {@code page
      * request} can show which part of list needed to return.
      * Read operation (CRUD).

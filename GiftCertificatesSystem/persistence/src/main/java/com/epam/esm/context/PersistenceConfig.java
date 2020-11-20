@@ -21,6 +21,8 @@ public class PersistenceConfig {
     private static final String DIALECT_PROPERTY = "hibernate.dialect";
     private static final String SHOW_SQL_PROPERTY = "hibernate.show_sql";
     private static final String FORMAT_SQL_PROPERTY = "hibernate.format_sql";
+    private static final String STORE_AT_DELETE_PROPERTY = "org.hibernate.envers.store_data_at_delete";
+    private static final String VALIDATION_MODE_PROPERTY = "javax.persistence.validation.mode";
 
     private final Environment environment;
 
@@ -39,6 +41,8 @@ public class PersistenceConfig {
         hibernateProperties.setProperty(DIALECT_PROPERTY, environment.getProperty(DIALECT_PROPERTY));
         hibernateProperties.setProperty(SHOW_SQL_PROPERTY, environment.getProperty(SHOW_SQL_PROPERTY));
         hibernateProperties.setProperty(FORMAT_SQL_PROPERTY, environment.getProperty(FORMAT_SQL_PROPERTY));
+        hibernateProperties.setProperty(STORE_AT_DELETE_PROPERTY, environment.getProperty(STORE_AT_DELETE_PROPERTY));
+        hibernateProperties.setProperty(VALIDATION_MODE_PROPERTY, environment.getProperty(VALIDATION_MODE_PROPERTY));
         return hibernateProperties;
     }
 }

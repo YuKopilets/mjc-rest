@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -30,7 +31,10 @@ public abstract class AbstractSessionDao {
      * @return the t
      */
     protected <T> T doWithSession(Function<Session, T> sessionFunction) {
-        return sessionFunction.apply(openSession());
+        final Session session = openSession();
+        T result = sessionFunction.apply(session);
+        session.close();
+        return result;
     }
 
     /**
@@ -38,16 +42,14 @@ public abstract class AbstractSessionDao {
      * session.
      * In the session function need to define necessary operations.
      *
-     * @param sessionFunction the session function
-     * @return the count of updated rows after transaction
+     * @param sessionConsumer the session consumer
      */
-    protected int doWithSessionTransaction(Function<Session, Integer> sessionFunction) {
+    protected void doWithSessionTransaction(Consumer<Session> sessionConsumer) {
         final Session session = openSession();
         session.beginTransaction();
-        int updatedRows = sessionFunction.apply(session);
+        sessionConsumer.accept(session);
         session.getTransaction().commit();
         session.close();
-        return updatedRows;
     }
 
     private Session openSession() {

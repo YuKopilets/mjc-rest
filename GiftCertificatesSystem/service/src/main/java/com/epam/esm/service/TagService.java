@@ -2,7 +2,6 @@ package com.epam.esm.service;
 
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
 
 import javax.validation.Valid;
@@ -52,10 +51,8 @@ public interface TagService {
      * Remove tag.
      *
      * @param id the tag id
-     * @throws DeleteByRequestedIdServiceException in case of {@code tag by
-     * current id hasn't been deleted}
      * @throws TagNotFoundServiceException        in case of {@code tag with
      * current id not found}
      */
-    void removeTag(Long id) throws TagNotFoundServiceException, DeleteByRequestedIdServiceException;
+    void removeTag(Long id) throws TagNotFoundServiceException;
 }

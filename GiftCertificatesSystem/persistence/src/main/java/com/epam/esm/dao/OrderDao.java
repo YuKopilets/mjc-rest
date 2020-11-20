@@ -24,12 +24,4 @@ public interface OrderDao extends CrudDao<Order> {
      * @return the list
      */
     List<Order> findOrdersByUserLogin(String login, PageRequest pageRequest);
-
-    /**
-     * Save gift certificates to <i>order_has_gift_certificate</i> table.
-     * Create operation (CRUD).
-     *
-     * @param order the order with certificates
-     */
-    void saveGiftCertificates(Order order);
 }

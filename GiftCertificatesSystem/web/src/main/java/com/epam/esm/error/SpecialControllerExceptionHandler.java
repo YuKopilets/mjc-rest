@@ -1,6 +1,5 @@
 package com.epam.esm.error;
 
-import com.epam.esm.exception.DeleteByRequestedIdServiceException;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
@@ -37,7 +36,6 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
      * @return the response entity
      */
     @ExceptionHandler({
-            DeleteByRequestedIdServiceException.class,
             GiftCertificateNotFoundServiceException.class,
             TagNotFoundServiceException.class,
             OrderNotFoundServiceException.class,
