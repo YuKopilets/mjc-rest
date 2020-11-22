@@ -50,3 +50,71 @@ CREATE TABLE order_has_gift_certificate
   FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate(id)
   ON DELETE CASCADE
 );
+
+CREATE TABLE REVINFO (
+   REV INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   REVTSTMP BIGINT
+);
+
+CREATE TABLE gift_certificate_aud
+(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(1024) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    create_date DATETIME NOT NULL,
+    last_update_date DATETIME NOT NULL,
+    duration INT NOT NULL,
+    REV INTEGER NOT NULL,
+    REVTYPE tinyint,
+    FOREIGN KEY (REV) REFERENCES REVINFO (REV)
+);
+
+CREATE TABLE tag_aud
+(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    REV INTEGER NOT NULL,
+    REVTYPE tinyint,
+    FOREIGN KEY (REV) REFERENCES REVINFO (REV)
+);
+
+CREATE TABLE gift_certificate_has_tag_aud
+(
+  gift_certificate_id BIGINT NOT NULL,
+  tag_id BIGINT NOT NULL,
+  REV INTEGER NOT NULL,
+  REVTYPE tinyint,
+  FOREIGN KEY (REV) REFERENCES REVINFO (REV)
+);
+
+CREATE TABLE user_account_aud
+(
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  login VARCHAR(50) NOT NULL,
+  REV INTEGER NOT NULL,
+  REVTYPE tinyint,
+  FOREIGN KEY (REV) REFERENCES REVINFO (REV)
+);
+
+CREATE TABLE user_order_aud
+(
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cost DECIMAL(20,2) NOT NULL,
+  date DATETIME NOT NULL,
+  user_account_id BIGINT NOT NULL,
+  REV INTEGER NOT NULL,
+  REVTYPE tinyint,
+  FOREIGN KEY (REV) REFERENCES REVINFO (REV),
+  FOREIGN KEY (user_account_id) REFERENCES user_account(id)
+  ON DELETE CASCADE
+);
+
+CREATE TABLE order_has_gift_certificate_aud
+(
+  order_id BIGINT NOT NULL,
+  gift_certificate_id BIGINT NOT NULL,
+  REV INTEGER NOT NULL,
+  REVTYPE tinyint,
+  FOREIGN KEY (REV) REFERENCES REVINFO (REV)
+);

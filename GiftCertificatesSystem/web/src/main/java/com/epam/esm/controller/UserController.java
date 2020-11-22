@@ -40,6 +40,10 @@ import java.util.stream.Collectors;
 @Api(value = "/users", tags = "User operations")
 @RequiredArgsConstructor
 public class UserController {
+    private static final String LINK_ORDERS = "orders";
+    private static final String LINK_ALL_USER_ORDERS = "allUserOrders";
+    private static final String LINK_GIFT_CERTIFICATES = "giftCertificates";
+
     private final UserService userService;
     private final OrderService orderService;
     private final UserDtoConverter userDtoConverter;
@@ -52,8 +56,8 @@ public class UserController {
         UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                 .slash(user.getLogin())
-                .slash("orders")
-                .withRel("orders");
+                .slash(LINK_ORDERS)
+                .withRel(LINK_ORDERS);
         dto.add(link);
         return dto;
     }
@@ -65,8 +69,8 @@ public class UserController {
         UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                 .slash(login)
-                .slash("orders")
-                .withRel("orders");
+                .slash(LINK_ORDERS)
+                .withRel(LINK_ORDERS);
         dto.add(link);
         return dto;
     }
@@ -82,34 +86,21 @@ public class UserController {
         PageRequest pageRequest = new PageRequest(page, pageSize);
         List<Order> orders = orderService.getUserOrders(login, pageRequest);
         List<OrderRepresentationDto> dtoList = convertOrdersToDtoList(orders);
-
-        dtoList.forEach(dto -> {
-            Link link = WebMvcLinkBuilder.linkTo(UserController.class)
-                    .slash(login)
-                    .slash("orders")
-                    .slash(dto.getId())
-                    .withSelfRel();
-            dto.add(link);
-        });
+        addSelfOrderLinksInDtoList(dtoList, login);
         return dtoList;
     }
 
     @GetMapping(value = "/{login}/orders/{id}")
     @ApiOperation(value = "get user's order by id")
     public OrderRepresentationDto getUserOrderById(@PathVariable @Size(min = 4, max = 50) String login,
-                                                                @PathVariable @Min(value = 1) long id) {
+                                                   @PathVariable @Min(value = 1) long id) {
         Order order = orderService.getUserOrderById(id);
         OrderRepresentationDto dto = orderDtoConverter.convertToRepresentationDto(order);
-        dto.getGiftCertificates().forEach(giftCertificate -> {
-            Link link = WebMvcLinkBuilder.linkTo(GiftCertificateController.class)
-                    .slash(giftCertificate.getId())
-                    .withRel("giftCertificates");
-            dto.add(link);
-        });
+        addGiftCertificatesLinksInDto(dto);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
                 .slash(login)
-                .slash("orders")
-                .withRel("allUserOrders");
+                .slash(LINK_ORDERS)
+                .withRel(LINK_ALL_USER_ORDERS);
         dto.add(link);
         return dto;
     }
@@ -118,5 +109,27 @@ public class UserController {
         return orders.stream()
                 .map(orderDtoConverter::convertToRepresentationDto)
                 .collect(Collectors.toList());
+    }
+
+    private void addSelfOrderLinksInDtoList(List<OrderRepresentationDto> dtoList, String login) {
+        dtoList.forEach(dto -> {
+            Link link = WebMvcLinkBuilder.linkTo(UserController.class)
+                    .slash(login)
+                    .slash(LINK_ORDERS)
+                    .slash(dto.getId())
+                    .withSelfRel();
+            dto.add(link);
+        });
+    }
+
+    private void addGiftCertificatesLinksInDto(OrderRepresentationDto dto) {
+        dto.getGiftCertificates().stream()
+                .distinct()
+                .forEach(giftCertificate -> {
+                    Link link = WebMvcLinkBuilder.linkTo(GiftCertificateController.class)
+                            .slash(giftCertificate.getId())
+                            .withRel(LINK_GIFT_CERTIFICATES);
+                    dto.add(link);
+                });
     }
 }

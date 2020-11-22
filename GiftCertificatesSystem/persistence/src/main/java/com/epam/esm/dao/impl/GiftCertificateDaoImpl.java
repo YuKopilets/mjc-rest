@@ -80,6 +80,7 @@ public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCe
                 .list());
 
         return doWithSession(session -> certificateIds.stream()
+                .distinct()
                 .map(id -> session.find(GiftCertificate.class, id))
                 .collect(Collectors.toList())
         );

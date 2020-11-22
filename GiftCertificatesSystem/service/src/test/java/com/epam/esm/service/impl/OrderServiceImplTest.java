@@ -130,7 +130,7 @@ class OrderServiceImplTest {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> firstTags = new HashSet<>();
-        firstTags.add(new Tag(5L, "sport"));
+        firstTags.add(buildTag(5L, "sport"));
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -144,8 +144,8 @@ class OrderServiceImplTest {
 
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         Set<Tag> secondTags = new HashSet<>();
-        secondTags.add(new Tag(2L, "spa"));
-        secondTags.add(new Tag(3L, "holiday"));
+        secondTags.add(buildTag(2L, "spa"));
+        secondTags.add(buildTag(3L, "holiday"));
         GiftCertificate secondCertificate = GiftCertificate.builder()
                 .id(2L)
                 .name("secondCertificate")
@@ -176,7 +176,7 @@ class OrderServiceImplTest {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> tags = new HashSet<>();
-        tags.add(new Tag(5L, "sport"));
+        tags.add(buildTag(5L, "sport"));
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -206,5 +206,12 @@ class OrderServiceImplTest {
                 .login("user")
                 .build();
         return new Arguments[]{Arguments.of(orders, user)};
+    }
+
+    private static Tag buildTag(Long id, String name) {
+        return Tag.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 }
