@@ -60,16 +60,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void initOrderByGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {
-        final List<GiftCertificate> giftCertificates = order.getGiftCertificates().stream()
+        List<GiftCertificate> giftCertificates = order.getGiftCertificates().stream()
                 .map(this::findOrderGiftCertificate)
                 .collect(Collectors.toList());
         order.setGiftCertificates(giftCertificates);
     }
 
-    private GiftCertificate findOrderGiftCertificate(GiftCertificate giftCertificate) {
-        return giftCertificateDao.findById(giftCertificate.getId()).orElseThrow(() ->
-                new GiftCertificateNotFoundServiceException(giftCertificate.getId())
-        );
+    private GiftCertificate findOrderGiftCertificate(GiftCertificate giftCertificate)
+            throws GiftCertificateNotFoundServiceException {
+        return giftCertificateDao.findById(giftCertificate.getId())
+                .orElseThrow(() -> new GiftCertificateNotFoundServiceException(giftCertificate.getId()));
     }
 
     private BigDecimal calculateOrderCost(Order order) {

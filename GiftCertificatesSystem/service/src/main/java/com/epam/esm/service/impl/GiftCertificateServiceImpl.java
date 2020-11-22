@@ -48,7 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         LocalDateTime localDateTime = LocalDateTime.now();
         giftCertificate.setCreateDate(localDateTime);
         giftCertificate.setLastUpdateDate(localDateTime);
-        prepareGiftCertificateTags(giftCertificate);
+        initGiftCertificateByTags(giftCertificate);
         giftCertificateDao.save(giftCertificate);
         return giftCertificate;
     }
@@ -86,12 +86,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateDao.delete(id);
     }
 
-    private void prepareGiftCertificateTags(GiftCertificate giftCertificate) throws TagNotFoundServiceException {
+    private void initGiftCertificateByTags(GiftCertificate giftCertificate) throws TagNotFoundServiceException {
         Set<Tag> tags = giftCertificate.getTags().stream()
-                .map(Tag::getId)
-                .map(id -> tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException(id)))
+                .map(this::findGiftCertificateTag)
                 .collect(Collectors.toSet());
         giftCertificate.setTags(tags);
+    }
+
+    private Tag findGiftCertificateTag(Tag tag) throws TagNotFoundServiceException {
+        return tagDao.findById(tag.getId()).orElseThrow(() -> new TagNotFoundServiceException(tag.getId()));
     }
 
     private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {

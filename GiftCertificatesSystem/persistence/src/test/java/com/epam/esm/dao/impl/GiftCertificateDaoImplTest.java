@@ -112,7 +112,7 @@ class GiftCertificateDaoImplTest {
     private static Arguments[] prepareGiftCertificate() {
         LocalDateTime localDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> tags = new HashSet<>();
-        tags.add(new Tag(5L, "sport"));
+        tags.add(buildTag(5L, "sport"));
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .name("test name")
                 .description("test description")
@@ -129,7 +129,7 @@ class GiftCertificateDaoImplTest {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> firstTags = new HashSet<>();
-        firstTags.add(new Tag(5L, "sport"));
+        firstTags.add(buildTag(5L, "sport"));
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -143,8 +143,8 @@ class GiftCertificateDaoImplTest {
 
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         Set<Tag> secondTags = new HashSet<>();
-        secondTags.add(new Tag(2L, "spa"));
-        secondTags.add(new Tag(3L, "holiday"));
+        secondTags.add(buildTag(2L, "spa"));
+        secondTags.add(buildTag(3L, "holiday"));
         GiftCertificate secondCertificate = GiftCertificate.builder()
                 .id(2L)
                 .name("secondCertificate")
@@ -158,8 +158,8 @@ class GiftCertificateDaoImplTest {
 
         LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
         Set<Tag> thirdTags = new HashSet<>();
-        thirdTags.add(new Tag(1L, "rest"));
-        thirdTags.add(new Tag(6L, "tourism"));
+        thirdTags.add(buildTag(1L, "rest"));
+        thirdTags.add(buildTag(6L, "tourism"));
         GiftCertificate thirdCertificate = GiftCertificate.builder()
                 .id(3L)
                 .name("thirdCertificate")
@@ -186,7 +186,7 @@ class GiftCertificateDaoImplTest {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> firstTags = new HashSet<>();
-        firstTags.add(new Tag(5L, "sport"));
+        firstTags.add(buildTag(5L, "sport"));
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -200,8 +200,8 @@ class GiftCertificateDaoImplTest {
 
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         Set<Tag> secondTags = new HashSet<>();
-        secondTags.add(new Tag(2L, "spa"));
-        secondTags.add(new Tag(3L, "holiday"));
+        secondTags.add(buildTag(2L, "spa"));
+        secondTags.add(buildTag(3L, "holiday"));
         GiftCertificate secondCertificate = GiftCertificate.builder()
                 .id(2L)
                 .name("secondCertificate")
@@ -224,5 +224,12 @@ class GiftCertificateDaoImplTest {
         tagNames.add("spa");
         tagNames.add("rest");
         return new GiftCertificateQuery(tagNames, null, "Certificate", null, null);
+    }
+
+    private static Tag buildTag(Long id, String name) {
+        return Tag.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 }

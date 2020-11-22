@@ -2,8 +2,12 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.PageRequest;
+import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
+import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
@@ -31,23 +35,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class GiftCertificateServiceImplTest {
     @Mock
     private GiftCertificateDao giftCertificateDao;
+    @Mock
+    private TagDao tagDao;
     private GiftCertificateService giftCertificateService;
 
     @BeforeEach
     void setUp() {
         giftCertificateDao = Mockito.mock(GiftCertificateDaoImpl.class);
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateDao);
+        tagDao = Mockito.mock(TagDaoImpl.class);
+        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateDao, tagDao);
     }
 
     @AfterEach
     void tearDown() {
         giftCertificateDao = null;
+        tagDao = null;
         giftCertificateService = null;
     }
 
     @ParameterizedTest
     @MethodSource("prepareGiftCertificate")
     void addGiftCertificateTest(GiftCertificate giftCertificate) {
+        Optional<Tag> tagOptional = Optional.ofNullable(buildTag(5L, "sport"));
+        Mockito.when(tagDao.findById(5L)).thenReturn(tagOptional);
         giftCertificateService.addGiftCertificate(giftCertificate);
         Mockito.verify(giftCertificateDao).save(giftCertificate);
     }
@@ -64,7 +74,8 @@ class GiftCertificateServiceImplTest {
     @Test
     void getGiftCertificateByIdNegativeTest() {
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(ServiceException.class, () -> giftCertificateService.getGiftCertificateById(1L));
+        assertThrows(GiftCertificateNotFoundServiceException.class,
+                () -> giftCertificateService.getGiftCertificateById(1L));
     }
 
     @ParameterizedTest
@@ -119,7 +130,7 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareGiftCertificate")
     void updateGiftCertificateNegativeTest(GiftCertificate giftCertificate) {
         Mockito.when(giftCertificateDao.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(ServiceException.class,
+        assertThrows(GiftCertificateNotFoundServiceException.class,
                 () -> giftCertificateService.updateGiftCertificate(giftCertificate)
         );
     }
@@ -140,6 +151,8 @@ class GiftCertificateServiceImplTest {
 
     private static Arguments[] prepareGiftCertificate() {
         LocalDateTime localDateTime = LocalDateTime.now();
+        Set<Tag> tags = new HashSet<>();
+        tags.add(buildTag(5L, "sport"));
         GiftCertificate giftCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("test name")
@@ -148,6 +161,7 @@ class GiftCertificateServiceImplTest {
                 .createDate(localDateTime)
                 .lastUpdateDate(localDateTime)
                 .duration(Duration.ofDays(25))
+                .tags(tags)
                 .build();
         return new Arguments[]{Arguments.of(giftCertificate)};
     }
@@ -155,6 +169,8 @@ class GiftCertificateServiceImplTest {
     private static Arguments[] prepareExpectedGiftCertificates() {
         List<GiftCertificate> expectedGiftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
+        Set<Tag> firstTags = new HashSet<>();
+        firstTags.add(buildTag(5L, "sport"));
         GiftCertificate firstCertificate = GiftCertificate.builder()
                 .id(1L)
                 .name("firstCertificate")
@@ -163,8 +179,13 @@ class GiftCertificateServiceImplTest {
                 .createDate(firstCertificateDateTime)
                 .lastUpdateDate(firstCertificateDateTime)
                 .duration(Duration.ofDays(10))
+                .tags(firstTags)
                 .build();
+
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
+        Set<Tag> secondTags = new HashSet<>();
+        secondTags.add(buildTag(2L, "spa"));
+        secondTags.add(buildTag(3L, "holiday"));
         GiftCertificate secondCertificate = GiftCertificate.builder()
                 .id(2L)
                 .name("secondCertificate")
@@ -173,8 +194,13 @@ class GiftCertificateServiceImplTest {
                 .createDate(secondCertificateDateTime)
                 .lastUpdateDate(secondCertificateDateTime)
                 .duration(Duration.ofDays(10))
+                .tags(secondTags)
                 .build();
+
         LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
+        Set<Tag> thirdTags = new HashSet<>();
+        thirdTags.add(buildTag(1L, "rest"));
+        thirdTags.add(buildTag(6L, "tourism"));
         GiftCertificate thirdCertificate = GiftCertificate.builder()
                 .id(3L)
                 .name("thirdCertificate")
@@ -183,7 +209,9 @@ class GiftCertificateServiceImplTest {
                 .createDate(thirdCertificateDateTime)
                 .lastUpdateDate(thirdCertificateDateTime)
                 .duration(Duration.ofDays(12))
+                .tags(thirdTags)
                 .build();
+
         expectedGiftCertificates.add(firstCertificate);
         expectedGiftCertificates.add(secondCertificate);
         expectedGiftCertificates.add(thirdCertificate);
@@ -193,5 +221,12 @@ class GiftCertificateServiceImplTest {
     private static GiftCertificateQuery prepareGiftCertificateQuery() {
         Set<String> tagNames = new HashSet<>();
         return new GiftCertificateQuery(tagNames, null, null, null, null);
+    }
+
+    private static Tag buildTag(Long id, String name) {
+        return Tag.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 }
