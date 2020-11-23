@@ -35,6 +35,7 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
             "GROUP BY t.id " +
             "    ORDER BY count(t.id) DESC " +
             "LIMIT 1";
+    private static final String DELETE_GIFT_CERTIFICATES_TAG = "DELETE FROM gift_certificate_has_tag WHERE tag_id = ?";
 
     public TagDaoImpl(LocalSessionFactoryBean sessionFactory) {
         super(sessionFactory);
@@ -88,5 +89,13 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
                 .setParameter(1, giftCertificateId)
                 .setParameter(2, tagId)
                 .executeUpdate());
+    }
+
+    @Override
+    public void deleteGiftCertificatesTag(Long id) {
+        doWithSessionTransaction(session -> session.createSQLQuery(DELETE_GIFT_CERTIFICATES_TAG)
+                .setParameter(1, id)
+                .executeUpdate()
+        );
     }
 }

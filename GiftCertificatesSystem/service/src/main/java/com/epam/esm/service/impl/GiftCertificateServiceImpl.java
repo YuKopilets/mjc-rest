@@ -12,6 +12,7 @@ import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -43,6 +44,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final TagDao tagDao;
 
     @Override
+    @Transactional
     public GiftCertificate addGiftCertificate(@Valid GiftCertificate giftCertificate)
             throws TagNotFoundServiceException {
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -68,6 +70,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional
     public GiftCertificate updateGiftCertificate(@Valid GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException {
         GiftCertificate oldGiftCertificateById = giftCertificateDao.findById(giftCertificate.getId())

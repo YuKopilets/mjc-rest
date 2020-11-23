@@ -7,6 +7,7 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.exception.TagNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -46,8 +47,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public void removeTag(Long id) throws TagNotFoundServiceException {
         tagDao.findById(id).orElseThrow(() -> new TagNotFoundServiceException(id));
+        tagDao.deleteGiftCertificatesTag(id);
         tagDao.delete(id);
     }
 }
