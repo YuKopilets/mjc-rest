@@ -4,6 +4,7 @@ import com.epam.esm.dao.AbstractSessionDao;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Order;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @see OrderDao
  * @see AbstractSessionDao
  */
+@Slf4j
 @Repository
 public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
     private static final String SELECT_BY_LOGIN = "SELECT orders FROM User WHERE login = :login";
@@ -68,6 +70,7 @@ public class OrderDaoImpl extends AbstractSessionDao implements OrderDao {
 
     @Override
     public Order update(Order order) {
+        log.info("Update method has been called but does not contain an implementation for the order!");
         return order;
     }
 

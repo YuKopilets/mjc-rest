@@ -113,12 +113,7 @@ class OrderServiceImplTest {
 
     private static Arguments[] prepareOrder() {
         LocalDateTime localDateTime = LocalDateTime.parse("2009-10-04T15:42:20.134");
-        Order order = Order.builder()
-                .userId(1L)
-                .cost(BigDecimal.valueOf(30.43).setScale(2, RoundingMode.HALF_UP))
-                .date(localDateTime)
-                .giftCertificates(prepareOrderGiftCertificates())
-                .build();
+        Order order = buildOrder(1L, 1L, 30.43, localDateTime, prepareOrderGiftCertificates());
         User user = User.builder()
                 .id(1L)
                 .login("user")
@@ -131,31 +126,17 @@ class OrderServiceImplTest {
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> firstTags = new HashSet<>();
         firstTags.add(buildTag(5L, "sport"));
-        GiftCertificate firstCertificate = GiftCertificate.builder()
-                .id(1L)
-                .name("firstCertificate")
-                .description("The First Certificate description")
-                .price(BigDecimal.valueOf(10.20).setScale(2, RoundingMode.HALF_UP))
-                .createDate(firstCertificateDateTime)
-                .lastUpdateDate(firstCertificateDateTime)
-                .duration(Duration.ofDays(10))
-                .tags(firstTags)
-                .build();
+        GiftCertificate firstCertificate = buildGiftCertificate(1L, "firstCertificate",
+                "The First Certificate description", 10.20, firstCertificateDateTime,
+                firstCertificateDateTime, 10, firstTags);
 
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         Set<Tag> secondTags = new HashSet<>();
         secondTags.add(buildTag(2L, "spa"));
         secondTags.add(buildTag(3L, "holiday"));
-        GiftCertificate secondCertificate = GiftCertificate.builder()
-                .id(2L)
-                .name("secondCertificate")
-                .description("The Second Certificate description")
-                .price(BigDecimal.valueOf(20.23).setScale(2, RoundingMode.HALF_UP))
-                .createDate(secondCertificateDateTime)
-                .lastUpdateDate(secondCertificateDateTime)
-                .duration(Duration.ofDays(10))
-                .tags(secondTags)
-                .build();
+        GiftCertificate secondCertificate = buildGiftCertificate(2L, "secondCertificate",
+                "The Second Certificate description", 20.23, secondCertificateDateTime,
+                secondCertificateDateTime, 10, secondTags);
 
         giftCertificates.add(firstCertificate);
         giftCertificates.add(secondCertificate);
@@ -165,38 +146,19 @@ class OrderServiceImplTest {
     private static Arguments[] prepareOrders() {
         List<Order> orders = new ArrayList<>();
         LocalDateTime firstOrderDateTime = LocalDateTime.parse("2009-10-04T15:42:20.134");
-        Order firstOrder = Order.builder()
-                .id(1L)
-                .userId(1L)
-                .cost(BigDecimal.valueOf(30.43).setScale(2, RoundingMode.HALF_UP))
-                .date(firstOrderDateTime)
-                .giftCertificates(prepareOrderGiftCertificates())
-                .build();
+        Order firstOrder = buildOrder(1L, 1L, 30.43, firstOrderDateTime, prepareOrderGiftCertificates());
 
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> tags = new HashSet<>();
         tags.add(buildTag(5L, "sport"));
-        GiftCertificate giftCertificate = GiftCertificate.builder()
-                .id(1L)
-                .name("firstCertificate")
-                .description("The First Certificate description")
-                .price(BigDecimal.valueOf(10.20).setScale(2, RoundingMode.HALF_UP))
-                .createDate(firstCertificateDateTime)
-                .lastUpdateDate(firstCertificateDateTime)
-                .duration(Duration.ofDays(10))
-                .tags(tags)
-                .build();
+        GiftCertificate giftCertificate = buildGiftCertificate(1L, "firstCertificate",
+                "The First Certificate description", 10.20, firstCertificateDateTime,
+                firstCertificateDateTime, 10, tags);
         giftCertificates.add(giftCertificate);
 
         LocalDateTime secondOrderDateTime = LocalDateTime.parse("2010-03-01T13:48:10.224");
-        Order secondOrder = Order.builder()
-                .id(2L)
-                .userId(1L)
-                .cost(BigDecimal.valueOf(10.20).setScale(2, RoundingMode.HALF_UP))
-                .date(secondOrderDateTime)
-                .giftCertificates(giftCertificates)
-                .build();
+        Order secondOrder = buildOrder(2L, 1L, 10.20, secondOrderDateTime, giftCertificates);
 
         orders.add(firstOrder);
         orders.add(secondOrder);
@@ -212,6 +174,32 @@ class OrderServiceImplTest {
         return Tag.builder()
                 .id(id)
                 .name(name)
+                .build();
+    }
+
+    private static Order buildOrder(Long id, Long userId, Double cost, LocalDateTime dateTime,
+                                    List<GiftCertificate> giftCertificates) {
+        return Order.builder()
+                .id(id)
+                .userId(userId)
+                .cost(BigDecimal.valueOf(cost).setScale(2, RoundingMode.HALF_UP))
+                .date(dateTime)
+                .giftCertificates(giftCertificates)
+                .build();
+    }
+
+    private static GiftCertificate buildGiftCertificate(Long id, String name, String description, Double price,
+                                                        LocalDateTime createDate, LocalDateTime lastUpdateDate,
+                                                        Integer duration, Set<Tag> tags) {
+        return GiftCertificate.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .price(BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP))
+                .createDate(createDate)
+                .lastUpdateDate(lastUpdateDate)
+                .duration(Duration.ofDays(duration))
+                .tags(tags)
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import com.epam.esm.dao.AbstractSessionDao;
 import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @see TagDao
  * @see AbstractSessionDao
  */
+@Slf4j
 @Repository
 public class TagDaoImpl extends AbstractSessionDao implements TagDao {
     private static final String SELECT_ALL_TAGS = "SELECT t FROM Tag t";
@@ -64,6 +66,7 @@ public class TagDaoImpl extends AbstractSessionDao implements TagDao {
 
     @Override
     public Tag update(Tag tag) {
+        log.info("Update method has been called but does not contain an implementation for the tag!");
         return tag;
     }
 

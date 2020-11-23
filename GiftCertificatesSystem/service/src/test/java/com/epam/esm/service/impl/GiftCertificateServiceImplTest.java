@@ -153,16 +153,8 @@ class GiftCertificateServiceImplTest {
         LocalDateTime localDateTime = LocalDateTime.now();
         Set<Tag> tags = new HashSet<>();
         tags.add(buildTag(5L, "sport"));
-        GiftCertificate giftCertificate = GiftCertificate.builder()
-                .id(1L)
-                .name("test name")
-                .description("test description")
-                .price(BigDecimal.valueOf(20.30).setScale(2, RoundingMode.HALF_UP))
-                .createDate(localDateTime)
-                .lastUpdateDate(localDateTime)
-                .duration(Duration.ofDays(25))
-                .tags(tags)
-                .build();
+        GiftCertificate giftCertificate = buildGiftCertificate(1L, "test name", "test description",
+                20.30, localDateTime, localDateTime, 25, tags);
         return new Arguments[]{Arguments.of(giftCertificate)};
     }
 
@@ -171,46 +163,25 @@ class GiftCertificateServiceImplTest {
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> firstTags = new HashSet<>();
         firstTags.add(buildTag(5L, "sport"));
-        GiftCertificate firstCertificate = GiftCertificate.builder()
-                .id(1L)
-                .name("firstCertificate")
-                .description("The First Certificate description")
-                .price(BigDecimal.valueOf(10.20).setScale(2, RoundingMode.HALF_UP))
-                .createDate(firstCertificateDateTime)
-                .lastUpdateDate(firstCertificateDateTime)
-                .duration(Duration.ofDays(10))
-                .tags(firstTags)
-                .build();
+        GiftCertificate firstCertificate = buildGiftCertificate(1L, "firstCertificate",
+                "The First Certificate description", 10.20, firstCertificateDateTime,
+                firstCertificateDateTime, 10, firstTags);
 
         LocalDateTime secondCertificateDateTime = LocalDateTime.parse("2010-09-02T13:00:20.354");
         Set<Tag> secondTags = new HashSet<>();
         secondTags.add(buildTag(2L, "spa"));
         secondTags.add(buildTag(3L, "holiday"));
-        GiftCertificate secondCertificate = GiftCertificate.builder()
-                .id(2L)
-                .name("secondCertificate")
-                .description("The Second Certificate description")
-                .price(BigDecimal.valueOf(20.23).setScale(2, RoundingMode.HALF_UP))
-                .createDate(secondCertificateDateTime)
-                .lastUpdateDate(secondCertificateDateTime)
-                .duration(Duration.ofDays(10))
-                .tags(secondTags)
-                .build();
+        GiftCertificate secondCertificate = buildGiftCertificate(2L, "secondCertificate",
+                "The Second Certificate description", 20.23, secondCertificateDateTime,
+                secondCertificateDateTime, 10, secondTags);
 
         LocalDateTime thirdCertificateDateTime = LocalDateTime.parse("2012-12-12T12:12:12.354");
         Set<Tag> thirdTags = new HashSet<>();
         thirdTags.add(buildTag(1L, "rest"));
         thirdTags.add(buildTag(6L, "tourism"));
-        GiftCertificate thirdCertificate = GiftCertificate.builder()
-                .id(3L)
-                .name("thirdCertificate")
-                .description("The Third Certificate description")
-                .price(BigDecimal.valueOf(40.20).setScale(2, RoundingMode.HALF_UP))
-                .createDate(thirdCertificateDateTime)
-                .lastUpdateDate(thirdCertificateDateTime)
-                .duration(Duration.ofDays(12))
-                .tags(thirdTags)
-                .build();
+        GiftCertificate thirdCertificate = buildGiftCertificate(3L, "thirdCertificate",
+                "The Third Certificate description", 40.20, thirdCertificateDateTime,
+                thirdCertificateDateTime, 12, thirdTags);
 
         expectedGiftCertificates.add(firstCertificate);
         expectedGiftCertificates.add(secondCertificate);
@@ -227,6 +198,21 @@ class GiftCertificateServiceImplTest {
         return Tag.builder()
                 .id(id)
                 .name(name)
+                .build();
+    }
+
+    private static GiftCertificate buildGiftCertificate(Long id, String name, String description, Double price,
+                                                        LocalDateTime createDate, LocalDateTime lastUpdateDate,
+                                                        Integer duration, Set<Tag> tags) {
+        return GiftCertificate.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .price(BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP))
+                .createDate(createDate)
+                .lastUpdateDate(lastUpdateDate)
+                .duration(Duration.ofDays(duration))
+                .tags(tags)
                 .build();
     }
 }
