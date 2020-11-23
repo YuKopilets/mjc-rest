@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * The interface Gift certificate dao is expansion of CrudDao for additional
  * operations with <i>gift_Certificate</i> table and
- * <i>gift_Certificate_has_tag</i> cross table.
+ * <i>gift_Certificate_has_tag</i> associated table.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -16,27 +16,13 @@ import java.util.List;
  */
 public interface GiftCertificateDao extends CrudDao<GiftCertificate> {
     /**
-     * Save tags to <i>gift_Certificate_has_tag</i> table.
-     * Create operation (CRUD).
-     *
-     * @param giftCertificate the gift certificate
-     */
-    void saveTags(GiftCertificate giftCertificate);
-
-    /**
-     * Find List of all gift certificates by query params.
+     * Find List of all gift certificates by query params. The {@code page
+     * request} can show which part of list needed to return.
      * Read operation (CRUD).
      *
      * @param giftCertificateQuery the gift certificate query
+     * @param pageRequest          the number and size of page
      * @return the list of all found gift certificates
      */
-    List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery);
-
-    /**
-     * Delete tags by id from <i>gift_Certificate_has_tag</i> table.
-     * Delete operation (CRUD).
-     *
-     * @param giftCertificateId the gift certificate id
-     */
-    void deleteTagsById(Long giftCertificateId);
+    List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery, PageRequest pageRequest);
 }

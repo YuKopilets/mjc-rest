@@ -5,13 +5,20 @@ import com.epam.esm.entity.Tag;
 /**
  * The interface Tag dao is expansion of CrudDao for additional
  * operations with <i>tag</i> table and <i>gift_Certificate_has_tag</i>
- * cross table.
+ * associated table.
  *
  * @author Yuriy Kopilets
  * @version 1.0
  * @see CrudDao
  */
 public interface TagDao extends CrudDao<Tag> {
+    /**
+     * Find most widely used tag of a user with the highest cost of all orders.
+     *
+     * @return the most widely used tag
+     */
+    Tag findMostWidelyUsedTag();
+
     /**
      * Save tag to gift certificate. Insert single record to
      * <i>gift_Certificate_has_tag</i> table.
@@ -23,11 +30,9 @@ public interface TagDao extends CrudDao<Tag> {
     void saveToGiftCertificate(Long giftCertificateId, Long tagId);
 
     /**
-     * Delete tag from gift certificates by tag id.
-     * Delete record from <i>gift_Certificate_has_tag</i>.
-     * Delete operation (CRUD).
+     * Delete records in <i>gift_certificate_has_tag</i> by tag id.
      *
-     * @param tagId the tag id
+     * @param id the id
      */
-    void deleteFromGiftCertificatesById(Long tagId);
+    void deleteGiftCertificatesTag(Long id);
 }

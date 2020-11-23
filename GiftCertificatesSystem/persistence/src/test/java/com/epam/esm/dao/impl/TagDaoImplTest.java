@@ -1,18 +1,18 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.context.TestConfig;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestConfig.class)
+@SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
 @Sql({"/drop_gift_certificates_system_schema.sql", "/create_gift_certificates_system_schema.sql"})
 @Sql(scripts = {"/gift_certificates_system_inserts.sql"})
@@ -42,7 +41,7 @@ class TagDaoImplTest {
     void findTagByIdTest() {
         Optional<Tag> tagById = tagDao.findById(1L);
         String expected = "rest";
-        String actual = tagById.get().getName();
+        String actual = tagById.map(Tag::getName).orElse(StringUtils.EMPTY);
         assertEquals(expected, actual);
     }
 
@@ -55,32 +54,29 @@ class TagDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void findAllTagsTest(List<Tag> expectedTags) {
-        List<Tag> actualTags = tagDao.findAll();
+        PageRequest pageRequest = new PageRequest(1, 6);
+        List<Tag> actualTags = tagDao.findAll(pageRequest);
         assertEquals(expectedTags, actualTags);
     }
 
-    @Test
-    void findAllTagsNegativeTest() {
-        List<Tag> actualTags = tagDao.findAll();
-        boolean isEmpty = actualTags.isEmpty();
-        assertFalse(isEmpty);
+    @ParameterizedTest
+    @MethodSource("prepareExceptedTags")
+    void findAllTagsNegativeTest(List<Tag> expectedTags) {
+        PageRequest pageRequest = new PageRequest(1, 3);
+        List<Tag> actualTags = tagDao.findAll(pageRequest);
+        assertNotEquals(expectedTags, actualTags);
     }
 
     @Test
     void deleteTest() {
-        boolean isDeleted = tagDao.delete(1L);
-        assertTrue(isDeleted);
-    }
-
-    @Test
-    void deleteNegativeTest() {
-        boolean isDeleted = tagDao.delete(7L);
-        assertFalse(isDeleted);
+        tagDao.delete(1L);
+        Optional<Tag> tag = tagDao.findById(1L);
+        assertFalse(tag.isPresent());
     }
 
     private static Arguments[] prepareTag() {
         Tag tag = Tag.builder()
-                .name("test tag")
+                .name("test_tag")
                 .build();
         return new Arguments[]{Arguments.of(tag)};
     }

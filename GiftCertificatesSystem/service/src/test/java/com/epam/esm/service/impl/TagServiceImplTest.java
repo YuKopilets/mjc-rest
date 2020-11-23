@@ -1,10 +1,12 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.exception.ServiceException;
+import com.epam.esm.exception.ServiceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,8 +64,9 @@ class TagServiceImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void getAllTagsTest(List<Tag> exceptedTags) {
-        Mockito.when(tagDao.findAll()).thenReturn(exceptedTags);
-        List<Tag> actualTags = tagService.getAllTags();
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedTags);
+        List<Tag> actualTags = tagService.getAllTags(pageRequest);
         assertEquals(exceptedTags, actualTags);
     }
 
@@ -71,20 +74,35 @@ class TagServiceImplTest {
     @MethodSource("prepareExceptedTags")
     void getAllTagsNegativeTest(List<Tag> exceptedTags) {
         List<Tag> tags = new ArrayList<>();
-        Mockito.when(tagDao.findAll()).thenReturn(tags);
-        List<Tag> actualTags = tagService.getAllTags();
+        PageRequest pageRequest = new PageRequest(1, 10);
+        Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(tags);
+        List<Tag> actualTags = tagService.getAllTags(pageRequest);
         assertNotEquals(exceptedTags, actualTags);
     }
 
     @Test
-    void removeTagTest() throws ServiceException {
-        Mockito.when(tagDao.delete(1L)).thenReturn(true);
+    void getMostWidelyUsedTagTest() {
+        tagService.getMostWidelyUsedTag();
+        Mockito.verify(tagDao).findMostWidelyUsedTag();
+    }
+
+    @ParameterizedTest
+    @MethodSource("prepareTag")
+    void removeTagTest(Tag tag) throws ServiceException {
+        Optional<Tag> tagOptional = Optional.of(tag);
+        Mockito.when(tagDao.findById(1L)).thenReturn(tagOptional);
         tagService.removeTag(1L);
         Mockito.verify(tagDao).delete(Mockito.anyLong());
     }
 
     @Test
     void removeTagNegativeTest() {
+        Mockito.when(tagDao.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(TagNotFoundServiceException.class, () -> tagService.removeTag(1L));
+    }
+
+    @Test
+    void removeTagBadIdNegativeTest() {
         assertThrows(ServiceException.class, () -> tagService.removeTag(-1L));
     }
 

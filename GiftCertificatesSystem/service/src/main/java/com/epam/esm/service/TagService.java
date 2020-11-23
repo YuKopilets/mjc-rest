@@ -1,10 +1,10 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
-import com.epam.esm.service.exception.TagNotFoundServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ public interface TagService {
      * @param tag the tag
      * @return the tag
      */
-    Tag addTag(Tag tag);
+    Tag addTag(@Valid Tag tag);
 
     /**
      * Get single tag by id.
@@ -29,35 +29,30 @@ public interface TagService {
      * @return the tag by id
      * @throws TagNotFoundServiceException        in case of {@code tag with
      * current id not found}
-     * @throws InvalidRequestedIdServiceException in case of {@code id is not
-     * valid to do operation}
      */
-    Tag getTagById(Long id) throws TagNotFoundServiceException, InvalidRequestedIdServiceException;
+    Tag getTagById(Long id) throws TagNotFoundServiceException;
 
     /**
      * Get list of all tags.
      *
+     * @param pageRequest the page number and size
      * @return the list of all exists tags
      */
-    List<Tag> getAllTags();
+    List<Tag> getAllTags(PageRequest pageRequest);
+
+    /**
+     * Get most widely used tag of a user with the highest cost of all orders.
+     *
+     * @return the most widely used tag
+     */
+    Tag getMostWidelyUsedTag();
 
     /**
      * Remove tag.
      *
      * @param id the tag id
-     * @throws InvalidRequestedIdServiceException  in case of {@code id is not
-     * valid to do operation}
-     * @throws DeleteByRequestedIdServiceException in case of {@code tag by
-     * current id hasn't been deleted}
+     * @throws TagNotFoundServiceException        in case of {@code tag with
+     * current id not found}
      */
-    void removeTag(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
-
-    /**
-     * Remove tag in gift certificates.
-     *
-     * @param tagId the tag id
-     * @throws InvalidRequestedIdServiceException in case of {@code id is not
-     * valid to do operation}
-     */
-    void removeGiftCertificateTags(Long tagId) throws InvalidRequestedIdServiceException;
+    void removeTag(Long id) throws TagNotFoundServiceException;
 }

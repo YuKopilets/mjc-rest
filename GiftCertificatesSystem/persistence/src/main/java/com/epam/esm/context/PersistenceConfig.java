@@ -1,48 +1,48 @@
 package com.epam.esm.context;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:datasource.properties")
 @ComponentScan("com.epam.esm.dao")
+@PropertySource("classpath:hibernate.properties")
+@RequiredArgsConstructor
 public class PersistenceConfig {
-    private static final String DRIVER_CLASS_NAME_PROPERTY = "dataSource.driverClassName";
-    private static final String URL_PROPERTY = "dataSource.url";
-    private static final String USERNAME_PROPERTY = "dataSource.username";
-    private static final String PASSWORD_PROPERTY = "dataSource.password";
+    private static final String DDL_AUTO_PROPERTY = "hibernate.hbm2ddl.auto";
+    private static final String SCAN_PACKAGE_PROPERTY = "hibernate.scan.package";
+    private static final String DIALECT_PROPERTY = "hibernate.dialect";
+    private static final String SHOW_SQL_PROPERTY = "hibernate.show_sql";
+    private static final String FORMAT_SQL_PROPERTY = "hibernate.format_sql";
+    private static final String STORE_AT_DELETE_PROPERTY = "org.hibernate.envers.store_data_at_delete";
+    private static final String VALIDATION_MODE_PROPERTY = "javax.persistence.validation.mode";
 
     private final Environment environment;
 
-    public PersistenceConfig(Environment environment) {
-        this.environment = environment;
+    @Bean
+    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource);
+        sessionFactory.setPackagesToScan(environment.getProperty(SCAN_PACKAGE_PROPERTY));
+        sessionFactory.setHibernateProperties(hibernateProperties());
+        return sessionFactory;
     }
 
-    @Bean
-    public HikariConfig hikariConfig() {
-        HikariConfig config = new HikariConfig();
-        config.setDriverClassName(environment.getProperty(DRIVER_CLASS_NAME_PROPERTY));
-        config.setJdbcUrl(environment.getProperty(URL_PROPERTY));
-        config.setUsername(environment.getProperty(USERNAME_PROPERTY));
-        config.setPassword(environment.getProperty(PASSWORD_PROPERTY));
-        return config;
-    }
-
-    @Bean
-    public DataSource dataSource() {
-        return new HikariDataSource(hikariConfig());
-    }
-
-    @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
+    private Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty(DDL_AUTO_PROPERTY, environment.getProperty(DDL_AUTO_PROPERTY));
+        hibernateProperties.setProperty(DIALECT_PROPERTY, environment.getProperty(DIALECT_PROPERTY));
+        hibernateProperties.setProperty(SHOW_SQL_PROPERTY, environment.getProperty(SHOW_SQL_PROPERTY));
+        hibernateProperties.setProperty(FORMAT_SQL_PROPERTY, environment.getProperty(FORMAT_SQL_PROPERTY));
+        hibernateProperties.setProperty(STORE_AT_DELETE_PROPERTY, environment.getProperty(STORE_AT_DELETE_PROPERTY));
+        hibernateProperties.setProperty(VALIDATION_MODE_PROPERTY, environment.getProperty(VALIDATION_MODE_PROPERTY));
+        return hibernateProperties;
     }
 }

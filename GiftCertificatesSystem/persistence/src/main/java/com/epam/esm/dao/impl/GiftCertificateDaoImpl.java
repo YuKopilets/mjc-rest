@@ -1,133 +1,88 @@
 package com.epam.esm.dao.impl;
 
+import com.epam.esm.dao.AbstractSessionDao;
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.mapper.GiftCertificateExtractor;
+import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.util.QueryConditionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * The type implementation of Gift certificate dao.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see GiftCertificateDao
+ * @see AbstractSessionDao
+ */
 @Repository
-@RequiredArgsConstructor
-public class GiftCertificateDaoImpl implements GiftCertificateDao {
-    private static final String INSERT_GIFT_CERTIFICATE = "INSERT INTO gift_certificate " +
-            "(name, description, price, create_date, last_update_date, duration) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_GIFT_CERTIFICATE = "SELECT gift_certificate.id, " +
-            "gift_certificate.name, gift_certificate.description, gift_certificate.price, " +
-            "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration, " +
-            "tag.id, tag.name " +
-            "FROM gift_certificate_has_tag " +
-            "INNER JOIN tag ON tag.id = gift_certificate_has_tag.tag_id " +
-            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id " +
-            "WHERE gift_certificate.id = ?";
-    private static final String SELECT_ALL_GIFT_CERTIFICATES = "SELECT gift_certificate.id, " +
-            "gift_certificate.name, gift_certificate.description, gift_certificate.price, " +
-            "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration, " +
-            "tag.id, tag.name " +
-            "FROM gift_certificate_has_tag " +
-            "INNER JOIN tag ON tag.id = gift_certificate_has_tag.tag_id " +
-            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id";
-    private static final String UPDATE_GIFT_CERTIFICATE = "UPDATE gift_certificate SET " +
-            "name = ?, description = ?, price = ?, create_date = ?, last_update_date = ?, duration = ? WHERE id = ?";
-    private static final String DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = ?";
-    private static final String INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID = "INSERT INTO gift_certificate_has_tag " +
-            "(gift_certificate_id, tag_id) VALUES (?, ?)";
-    private static final String SELECT_ALL_GIFT_CERTIFICATES_BY_QUERY_PARAMS = "SELECT gift_certificate.id, " +
-            "gift_certificate.name, gift_certificate.description, gift_certificate.price, " +
-            "gift_certificate.create_date, gift_certificate.last_update_date, gift_certificate.duration, " +
-            "tag.id, tag.name " +
-            "FROM gift_certificate_has_tag " +
-            "INNER JOIN tag ON tag.id = gift_certificate_has_tag.tag_id " +
-            "INNER JOIN gift_certificate ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id";
-    private static final String DELETE_GIFT_CERTIFICATE_TAGS = "DELETE FROM gift_certificate_has_tag " +
-            "WHERE gift_certificate_id = ?";
+public class GiftCertificateDaoImpl extends AbstractSessionDao implements GiftCertificateDao {
+    private static final String SELECT_ALL_GIFT_CERTIFICATES = "SELECT gc FROM GiftCertificate gc JOIN FETCH gc.tags t";
+    private static final String SELECT_ALL_GIFT_CERTIFICATE_IDS = "SELECT gc.id FROM GiftCertificate gc JOIN gc.tags t";
 
-    private final JdbcTemplate jdbcTemplate;
-    private final GiftCertificateExtractor giftCertificateExtractor;
+    public GiftCertificateDaoImpl(LocalSessionFactoryBean sessionFactory) {
+        super(sessionFactory);
+    }
 
-    @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(INSERT_GIFT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, giftCertificate.getName());
-            ps.setString(2, giftCertificate.getDescription());
-            ps.setBigDecimal(3, giftCertificate.getPrice());
-            ps.setObject(4, giftCertificate.getCreateDate());
-            ps.setObject(5, giftCertificate.getLastUpdateDate());
-            ps.setInt(6, giftCertificate.getDuration());
-            return ps;
-        }, keyHolder);
-        Optional.ofNullable(keyHolder.getKey()).map(Number::longValue).ifPresent(giftCertificate::setId);
+        doWithSessionTransaction(session -> session.save(giftCertificate));
         return giftCertificate;
     }
 
     @Override
     public Optional<GiftCertificate> findById(Long id) {
-        List<GiftCertificate> giftCertificates = jdbcTemplate.query(
-                SELECT_GIFT_CERTIFICATE,
-                giftCertificateExtractor,
-                id
-        );
-        return CollectionUtils.isEmpty(giftCertificates) ? Optional.empty()
-                : Optional.ofNullable(giftCertificates.get(0));
+        GiftCertificate giftCertificate = doWithSession(session -> session.find(GiftCertificate.class, id));
+        return Optional.ofNullable(giftCertificate);
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
-        return jdbcTemplate.query(SELECT_ALL_GIFT_CERTIFICATES, giftCertificateExtractor);
+    public List<GiftCertificate> findAll(PageRequest pageRequest) {
+        return doWithSession(session -> session.createQuery(SELECT_ALL_GIFT_CERTIFICATES, GiftCertificate.class)
+                .setFirstResult(pageRequest.calculateStartElementPosition())
+                .setMaxResults(pageRequest.getPageSize())
+                .setReadOnly(true)
+                .list()
+        );
     }
 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-        jdbcTemplate.update(UPDATE_GIFT_CERTIFICATE,
-                giftCertificate.getName(),
-                giftCertificate.getDescription(),
-                giftCertificate.getPrice(),
-                giftCertificate.getCreateDate(),
-                giftCertificate.getLastUpdateDate(),
-                giftCertificate.getDuration(),
-                giftCertificate.getId()
-        );
+        doWithSessionTransaction(session -> session.merge(giftCertificate));
         return giftCertificate;
     }
 
     @Override
-    public boolean delete(Long id) {
-        int updatedRows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE, id);
-        return updatedRows > 0;
+    public void delete(Long id) {
+        doWithSessionTransaction(session -> {
+            GiftCertificate giftCertificate = session.find(GiftCertificate.class, id);
+            session.delete(giftCertificate);
+        });
     }
 
     @Override
-    public void saveTags(GiftCertificate giftCertificate) {
-        Long giftCertificateId = giftCertificate.getId();
-        List<Tag> tags = giftCertificate.getTags();
-        tags.forEach(tag -> jdbcTemplate.update(INSERT_GIFT_CERTIFICATE_ID_AND_TAG_ID, giftCertificateId, tag.getId()));
-    }
-
-    @Override
-    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery) {
+    public List<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery,
+                                                      PageRequest pageRequest) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
-        return jdbcTemplate.query(
-                SELECT_ALL_GIFT_CERTIFICATES_BY_QUERY_PARAMS + condition,
-                giftCertificateExtractor
-        );
-    }
+        String query = SELECT_ALL_GIFT_CERTIFICATE_IDS + condition;
+        // This cast is correct, because the list we're creating is of the same
+        // type as the one passed after operation with session. We're selecting
+        // the list of gift certificate identifiers.
+        @SuppressWarnings("unchecked") List<Long> certificateIds = doWithSession(session -> session.createQuery(query)
+                .setFirstResult(pageRequest.calculateStartElementPosition())
+                .setMaxResults(pageRequest.getPageSize())
+                .setReadOnly(true)
+                .list());
 
-    @Override
-    public void deleteTagsById(Long giftCertificateId) {
-        jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_TAGS, giftCertificateId);
+        return doWithSession(session -> certificateIds.stream()
+                .distinct()
+                .map(id -> session.find(GiftCertificate.class, id))
+                .collect(Collectors.toList())
+        );
     }
 }

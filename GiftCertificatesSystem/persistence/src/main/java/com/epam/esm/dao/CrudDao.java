@@ -6,7 +6,9 @@ import java.util.Optional;
 /**
  * The interface Crud dao.
  *
- * @param <T> the type parameter
+ * @param <T> the entity type parameter
+ * @author Yuriy Kopilets
+ * @version 1.0
  */
 public interface CrudDao<T> {
     /**
@@ -18,33 +20,34 @@ public interface CrudDao<T> {
     T save(T entity);
 
     /**
-     * Find by id.
+     * Find entity by id.
      *
      * @param id the id
-     * @return the optional
+     * @return the optional entity
      */
     Optional<T> findById(Long id);
 
     /**
-     * Find all list.
+     * Find all list of entity. The {@code page request}
+     * can show which part of list needed to return.
      *
+     * @param pageRequest the number and size of page
      * @return the list
      */
-    List<T> findAll();
+    List<T> findAll(PageRequest pageRequest);
 
     /**
      * Update entity.
      *
      * @param entity the entity
-     * @return the entity
+     * @return the updated entity
      */
     T update(T entity);
 
     /**
-     * Delete boolean.
+     * Delete entity by id.
      *
      * @param id the id
-     * @return the entity has been deleted
      */
-    boolean delete(Long id);
+    void delete(Long id);
 }

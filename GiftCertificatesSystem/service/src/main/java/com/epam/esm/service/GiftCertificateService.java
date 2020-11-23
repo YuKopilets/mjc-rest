@@ -1,11 +1,12 @@
 package com.epam.esm.service;
 
-import com.epam.esm.service.exception.DeleteByRequestedIdServiceException;
+import com.epam.esm.dao.PageRequest;
+import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.exception.GiftCertificateNotFoundServiceException;
-import com.epam.esm.service.exception.InvalidRequestedIdServiceException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,8 +21,10 @@ public interface GiftCertificateService {
      *
      * @param giftCertificate the gift certificate
      * @return the gift certificate
+     * @throws TagNotFoundServiceException in case of {@code tag with
+     *                                     current id not found}
      */
-    GiftCertificate addGiftCertificate(GiftCertificate giftCertificate);
+    GiftCertificate addGiftCertificate(@Valid GiftCertificate giftCertificate) throws TagNotFoundServiceException;
 
     /**
      * Get single gift certificate by id.
@@ -30,21 +33,19 @@ public interface GiftCertificateService {
      * @return the gift certificate found by id
      * @throws GiftCertificateNotFoundServiceException in case of {@code gift
      * certificate with current id not found}
-     * @throws InvalidRequestedIdServiceException      in case of {@code id is
-     * not valid to do operation}
      */
-    GiftCertificate getGiftCertificateById(Long id)
-            throws GiftCertificateNotFoundServiceException, InvalidRequestedIdServiceException;
+    GiftCertificate getGiftCertificateById(Long id) throws GiftCertificateNotFoundServiceException;
 
     /**
      * Get list of gift certificates. If query params for finding certificates
      * are empty, method will return list of all gift certificates
      *
      * @param giftCertificateQuery the query params for finding list of
-     *                             gift certificate
+     * gift certificate
+     * @param pageRequest          the page number and size
      * @return the list of gift certificates matching search parameters
      */
-    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery);
+    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, PageRequest pageRequest);
 
     /**
      * Update gift certificate. Update values of gift certificate if there are
@@ -55,33 +56,15 @@ public interface GiftCertificateService {
      * @throws GiftCertificateNotFoundServiceException in case of {@code gift
      * certificate with current id not found}
      */
-    GiftCertificate updateGiftCertificate(GiftCertificate giftCertificate)
+    GiftCertificate updateGiftCertificate(@Valid GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException;
 
     /**
      * Remove gift certificate by id.
      *
      * @param id the gift certificate id
-     * @throws InvalidRequestedIdServiceException  in case of {@code id is not
-     * valid to do operation}
-     * @throws DeleteByRequestedIdServiceException in case of {@code certificate
-     * by current id hasn't been deleted}
+     * @throws GiftCertificateNotFoundServiceException in case of {@code gift
+     * certificate with current id not found}
      */
-    void removeGiftCertificate(Long id) throws InvalidRequestedIdServiceException, DeleteByRequestedIdServiceException;
-
-    /**
-     * Add gift certificate tags.
-     *
-     * @param giftCertificate the gift certificate with required tags to add
-     */
-    void addGiftCertificateTags(GiftCertificate giftCertificate);
-
-    /**
-     * Remove gift certificate tags.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @throws InvalidRequestedIdServiceException in case of {@code id is not
-     * valid to do operation}
-     */
-    void removeGiftCertificateTags(Long giftCertificateId) throws InvalidRequestedIdServiceException;
+    void removeGiftCertificate(Long id) throws GiftCertificateNotFoundServiceException;
 }
