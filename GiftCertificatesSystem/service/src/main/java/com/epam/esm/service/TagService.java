@@ -1,11 +1,11 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.TagNotFoundServiceException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * The interface Tag service.
@@ -35,10 +35,10 @@ public interface TagService {
     /**
      * Get list of all tags.
      *
-     * @param pageRequest the page number and size
+     * @param pageable   the pageable
      * @return the list of all exists tags
      */
-    List<Tag> getAllTags(PageRequest pageRequest);
+    Page<Tag> getAllTags(Pageable pageable);
 
     /**
      * Get most widely used tag of a user with the highest cost of all orders.

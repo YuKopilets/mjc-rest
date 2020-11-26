@@ -1,8 +1,8 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.PageRequest;
-import com.epam.esm.dao.TagDao;
+import com.epam.esm.repository.GiftCertificateFilterRepository;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.TagRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
@@ -11,6 +11,8 @@ import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +21,6 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -40,8 +41,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private static final String NAME_SORT = "name";
     private static final String DATE_SORT = "date";
 
-    private final GiftCertificateDao giftCertificateDao;
-    private final TagDao tagDao;
+    private final GiftCertificateRepository giftCertificateRepository;
+    private final GiftCertificateFilterRepository giftCertificateFilterRepository;
+    private final TagRepository tagRepository;
 
     @Override
     @Transactional
@@ -51,42 +53,42 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificate.setCreateDate(localDateTime);
         giftCertificate.setLastUpdateDate(localDateTime);
         initGiftCertificateByTags(giftCertificate);
-        giftCertificateDao.save(giftCertificate);
+        giftCertificateRepository.save(giftCertificate);
         return giftCertificate;
     }
 
     @Override
     public GiftCertificate getGiftCertificateById(Long id) throws GiftCertificateNotFoundServiceException {
-        return giftCertificateDao.findById(id).orElseThrow(() -> new GiftCertificateNotFoundServiceException(id));
+        return giftCertificateRepository.findById(id).orElseThrow(() -> new GiftCertificateNotFoundServiceException(id));
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery,
-                                                     PageRequest pageRequest) {
+    public Page<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery,
+                                                     Pageable pageable) {
         if (reviewGiftCertificateQueryParams(giftCertificateQuery)) {
-            return giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
+            return giftCertificateFilterRepository.findAllByQueryParams(giftCertificateQuery, pageable);
         }
-        return giftCertificateDao.findAll(pageRequest);
+        return giftCertificateRepository.findAll(pageable);
     }
 
     @Override
     @Transactional
     public GiftCertificate updateGiftCertificate(@Valid GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException {
-        GiftCertificate oldGiftCertificateById = giftCertificateDao.findById(giftCertificate.getId())
+        GiftCertificate oldGiftCertificateById = giftCertificateRepository.findById(giftCertificate.getId())
                 .orElseThrow(() -> new GiftCertificateNotFoundServiceException(giftCertificate.getId()));
 
         if (hasUpdateValues(giftCertificate)) {
             setUpdateValues(oldGiftCertificateById, giftCertificate);
-            giftCertificateDao.update(oldGiftCertificateById);
+            giftCertificateRepository.save(oldGiftCertificateById);
         }
         return oldGiftCertificateById;
     }
 
     @Override
     public void removeGiftCertificate(Long id) throws GiftCertificateNotFoundServiceException {
-        giftCertificateDao.findById(id).orElseThrow(() -> new GiftCertificateNotFoundServiceException(id));
-        giftCertificateDao.delete(id);
+        giftCertificateRepository.findById(id).orElseThrow(() -> new GiftCertificateNotFoundServiceException(id));
+        giftCertificateRepository.deleteById(id);
     }
 
     private void initGiftCertificateByTags(GiftCertificate giftCertificate) throws TagNotFoundServiceException {
@@ -97,7 +99,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private Tag findGiftCertificateTag(Tag tag) throws TagNotFoundServiceException {
-        return tagDao.findById(tag.getId()).orElseThrow(() -> new TagNotFoundServiceException(tag.getId()));
+        return tagRepository.findById(tag.getId()).orElseThrow(() -> new TagNotFoundServiceException(tag.getId()));
     }
 
     private boolean reviewGiftCertificateQueryParams(GiftCertificateQuery giftCertificateQuery) {

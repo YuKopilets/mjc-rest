@@ -1,13 +1,13 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.Order;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
 import com.epam.esm.exception.UserNotFoundServiceException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * The interface Order service.
@@ -33,12 +33,12 @@ public interface OrderService {
      * Get list of all user's orders by user login value.
      *
      * @param userLogin   the user login
-     * @param pageRequest the page number and size
+     * @param pageable    the pageable
      * @return the orders
      * @throws UserNotFoundServiceException        in case of {@code user with
      *                                             current login not found}
      */
-    List<Order> getUserOrders(String userLogin, PageRequest pageRequest) throws UserNotFoundServiceException;
+    Page<Order> getUserOrders(String userLogin, Pageable pageable) throws UserNotFoundServiceException;
 
     /**
      * Get user's order by order id.

@@ -1,9 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.context.TestConfig;
-import com.epam.esm.dao.PageRequest;
-import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.repository.TagRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,6 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -26,12 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = {"/gift_certificates_system_inserts.sql"})
 class TagDaoImplTest {
     @Autowired
-    private TagDao tagDao;
+    private TagRepository tagRepository;
 
     @ParameterizedTest
     @MethodSource("prepareTag")
     void saveTest(Tag tag) {
-        tagDao.save(tag);
+        tagRepository.save(tag);
         Long expected = 7L;
         Long actual = tag.getId();
         assertEquals(expected, actual);
@@ -39,7 +39,7 @@ class TagDaoImplTest {
 
     @Test
     void findTagByIdTest() {
-        Optional<Tag> tagById = tagDao.findById(1L);
+        Optional<Tag> tagById = tagRepository.findById(1L);
         String expected = "rest";
         String actual = tagById.map(Tag::getName).orElse(StringUtils.EMPTY);
         assertEquals(expected, actual);
@@ -47,30 +47,30 @@ class TagDaoImplTest {
 
     @Test
     void findTagByIdNegativeTest() {
-        Optional<Tag> tagById = tagDao.findById(7L);
+        Optional<Tag> tagById = tagRepository.findById(7L);
         assertFalse(tagById.isPresent());
     }
 
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void findAllTagsTest(List<Tag> expectedTags) {
-        PageRequest pageRequest = new PageRequest(1, 6);
-        List<Tag> actualTags = tagDao.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 6);
+        List<Tag> actualTags = tagRepository.findAll(pageRequest).getContent();
         assertEquals(expectedTags, actualTags);
     }
 
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void findAllTagsNegativeTest(List<Tag> expectedTags) {
-        PageRequest pageRequest = new PageRequest(1, 3);
-        List<Tag> actualTags = tagDao.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 3);
+        List<Tag> actualTags = tagRepository.findAll(pageRequest).getContent();
         assertNotEquals(expectedTags, actualTags);
     }
 
     @Test
     void deleteTest() {
-        tagDao.delete(1L);
-        Optional<Tag> tag = tagDao.findById(1L);
+        tagRepository.deleteById(1L);
+        Optional<Tag> tag = tagRepository.findById(1L);
         assertFalse(tag.isPresent());
     }
 

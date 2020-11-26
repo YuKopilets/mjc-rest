@@ -1,9 +1,8 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.UserDao;
-import com.epam.esm.dao.impl.UserDaoImpl;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.UserNotFoundServiceException;
+import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,27 +10,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceImplTest {
-    @Mock
-    private UserDao userDao;
+    @MockBean(name = "userRepository")
+    private UserRepository userRepository;
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userDao = Mockito.mock(UserDaoImpl.class);
-        userService = new UserServiceImpl(userDao);
+        //userRepository = Mockito.mock(UserDaoImpl.class);
+        userService = new UserServiceImpl(userRepository);
     }
 
     @AfterEach
     void tearDown() {
-        userDao = null;
+        //userRepository = null;
         userService = null;
     }
 
@@ -39,14 +39,14 @@ class UserServiceImplTest {
     @MethodSource("prepareUser")
     void getUserByIdTest(User expected) {
         Optional<User> userOptional = Optional.of(expected);
-        Mockito.when(userDao.findById(1L)).thenReturn(userOptional);
+        Mockito.when(userRepository.findById(1L)).thenReturn(userOptional);
         User actual = userService.getUserById(1L);
         assertEquals(expected, actual);
     }
 
     @Test
     void getUserByIdNegativeTest() {
-        Mockito.when(userDao.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundServiceException.class, () -> userService.getUserById(1L));
     }
 
@@ -54,14 +54,14 @@ class UserServiceImplTest {
     @MethodSource("prepareUser")
     void getUserByLoginTest(User expected) {
         Optional<User> userOptional = Optional.of(expected);
-        Mockito.when(userDao.findByLogin("login")).thenReturn(userOptional);
+        Mockito.when(userRepository.findByLogin("login")).thenReturn(userOptional);
         User actual = userService.getUserByLogin("login");
         assertEquals(expected, actual);
     }
 
     @Test
     void getUserByLoginNegativeTest() {
-        Mockito.when(userDao.findByLogin("login")).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findByLogin("login")).thenReturn(Optional.empty());
         assertThrows(UserNotFoundServiceException.class, () -> userService.getUserByLogin("login"));
     }
 

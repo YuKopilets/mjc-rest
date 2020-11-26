@@ -1,7 +1,6 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.converter.GiftCertificateDtoConverter;
-import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dto.GiftCertificatePatchDto;
 import com.epam.esm.dto.GiftCertificatePostDto;
 import com.epam.esm.entity.GiftCertificate;
@@ -10,6 +9,9 @@ import com.epam.esm.util.GiftCertificateQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.HashSet;
@@ -66,13 +67,10 @@ public class GiftCertificateController {
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(name = "order", required = false) String order,
-            @RequestParam(name = "page", required = false, defaultValue = "1") @Min(value = 1) int page,
-            @RequestParam(name = "page_size", required = false, defaultValue = "8")
-            @Min(value = 6) @Max(value = 16) int pageSize
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
-        PageRequest pageRequest = new PageRequest(page, pageSize);
-        return giftCertificateService.getGiftCertificates(query, pageRequest);
+        return giftCertificateService.getGiftCertificates(query, pageable).getContent();
     }
 
     @PatchMapping(value = "/{id}")

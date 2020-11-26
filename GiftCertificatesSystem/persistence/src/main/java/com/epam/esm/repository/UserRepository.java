@@ -1,24 +1,18 @@
-package com.epam.esm.dao;
+package com.epam.esm.repository;
 
 import com.epam.esm.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 /**
- * The interface User dao for get operations with <i>user_account</i> table
+ * The interface User repository for get operations with
+ * <i>user_account</i> table
  *
  * @author Yuriy Kopilets
  * @version 1.0
  */
-public interface UserDao {
-    /**
-     * Find user by id.
-     *
-     * @param id the id
-     * @return the optional
-     */
-    Optional<User> findById(Long id);
-
+public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Find user by login.
      *

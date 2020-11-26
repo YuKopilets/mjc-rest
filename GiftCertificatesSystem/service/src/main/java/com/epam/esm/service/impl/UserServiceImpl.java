@@ -1,6 +1,6 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.UserDao;
+import com.epam.esm.repository.UserRepository;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.service.UserService;
@@ -17,15 +17,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     @Override
     public User getUserById(Long id) throws UserNotFoundServiceException {
-        return userDao.findById(id).orElseThrow(() -> new UserNotFoundServiceException(id));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundServiceException(id));
     }
 
     @Override
     public User getUserByLogin(String login) throws UserNotFoundServiceException {
-        return userDao.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
+        return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
     }
 }

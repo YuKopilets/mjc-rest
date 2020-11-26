@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.converter.OrderDtoConverter;
 import com.epam.esm.converter.UserDtoConverter;
-import com.epam.esm.dao.PageRequest;
 import com.epam.esm.dto.OrderRepresentationDto;
 import com.epam.esm.dto.UserRepresentationDto;
 import com.epam.esm.entity.Order;
@@ -12,16 +11,17 @@ import com.epam.esm.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -79,12 +79,9 @@ public class UserController {
     @ApiOperation(value = "get list of user's orders by login")
     public List<OrderRepresentationDto> getUserOrders(
             @PathVariable @Size(min = 4, max = 50) String login,
-            @RequestParam(name = "page", required = false, defaultValue = "1") @Min(value = 1) int page,
-            @RequestParam(name = "page_size", required = false, defaultValue = "10")
-            @Min(value = 8) @Max(value = 20) int pageSize
-    ) {
-        PageRequest pageRequest = new PageRequest(page, pageSize);
-        List<Order> orders = orderService.getUserOrders(login, pageRequest);
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+            ) {
+        List<Order> orders = orderService.getUserOrders(login, pageable).getContent();
         List<OrderRepresentationDto> dtoList = convertOrdersToDtoList(orders);
         addSelfOrderLinksInDtoList(dtoList, login);
         return dtoList;

@@ -6,13 +6,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("com.epam.esm.dao")
+@EnableJpaRepositories(basePackages = "com.epam.esm.repository")
+@ComponentScan("com.epam.esm.repository.impl")
 @PropertySource("classpath:hibernate.properties")
 @RequiredArgsConstructor
 public class PersistenceConfig {
@@ -26,7 +28,7 @@ public class PersistenceConfig {
 
     private final Environment environment;
 
-    @Bean
+    @Bean(name = "entityManagerFactory")
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);

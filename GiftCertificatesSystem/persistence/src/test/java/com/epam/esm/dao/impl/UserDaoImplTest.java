@@ -1,8 +1,8 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.context.TestConfig;
-import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.User;
+import com.epam.esm.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,19 +24,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = {"/gift_certificates_system_inserts.sql"})
 class UserDaoImplTest {
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @ParameterizedTest
     @MethodSource("prepareUser")
     void findByIdTest(User user) {
         String expected = user.getLogin();
-        String actual = userDao.findById(1L).map(User::getLogin).orElse(StringUtils.EMPTY);
+        String actual = userRepository.findById(1L).map(User::getLogin).orElse(StringUtils.EMPTY);
         assertEquals(expected, actual);
     }
 
     @Test
     void findByIdNegativeTest() {
-        Optional<User> user = userDao.findById(2L);
+        Optional<User> user = userRepository.findById(2L);
         assertFalse(user.isPresent());
     }
 
@@ -44,13 +44,13 @@ class UserDaoImplTest {
     @MethodSource("prepareUser")
     void findByLoginTest(User user) {
         Long expected = user.getId();
-        Long actual = userDao.findByLogin("user").map(User::getId).orElse(0L);
+        Long actual = userRepository.findByLogin("user").map(User::getId).orElse(0L);
         assertEquals(expected, actual);
     }
 
     @Test
     void findByLoginNegativeTest() {
-        assertThrows(NoResultException.class, () -> userDao.findByLogin("login"));
+        assertThrows(NoResultException.class, () -> userRepository.findByLogin("login"));
     }
 
     private static Arguments[] prepareUser() {

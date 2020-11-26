@@ -1,13 +1,11 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.PageRequest;
-import com.epam.esm.dao.TagDao;
-import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
-import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
+import com.epam.esm.repository.GiftCertificateFilterRepository;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
@@ -19,6 +17,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -34,22 +34,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GiftCertificateServiceImplTest {
     @Mock
-    private GiftCertificateDao giftCertificateDao;
+    private GiftCertificateRepository giftCertificateRepository;
     @Mock
-    private TagDao tagDao;
+    private GiftCertificateFilterRepository giftCertificateFilterRepository;
+    @Mock
+    private TagRepository tagRepository;
     private GiftCertificateService giftCertificateService;
 
     @BeforeEach
     void setUp() {
-        giftCertificateDao = Mockito.mock(GiftCertificateDaoImpl.class);
-        tagDao = Mockito.mock(TagDaoImpl.class);
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateDao, tagDao);
+        //giftCertificateRepository = Mockito.mock(GiftCertificateDaoImpl.class);
+        //tagRepository = Mockito.mock(TagDaoImpl.class);
+        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateRepository, giftCertificateFilterRepository, tagRepository);
     }
 
     @AfterEach
     void tearDown() {
-        giftCertificateDao = null;
-        tagDao = null;
+        giftCertificateRepository = null;
+        tagRepository = null;
         giftCertificateService = null;
     }
 
@@ -57,23 +59,23 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareGiftCertificate")
     void addGiftCertificateTest(GiftCertificate giftCertificate) {
         Optional<Tag> tagOptional = Optional.ofNullable(buildTag(5L, "sport"));
-        Mockito.when(tagDao.findById(5L)).thenReturn(tagOptional);
+        Mockito.when(tagRepository.findById(5L)).thenReturn(tagOptional);
         giftCertificateService.addGiftCertificate(giftCertificate);
-        Mockito.verify(giftCertificateDao).save(giftCertificate);
+        Mockito.verify(giftCertificateRepository).save(giftCertificate);
     }
 
     @ParameterizedTest
     @MethodSource("prepareGiftCertificate")
     void getGiftCertificateByIdTest(GiftCertificate giftCertificate) throws ServiceException {
         Optional<GiftCertificate> giftCertificateOptional = Optional.ofNullable(giftCertificate);
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
+        Mockito.when(giftCertificateRepository.findById(1L)).thenReturn(giftCertificateOptional);
         giftCertificateService.getGiftCertificateById(1L);
-        Mockito.verify(giftCertificateDao, Mockito.atLeastOnce()).findById(Mockito.anyLong());
+        Mockito.verify(giftCertificateRepository, Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
 
     @Test
     void getGiftCertificateByIdNegativeTest() {
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(giftCertificateRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(GiftCertificateNotFoundServiceException.class,
                 () -> giftCertificateService.getGiftCertificateById(1L));
     }
@@ -82,10 +84,11 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates,
                                     GiftCertificateQuery giftCertificateQuery) {
-        PageRequest pageRequest = new PageRequest(1, 10);
-        Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Mockito.when(giftCertificateRepository.findAll(Mockito.eq(pageRequest)))
+                .thenReturn(new PageImpl<>(exceptedGiftCertificates));
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
-                pageRequest);
+                pageRequest).getContent();
         assertEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -94,10 +97,10 @@ class GiftCertificateServiceImplTest {
     void getGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates,
                                             GiftCertificateQuery giftCertificateQuery) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
-        PageRequest pageRequest = new PageRequest(1, 10);
-        Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(giftCertificates);
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Mockito.when(giftCertificateRepository.findAll(Mockito.eq(pageRequest))).thenReturn(new PageImpl<>(giftCertificates));
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
-                pageRequest);
+                pageRequest).getContent();
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
     }
 
@@ -105,13 +108,14 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesByQueryParamsTest(List<GiftCertificate> exceptedGiftCertificates,
                                  GiftCertificateQuery giftCertificateQuery) {
-        PageRequest pageRequest = new PageRequest(1, 10);
+        PageRequest pageRequest = PageRequest.of(1, 10);
         Set<String> tagNames = giftCertificateQuery.getTagNames();
         tagNames.add("test tag");
 
-        Mockito.when(giftCertificateDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedGiftCertificates);
+        Mockito.when(giftCertificateRepository.findAll(Mockito.eq(pageRequest)))
+                .thenReturn(new PageImpl<>(exceptedGiftCertificates));
         giftCertificateService.getGiftCertificates(giftCertificateQuery, pageRequest);
-        Mockito.verify(giftCertificateDao, Mockito.atLeastOnce())
+        Mockito.verify(giftCertificateFilterRepository, Mockito.atLeastOnce())
                 .findAllByQueryParams(giftCertificateQuery, pageRequest);
     }
 
@@ -119,17 +123,17 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareGiftCertificate")
     void updateGiftCertificateTest(GiftCertificate giftCertificate) throws ServiceException {
         Optional<GiftCertificate> giftCertificateOptional = Optional.ofNullable(giftCertificate);
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
+        Mockito.when(giftCertificateRepository.findById(1L)).thenReturn(giftCertificateOptional);
         giftCertificateOptional.ifPresent(actualGiftCertificate -> {
             giftCertificateService.updateGiftCertificate(actualGiftCertificate);
-            Mockito.verify(giftCertificateDao).update(actualGiftCertificate);
+            Mockito.verify(giftCertificateRepository).save(actualGiftCertificate);
         });
     }
 
     @ParameterizedTest
     @MethodSource("prepareGiftCertificate")
     void updateGiftCertificateNegativeTest(GiftCertificate giftCertificate) {
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(giftCertificateRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(GiftCertificateNotFoundServiceException.class,
                 () -> giftCertificateService.updateGiftCertificate(giftCertificate)
         );
@@ -139,9 +143,9 @@ class GiftCertificateServiceImplTest {
     @MethodSource("prepareGiftCertificate")
     void removeGiftCertificateTest(GiftCertificate giftCertificate) throws ServiceException {
         Optional<GiftCertificate> giftCertificateOptional = Optional.of(giftCertificate);
-        Mockito.when(giftCertificateDao.findById(1L)).thenReturn(giftCertificateOptional);
+        Mockito.when(giftCertificateRepository.findById(1L)).thenReturn(giftCertificateOptional);
         giftCertificateService.removeGiftCertificate(1L);
-        Mockito.verify(giftCertificateDao).delete(Mockito.anyLong());
+        Mockito.verify(giftCertificateRepository).deleteById(Mockito.anyLong());
     }
 
     @Test

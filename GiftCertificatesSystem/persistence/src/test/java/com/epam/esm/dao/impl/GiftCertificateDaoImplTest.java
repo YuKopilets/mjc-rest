@@ -1,10 +1,10 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.context.TestConfig;
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.PageRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.repository.GiftCertificateFilterRepository;
+import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.util.GiftCertificateQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -34,12 +35,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = "/gift_certificates_system_inserts.sql")
 class GiftCertificateDaoImplTest {
     @Autowired
-    private GiftCertificateDao giftCertificateDao;
+    private GiftCertificateRepository giftCertificateRepository;
+    @Autowired
+    private GiftCertificateFilterRepository giftCertificateFilterRepository;
 
     @ParameterizedTest
     @MethodSource("prepareGiftCertificate")
     void saveTest(GiftCertificate giftCertificate) {
-        giftCertificateDao.save(giftCertificate);
+        giftCertificateRepository.save(giftCertificate);
         Long expected = 4L;
         Long actual = giftCertificate.getId();
         assertEquals(expected, actual);
@@ -47,7 +50,7 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void findGiftCertificateByIdTest() {
-        Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(1L);
+        Optional<GiftCertificate> giftCertificateById = giftCertificateRepository.findById(1L);
         String expected = "firstCertificate";
         String actual = giftCertificateById.map(GiftCertificate::getName).orElse(StringUtils.EMPTY);
         assertEquals(expected, actual);
@@ -55,31 +58,32 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void findGiftCertificateByIdNegativeTest() {
-        Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(4L);
+        Optional<GiftCertificate> giftCertificateById = giftCertificateRepository.findById(4L);
         assertFalse(giftCertificateById.isPresent());
     }
 
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void findAllGiftCertificatesTest(List<GiftCertificate> expectedGiftCertificates) {
-        PageRequest pageRequest = new PageRequest(1, 3);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateDao.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 3);
+        List<GiftCertificate> actualGiftCertificates = giftCertificateRepository.findAll(pageRequest).getContent();
         assertEquals(expectedGiftCertificates, actualGiftCertificates);
     }
 
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void findAllGiftCertificatesNegativeTest(List<GiftCertificate> expectedGiftCertificates) {
-        PageRequest pageRequest = new PageRequest(1, 2);
-        List<GiftCertificate> actualGiftCertificates = giftCertificateDao.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 2);
+        List<GiftCertificate> actualGiftCertificates = giftCertificateRepository.findAll(pageRequest).getContent();
         assertNotEquals(expectedGiftCertificates, actualGiftCertificates);
     }
 
     @ParameterizedTest
     @MethodSource("prepareGiftCertificateQueryAndExpectedList")
     void findAllGiftCertificatesByTagNamesTest(GiftCertificateQuery giftCertificateQuery, List<GiftCertificate> expected) {
-        PageRequest pageRequest = new PageRequest(1, 3);
-        List<GiftCertificate> actual = giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 3);
+        List<GiftCertificate> actual = giftCertificateFilterRepository.findAllByQueryParams(giftCertificateQuery,
+                pageRequest).getContent();
         assertEquals(expected, actual);
     }
 
@@ -87,8 +91,9 @@ class GiftCertificateDaoImplTest {
     @MethodSource("prepareExpectedGiftCertificates")
     void findAllGiftCertificatesByQueryParamsTest(List<GiftCertificate> expected) {
         GiftCertificateQuery giftCertificateQuery = prepareGiftCertificateQuery();
-        PageRequest pageRequest = new PageRequest(1, 3);
-        List<GiftCertificate> actual = giftCertificateDao.findAllByQueryParams(giftCertificateQuery, pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 3);
+        List<GiftCertificate> actual = giftCertificateFilterRepository.findAllByQueryParams(giftCertificateQuery,
+                pageRequest).getContent();
         assertEquals(expected, actual);
     }
 
@@ -96,16 +101,16 @@ class GiftCertificateDaoImplTest {
     @MethodSource("prepareGiftCertificate")
     void updateTest(GiftCertificate expectedGiftCertificate) {
         expectedGiftCertificate.setId(1L);
-        giftCertificateDao.update(expectedGiftCertificate);
-        Optional<GiftCertificate> giftCertificateById = giftCertificateDao.findById(1L);
+        giftCertificateRepository.save(expectedGiftCertificate);
+        Optional<GiftCertificate> giftCertificateById = giftCertificateRepository.findById(1L);
         GiftCertificate actualGiftCertificate = giftCertificateById.orElseGet(GiftCertificate::new);
         assertEquals(expectedGiftCertificate, actualGiftCertificate);
     }
 
     @Test
     void deleteTest() {
-        giftCertificateDao.delete(1L);
-        Optional<GiftCertificate> giftCertificate = giftCertificateDao.findById(1L);
+        giftCertificateRepository.deleteById(1L);
+        Optional<GiftCertificate> giftCertificate = giftCertificateRepository.findById(1L);
         assertFalse(giftCertificate.isPresent());
     }
 
