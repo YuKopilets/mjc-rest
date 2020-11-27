@@ -1,4 +1,4 @@
-package com.epam.esm.context;
+package com.epam.esm.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

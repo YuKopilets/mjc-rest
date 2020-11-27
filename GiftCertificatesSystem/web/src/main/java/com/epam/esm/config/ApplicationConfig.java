@@ -1,4 +1,4 @@
-package com.epam.esm.context;
+package com.epam.esm.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;

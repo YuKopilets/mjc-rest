@@ -9,17 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The {@code type User} is domain representation of <i>user_account</i> table.
@@ -44,6 +37,18 @@ public class User {
 
     @Column(nullable = false, unique = true, length = 50)
     private String login;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private Boolean active;
+
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role", nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private Set<UserRole> roles;
 
     @JsonIgnore
     @ToString.Exclude

@@ -1,5 +1,6 @@
 package com.epam.esm.context;
 
+import com.epam.esm.config.PersistenceConfig;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
