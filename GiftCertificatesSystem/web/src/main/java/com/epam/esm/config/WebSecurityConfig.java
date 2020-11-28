@@ -1,33 +1,36 @@
 package com.epam.esm.config;
 
+import com.epam.esm.filter.AuthorizationFilter;
+import com.epam.esm.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final String SELECT_LOGIN_AND_PASSWORD = "SELECT login, password, active FROM user_account " +
-            "WHERE login = ?";
-    private static final String SELECT_LOGIN_AND_ROLES = "SELECT u.login, ur.role FROM user_account u " +
-            "INNER JOIN user_role ur ON u.id = ur.user_id " +
-            "WHERE u.login = ?";
-
-    private final DataSource dataSource;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .cors().disable()
+                .authorizeRequests()
                     .antMatchers("/", "/registration").permitAll()
+                    .antMatchers(HttpMethod.GET, "/certificates").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -36,7 +39,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .and()
                     .logout()
-                    .permitAll();
+                    .permitAll()
+                .and()
+                    .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                    .addFilterBefore(new AuthorizationFilter(userDetailsService),
+                            UsernamePasswordAuthenticationFilter.class)
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean
@@ -46,10 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery(SELECT_LOGIN_AND_PASSWORD)
-                .authoritiesByUsernameQuery(SELECT_LOGIN_AND_ROLES);
+       builder.userDetailsService(userDetailsService)
+               .passwordEncoder(passwordEncoder());
     }
 }
