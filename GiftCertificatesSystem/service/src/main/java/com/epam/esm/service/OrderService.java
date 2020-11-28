@@ -43,10 +43,11 @@ public interface OrderService {
     /**
      * Get user's order by order id.
      *
-     * @param id the order id
+     * @param userLogin the user login
+     * @param id        the order id
      * @return the user's order by id
-     * @throws OrderNotFoundServiceException      in case of {@code order with
-     *                                            current id not found}
+     * @throws OrderNotFoundServiceException in case of {@code order with
+     *                                       current id not found}
      */
-    Order getUserOrderById(Long id) throws OrderNotFoundServiceException;
+    Order getUserOrderById(String userLogin, Long id) throws OrderNotFoundServiceException;
 }

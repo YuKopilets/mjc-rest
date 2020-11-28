@@ -20,6 +20,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String ADMIN_ROLE = "ADMIN";
+    private static final String[] AUTHORIZE_ADMIN_LIST = {
+            // -- swagger
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/webjars/**",
+            // -- actuator
+            "/actuator",
+            "/actuator/*"
+    };
+
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -30,7 +48,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().disable()
                 .authorizeRequests()
                     .antMatchers("/", "/registration").permitAll()
-                    .antMatchers(HttpMethod.GET, "/certificates").permitAll()
+                    .antMatchers(HttpMethod.GET, "/certificates","/certificates/*").permitAll()
+                    .antMatchers(AUTHORIZE_ADMIN_LIST).hasRole(ADMIN_ROLE)
+                    .antMatchers(HttpMethod.POST, "/certificates", "/certificates/", "/tags", "/tags/")
+                        .hasRole(ADMIN_ROLE)
+                    .antMatchers(HttpMethod.PATCH).hasRole(ADMIN_ROLE)
+                    .antMatchers(HttpMethod.DELETE).hasRole(ADMIN_ROLE)
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

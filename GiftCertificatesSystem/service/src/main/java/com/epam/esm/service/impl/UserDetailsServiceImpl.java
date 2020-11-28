@@ -21,6 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 new UsernameNotFoundException("User with login=" + login + " not found!")
         );
         return UserDetailsImpl.builder()
+                .id(user.getId())
                 .login(user.getLogin())
                 .password(user.getPassword())
                 .active(user.getActive())

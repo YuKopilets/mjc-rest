@@ -12,6 +12,7 @@ import com.epam.esm.exception.OrderNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -52,13 +53,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @PreAuthorize("#userLogin == authentication.principal.username or hasRole('ADMIN')")
     public Page<Order> getUserOrders(String userLogin, Pageable pageable) throws UserNotFoundServiceException {
         userRepository.findByLogin(userLogin).orElseThrow(() -> new UserNotFoundServiceException(userLogin));
         return orderRepository.findOrdersByUserLogin(userLogin, pageable);
     }
 
     @Override
-    public Order getUserOrderById(Long id) throws OrderNotFoundServiceException {
+    @PreAuthorize("#userLogin == authentication.principal.username or hasRole('ADMIN')")
+    public Order getUserOrderById(String userLogin, Long id) throws OrderNotFoundServiceException {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
     }
 

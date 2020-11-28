@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,8 @@ import java.util.Set;
 
 @Builder
 public class UserDetailsImpl implements UserDetails {
+    @Getter
+    private final Long id;
     private final String login;
     private final String password;
     private final boolean active;

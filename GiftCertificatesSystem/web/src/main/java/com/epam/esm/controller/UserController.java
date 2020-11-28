@@ -91,7 +91,7 @@ public class UserController {
     @ApiOperation(value = "get user's order by id")
     public OrderRepresentationDto getUserOrderById(@PathVariable @Size(min = 4, max = 50) String login,
                                                    @PathVariable @Min(value = 1) long id) {
-        Order order = orderService.getUserOrderById(id);
+        Order order = orderService.getUserOrderById(login, id);
         OrderRepresentationDto dto = orderDtoConverter.convertToRepresentationDto(order);
         addGiftCertificatesLinksInDto(dto);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
