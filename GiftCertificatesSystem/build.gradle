@@ -44,6 +44,7 @@ allprojects {
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.4.0'
 
         implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
         implementation group: 'de.codecentric', name: 'spring-boot-admin-starter-client', version: '2.3.0'
