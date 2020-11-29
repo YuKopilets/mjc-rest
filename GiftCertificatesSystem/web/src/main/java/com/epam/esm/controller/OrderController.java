@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.converter.OrderDtoConverter;
 import com.epam.esm.dto.OrderDto;
+import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.entity.Order;
 import com.epam.esm.service.OrderService;
 import io.swagger.annotations.Api;
@@ -29,8 +30,9 @@ public class OrderController {
 
     @PostMapping
     @ApiOperation(value = "add new order")
-    public Order createOrder(@RequestBody OrderDto dto) {
+    public OrderRepresentationDto createOrder(@RequestBody OrderDto dto) {
         Order order = dtoConverter.convertToOrder(dto);
-        return orderService.addOrder(order);
+        Order addedOrder = orderService.addOrder(order);
+        return dtoConverter.convertToRepresentationDto(addedOrder);
     }
 }

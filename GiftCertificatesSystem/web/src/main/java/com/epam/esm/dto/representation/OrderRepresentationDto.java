@@ -1,6 +1,5 @@
-package com.epam.esm.dto;
+package com.epam.esm.dto.representation;
 
-import com.epam.esm.entity.GiftCertificate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,9 +25,5 @@ public class OrderRepresentationDto extends RepresentationModel<OrderRepresentat
     private Long userId;
     private BigDecimal cost;
     private LocalDateTime date;
-    private List<GiftCertificate> giftCertificates;
-
-    public List<GiftCertificate> getGiftCertificates() {
-        return Collections.unmodifiableList(giftCertificates);
-    }
+    private List<GiftCertificateRepresentationDto> giftCertificates;
 }

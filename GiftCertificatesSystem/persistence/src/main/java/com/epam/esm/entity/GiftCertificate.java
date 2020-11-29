@@ -1,9 +1,6 @@
 package com.epam.esm.entity;
 
-import com.epam.esm.entity.converter.JsonDurationSerializer;
 import com.epam.esm.entity.validator.ValidDaysDuration;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -79,7 +76,6 @@ public class GiftCertificate {
     private LocalDateTime lastUpdateDate;
 
     @ValidDaysDuration
-    @JsonSerialize(using = JsonDurationSerializer.class)
     @Column(nullable = false)
     private Duration duration;
 
@@ -90,7 +86,6 @@ public class GiftCertificate {
     )
     private Set<Tag> tags;
 
-    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToMany(mappedBy = "giftCertificates", fetch = FetchType.LAZY)

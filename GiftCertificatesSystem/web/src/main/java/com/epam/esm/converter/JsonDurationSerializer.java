@@ -1,4 +1,4 @@
-package com.epam.esm.entity.converter;
+package com.epam.esm.converter;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

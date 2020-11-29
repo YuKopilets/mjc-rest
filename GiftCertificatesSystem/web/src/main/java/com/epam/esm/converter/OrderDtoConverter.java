@@ -1,7 +1,7 @@
 package com.epam.esm.converter;
 
 import com.epam.esm.dto.OrderDto;
-import com.epam.esm.dto.OrderRepresentationDto;
+import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,6 +1,7 @@
 package com.epam.esm.converter;
 
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.dto.representation.TagRepresentationDto;
 import com.epam.esm.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,5 +27,9 @@ public class TagDtoConverter {
      */
     public Tag convertToTag(TagDto dto) {
         return modelMapper.map(dto, Tag.class);
+    }
+
+    public TagRepresentationDto convertToRepresentationDto(Tag tag) {
+        return modelMapper.map(tag, TagRepresentationDto.class);
     }
 }

@@ -2,6 +2,7 @@ package com.epam.esm.converter;
 
 import com.epam.esm.dto.GiftCertificatePatchDto;
 import com.epam.esm.dto.GiftCertificatePostDto;
+import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
 import com.epam.esm.entity.GiftCertificate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -49,5 +50,9 @@ public class GiftCertificateDtoConverter {
             giftCertificate.setDuration(Duration.ofDays(dto.getDuration()));
         }
         return giftCertificate;
+    }
+
+    public GiftCertificateRepresentationDto convertToRepresentationDto(GiftCertificate giftCertificate) {
+        return modelMapper.map(giftCertificate, GiftCertificateRepresentationDto.class);
     }
 }

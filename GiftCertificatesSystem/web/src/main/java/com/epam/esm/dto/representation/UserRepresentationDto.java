@@ -1,4 +1,4 @@
-package com.epam.esm.dto;
+package com.epam.esm.dto.representation;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

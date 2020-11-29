@@ -2,8 +2,8 @@ package com.epam.esm.controller;
 
 import com.epam.esm.converter.OrderDtoConverter;
 import com.epam.esm.converter.UserDtoConverter;
-import com.epam.esm.dto.OrderRepresentationDto;
-import com.epam.esm.dto.UserRepresentationDto;
+import com.epam.esm.dto.representation.OrderRepresentationDto;
+import com.epam.esm.dto.representation.UserRepresentationDto;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
 import com.epam.esm.service.OrderService;

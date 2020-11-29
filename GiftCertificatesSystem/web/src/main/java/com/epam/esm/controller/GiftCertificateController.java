@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.converter.GiftCertificateDtoConverter;
 import com.epam.esm.dto.GiftCertificatePatchDto;
 import com.epam.esm.dto.GiftCertificatePostDto;
+import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQuery;
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Gift certificate controller.
@@ -48,20 +50,22 @@ public class GiftCertificateController {
 
     @PostMapping
     @ApiOperation(value = "add new certificate")
-    public GiftCertificate createGiftCertificate(@RequestBody @Valid GiftCertificatePostDto dto) {
+    public GiftCertificateRepresentationDto createGiftCertificate(@RequestBody @Valid GiftCertificatePostDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto);
-        return giftCertificateService.addGiftCertificate(giftCertificate);
+        GiftCertificate addedGiftCertificate = giftCertificateService.addGiftCertificate(giftCertificate);
+        return dtoConverter.convertToRepresentationDto(addedGiftCertificate);
     }
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "get certificate by id")
-    public GiftCertificate getGiftCertificateById(@PathVariable @Min(value = 1) long id) {
-        return giftCertificateService.getGiftCertificateById(id);
+    public GiftCertificateRepresentationDto getGiftCertificateById(@PathVariable @Min(value = 1) long id) {
+        GiftCertificate giftCertificate = giftCertificateService.getGiftCertificateById(id);
+        return dtoConverter.convertToRepresentationDto(giftCertificate);
     }
 
     @GetMapping
     @ApiOperation(value = "get list of certificates")
-    public List<GiftCertificate> getGiftCertificates(
+    public List<GiftCertificateRepresentationDto> getGiftCertificates(
             @RequestParam(name = "tag_name", required = false) String[] tagNames,
             @RequestParam(name = "part_of_name", required = false) String partOfName,
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
@@ -70,15 +74,17 @@ public class GiftCertificateController {
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
-        return giftCertificateService.getGiftCertificates(query, pageable).getContent();
+        List<GiftCertificate> certificates = giftCertificateService.getGiftCertificates(query, pageable).getContent();
+        return convertCertificatesToDtoList(certificates);
     }
 
     @PatchMapping(value = "/{id}")
     @ApiOperation(value = "update certificate")
-    public GiftCertificate updateGiftCertificate(@PathVariable @Min(value = 1) long id,
+    public GiftCertificateRepresentationDto updateGiftCertificate(@PathVariable @Min(value = 1) long id,
                                                  @RequestBody GiftCertificatePatchDto dto) {
         GiftCertificate giftCertificate = dtoConverter.convertToGiftCertificate(dto, id);
-        return giftCertificateService.updateGiftCertificate(giftCertificate);
+        GiftCertificate updatedGiftCertificate = giftCertificateService.updateGiftCertificate(giftCertificate);
+        return dtoConverter.convertToRepresentationDto(updatedGiftCertificate);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -94,5 +100,11 @@ public class GiftCertificateController {
             Collections.addAll(names, tagNames);
         }
         return new GiftCertificateQuery(names, partOfName, partOfDescription, sort, order);
+    }
+
+    private List<GiftCertificateRepresentationDto> convertCertificatesToDtoList(List<GiftCertificate> certificates) {
+        return certificates.stream()
+                .map(dtoConverter::convertToRepresentationDto)
+                .collect(Collectors.toList());
     }
 }
