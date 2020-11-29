@@ -48,7 +48,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Min(value = 1)
     @Column(name = "user_account_id")
     private Long userId;

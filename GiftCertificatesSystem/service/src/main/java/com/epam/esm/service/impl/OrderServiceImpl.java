@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.entity.User;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.repository.UserRepository;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -43,8 +46,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException,
             UserNotFoundServiceException {
-        userRepository.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException(order.getUserId()));
-
+        Long userId = getAuthorizedUserId();
+        order.setUserId(userId);
         order.setDate(LocalDateTime.now());
         initOrderByGiftCertificates(order);
         order.setCost(calculateOrderCost(order));
@@ -63,6 +66,13 @@ public class OrderServiceImpl implements OrderService {
     @PreAuthorize("#userLogin == authentication.principal.username or hasRole('ADMIN')")
     public Order getUserOrderById(String userLogin, Long id) throws OrderNotFoundServiceException {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
+    }
+
+    private Long getAuthorizedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        User user = userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
+        return user.getId();
     }
 
     private void initOrderByGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {

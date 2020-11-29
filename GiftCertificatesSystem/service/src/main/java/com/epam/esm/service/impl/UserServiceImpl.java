@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasPermission(#id, 'User', 'hasSuitableId') or hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
     public User getUserById(Long id) throws UserNotFoundServiceException {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundServiceException(id));
     }
