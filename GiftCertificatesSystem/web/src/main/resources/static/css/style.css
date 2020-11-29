@@ -1,0 +1,266 @@
+html {
+  font-size: 10px;
+  font-family: "Open Sans", sans-serif;
+}
+
+body {
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 2.6rem;
+}
+
+h1, h2, h3, h4, h5, p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 4.4rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 5.4rem;
+}
+@media (max-width: 414px) {
+  h1 {
+    font-size: 3.2rem;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 4.2rem;
+  }
+}
+
+h2 {
+  font-size: 3.4rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 4.6rem;
+}
+@media (max-width: 414px) {
+  h2 {
+    font-size: 2.4rem;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 3.3rem;
+  }
+}
+
+h3 {
+  font-size: 2.4rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 3.4rem;
+}
+@media (max-width: 414px) {
+  h3 {
+    font-size: 2.1rem;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 3.1rem;
+  }
+}
+
+h4 {
+  font-size: 2.2rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 3rem;
+}
+@media (max-width: 768px) {
+  h4 {
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 3rem;
+  }
+}
+
+h5 {
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 2.6rem;
+}
+
+.input {
+  background-color: #FFFFFF;
+  padding: 1rem 2.5rem;
+  border: 0.1rem solid #A1A1A1;
+  border-color: #A1A1A1;
+  font-size: 2rem;
+  outline: 0;
+  box-sizing: border-box;
+}
+.input::placeholder {
+  color: #A1A1A1;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: row;
+}
+.search-bar__input {
+  display: block;
+  border-right: 0;
+}
+.search-bar__select {
+  display: block;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  border: 0.1rem solid #A1A1A1;
+  border-radius: 0;
+  border-color: #A1A1A1;
+}
+
+.icon {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.icon_like {
+  height: 2rem;
+  width: auto;
+}
+
+.icon_basket {
+  height: 2rem;
+  width: auto;
+}
+
+.icon_google {
+  height: 2rem;
+  width: auto;
+}
+
+.icon_github {
+  height: 2rem;
+  width: auto;
+}
+
+.link {
+  font-size: 2rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.link:hover {
+  color: #484848;
+}
+
+.button {
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  transition: all 0.3s;
+  color: #A1A1A1;
+  cursor: pointer;
+}
+
+.button_submit {
+  background-color: #6FCF97;
+  color: #FFFFFF;
+  border: 0;
+}
+.button_submit:hover {
+  background-color: #569D74;
+}
+
+.hamburger__line, .hamburger:after, .hamburger:before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  background-color: #484848;
+  border-radius: 5px;
+  width: 100%;
+  height: 3px;
+}
+
+.hamburger {
+  position: relative;
+  width: 31px;
+  height: 25px;
+}
+@media (max-width: 768px) {
+  .hamburger {
+    display: inline-block;
+  }
+}
+.hamburger:before {
+  top: 0;
+  left: 0;
+}
+.hamburger:after {
+  bottom: 0;
+  left: 0;
+}
+
+.hamburger__line {
+  top: calc( 50% - 1.5px );
+  left: 0;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20rem;
+}
+
+.form-login {
+  width: 50rem;
+  box-sizing: border-box;
+  padding: 16rem 5rem 6rem 5rem;
+  position: relative;
+  border: 0.1rem solid #A1A1A1;
+  border-color: #A1A1A1;
+}
+.form-login__logo {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25rem;
+  height: 25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #A1A1A1;
+  color: #FFFFFF;
+  font-size: 4rem;
+  font-weight: bold;
+}
+.form-login > .form-login__input, .form-login__button {
+  width: 100%;
+}
+.form-login > * {
+  margin: 0.5rem 0;
+}
+
+.header {
+  background-color: #FFFFFF;
+  padding: 2rem;
+}
+.header__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.header__logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.header__logo > .hamburger {
+  margin-right: 3rem;
+}
+.header__logo > .logo {
+  font-size: 4rem;
+}
+.header__actions {
+  display: flex;
+  flex-direction: row;
+}
+.header__icons > .icon {
+  margin-right: 1rem;
+}

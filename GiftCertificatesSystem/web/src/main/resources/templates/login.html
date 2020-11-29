@@ -1,25 +1,68 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Spring Security Example </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link th:href="@{/static/css/style.css}" media="all" type="text/css" rel="stylesheet">
 </head>
-<body>
-    <div sec:authorize="!isAuthenticated()">
-        <div th:if="${param.error}">
-            Invalid username and password.
-        </div>
-        <div th:if="${param.logout}">
-            You have been logged out.
-        </div>
-        <form th:action="@{/login}" method="post">
-            <div><label> User Name : <input type="text" name="username"/> </label></div>
-            <div><label> Password: <input type="password" name="password"/> </label></div>
-            <div><input type="submit" value="Sign In"/></div>
-        </form>
-        <p><a th:href="@{/registration}">Sign Up</a></p>
-        <p><a th:href="@{/oauth2/authorize-client/google}">Authorize with Google</a></p>
-        <p><a th:href="@{/oauth2/authorize-client/github}">Authorize with GitHub</a></p>
-    </div>
-</body>
+    <body>
+        <header class="header">
+            <div class="header__wrapper">
+                <div class="header__logo">
+                    <div class="hamburger">
+                        <span class="hamburger__line"></span>
+                    </div>
+                    <h1 class="logo">Logo</h1>
+                </div>
+                <div class="header__search-bar">
+                    <div class="search-bar">
+                        <input class="input search-bar__input" placeholder="Search by item name"/>
+                        <select class="search-bar__select">
+                            <option>item 1</option>
+                            <option>item 2</option>
+                            <option>item 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="header__actions">
+                    <div class="header__icons">
+                        <img alt="like" src="static/assets/like.svg" class="icon icon_like"/>
+                        <img alt="like" src="static/assets/basket.svg" class="icon icon_basket"/>
+                    </div>
+                    <div class="header__links">
+                        <a class="link">Login</a>
+                        <a class="link">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main  class="login">
+            <div sec:authorize="!isAuthenticated()">
+                <form class="form form-login" th:action="@{/login}" method="post">
+                    <div class="form-login__logo">Logo</div>
+                    <div th:if="${param.error}">
+                        Invalid username and password.
+                    </div>
+                    <div th:if="${param.logout}">
+                        You have been logged out.
+                    </div>
+                    <input type="text" name="username" class="input form-login__input" placeholder="Login"/>
+                    <input type="password" name="password" class="input form-login__input" placeholder="Password"/>
+                    <button class="button button_submit form-login__button" type="submit">Login</button>
+                    <label>Log in with:</label>
+                    <div class="form-login__icons">
+                        <a th:href="@{/oauth2/authorize-client/google}">
+                            <img alt="like" src="static/assets/google.svg" class="icon icon_google"/>
+                        </a>
+                        <a th:href="@{/oauth2/authorize-client/github}">
+                            <img alt="like" src="static/assets/github.svg" class="icon icon_github"/>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </body>
 </html>

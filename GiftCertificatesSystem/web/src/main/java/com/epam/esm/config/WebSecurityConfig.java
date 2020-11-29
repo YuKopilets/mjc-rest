@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/registration").permitAll()
+                    .antMatchers("/", "/registration", "/static/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/certificates","/certificates/*").permitAll()
                     .antMatchers(AUTHORIZE_ADMIN_LIST).hasRole(ADMIN_ROLE)
                     .antMatchers(HttpMethod.POST, "/certificates", "/certificates/", "/tags", "/tags/")
