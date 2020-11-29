@@ -39,7 +39,7 @@ public class User {
     private String login;
 
     @Column(nullable = false)
-    private String password;
+    private char[] password;
 
     @Column(nullable = false)
     private Boolean active;

@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.CharBuffer;
 import java.util.Collections;
 
 /**
@@ -32,7 +33,8 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationFailServiceException("User with login: "
                     + userByLogin.getLogin() + " already exists");
         });
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String encodedPassword = passwordEncoder.encode(CharBuffer.wrap(user.getPassword()));
+        user.setPassword(encodedPassword.toCharArray());
         user.setRoles(Collections.singleton(UserRole.USER));
         user.setActive(true);
         userRepository.save(user);
