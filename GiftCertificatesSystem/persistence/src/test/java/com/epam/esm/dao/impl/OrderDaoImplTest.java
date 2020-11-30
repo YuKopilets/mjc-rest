@@ -35,15 +35,6 @@ class OrderDaoImplTest {
     @Autowired
     private OrderRepository orderRepository;
 
-    @ParameterizedTest
-    @MethodSource("prepareOrder")
-    void saveTest(Order order) {
-        orderRepository.save(order);
-        Long expected = 3L;
-        Long actual = order.getId();
-        assertEquals(expected, actual);
-    }
-
     @Test
     void findByIdTest() {
         Optional<Order> orderById = orderRepository.findById(1L);
@@ -61,7 +52,7 @@ class OrderDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareOrders")
     void findAllTest(List<Order> expectedOrders) {
-        PageRequest pageRequest = PageRequest.of(1, 2);
+        PageRequest pageRequest = PageRequest.of(0, 2);
         List<Order> actualOrders = orderRepository.findAll(pageRequest).getContent();
         assertEquals(expectedOrders, actualOrders);
     }
@@ -69,7 +60,7 @@ class OrderDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareOrders")
     void findAllNegativeTest(List<Order> expectedOrders) {
-        PageRequest pageRequest = PageRequest.of(1, 1);
+        PageRequest pageRequest = PageRequest.of(0, 1);
         List<Order> actualOrders = orderRepository.findAll(pageRequest).getContent();
         assertNotEquals(expectedOrders, actualOrders);
     }
@@ -83,7 +74,7 @@ class OrderDaoImplTest {
 
     private static Arguments[] prepareOrder() {
         LocalDateTime localDateTime = LocalDateTime.parse("2009-10-04T15:42:20.134");
-        Order order = buildOrder(1L, 1L, 30.43, localDateTime, prepareOrderGiftCertificates());
+        Order order = buildOrder(null, 1L, 30.43, localDateTime, prepareOrderGiftCertificates());
         return new Arguments[]{Arguments.of(order)};
     }
 

@@ -32,7 +32,7 @@ public class GiftCertificateFilterRepositoryImpl implements GiftCertificateFilte
     public Page<GiftCertificate> findAllByQueryParams(GiftCertificateQuery giftCertificateQuery, Pageable pageable) {
         String condition = QueryConditionUtils.generateConditionByQueryParams(giftCertificateQuery);
         String query = SELECT_ALL_GIFT_CERTIFICATE_IDS + condition;
-        int firstResult = (pageable.getPageNumber() + 1) * pageable.getPageSize();
+        int firstResult = pageable.getPageNumber() * pageable.getPageSize();
         // This cast is correct, because the list we're creating is of the same
         // type as the one passed after operation with entity manager.
         // We're selecting the list of gift certificate identifiers.

@@ -48,11 +48,6 @@ class UserDaoImplTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void findByLoginNegativeTest() {
-        assertThrows(NoResultException.class, () -> userRepository.findByLogin("login"));
-    }
-
     private static Arguments[] prepareUser() {
         User user = User.builder()
                 .id(1L)

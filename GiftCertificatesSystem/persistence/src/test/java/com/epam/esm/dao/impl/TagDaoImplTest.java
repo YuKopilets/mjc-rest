@@ -54,7 +54,7 @@ class TagDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void findAllTagsTest(List<Tag> expectedTags) {
-        PageRequest pageRequest = PageRequest.of(1, 6);
+        PageRequest pageRequest = PageRequest.of(0, 6);
         List<Tag> actualTags = tagRepository.findAll(pageRequest).getContent();
         assertEquals(expectedTags, actualTags);
     }
@@ -62,7 +62,7 @@ class TagDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void findAllTagsNegativeTest(List<Tag> expectedTags) {
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
         List<Tag> actualTags = tagRepository.findAll(pageRequest).getContent();
         assertNotEquals(expectedTags, actualTags);
     }

@@ -39,15 +39,6 @@ class GiftCertificateDaoImplTest {
     @Autowired
     private GiftCertificateFilterRepository giftCertificateFilterRepository;
 
-    @ParameterizedTest
-    @MethodSource("prepareGiftCertificate")
-    void saveTest(GiftCertificate giftCertificate) {
-        giftCertificateRepository.save(giftCertificate);
-        Long expected = 4L;
-        Long actual = giftCertificate.getId();
-        assertEquals(expected, actual);
-    }
-
     @Test
     void findGiftCertificateByIdTest() {
         Optional<GiftCertificate> giftCertificateById = giftCertificateRepository.findById(1L);
@@ -65,7 +56,7 @@ class GiftCertificateDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void findAllGiftCertificatesTest(List<GiftCertificate> expectedGiftCertificates) {
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
         List<GiftCertificate> actualGiftCertificates = giftCertificateRepository.findAll(pageRequest).getContent();
         assertEquals(expectedGiftCertificates, actualGiftCertificates);
     }
@@ -73,7 +64,7 @@ class GiftCertificateDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void findAllGiftCertificatesNegativeTest(List<GiftCertificate> expectedGiftCertificates) {
-        PageRequest pageRequest = PageRequest.of(1, 2);
+        PageRequest pageRequest = PageRequest.of(0, 2);
         List<GiftCertificate> actualGiftCertificates = giftCertificateRepository.findAll(pageRequest).getContent();
         assertNotEquals(expectedGiftCertificates, actualGiftCertificates);
     }
@@ -81,7 +72,7 @@ class GiftCertificateDaoImplTest {
     @ParameterizedTest
     @MethodSource("prepareGiftCertificateQueryAndExpectedList")
     void findAllGiftCertificatesByTagNamesTest(GiftCertificateQuery giftCertificateQuery, List<GiftCertificate> expected) {
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
         List<GiftCertificate> actual = giftCertificateFilterRepository.findAllByQueryParams(giftCertificateQuery,
                 pageRequest).getContent();
         assertEquals(expected, actual);
@@ -91,7 +82,7 @@ class GiftCertificateDaoImplTest {
     @MethodSource("prepareExpectedGiftCertificates")
     void findAllGiftCertificatesByQueryParamsTest(List<GiftCertificate> expected) {
         GiftCertificateQuery giftCertificateQuery = prepareGiftCertificateQuery();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
         List<GiftCertificate> actual = giftCertificateFilterRepository.findAllByQueryParams(giftCertificateQuery,
                 pageRequest).getContent();
         assertEquals(expected, actual);
@@ -118,7 +109,7 @@ class GiftCertificateDaoImplTest {
         LocalDateTime localDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");
         Set<Tag> tags = new HashSet<>();
         tags.add(buildTag(5L, "sport"));
-        GiftCertificate giftCertificate = buildGiftCertificate(1L, "test name", "test description",
+        GiftCertificate giftCertificate = buildGiftCertificate(null, "test name", "test description",
                 20.30, localDateTime, localDateTime, 25, tags);
         return new Arguments[]{Arguments.of(giftCertificate)};
     }

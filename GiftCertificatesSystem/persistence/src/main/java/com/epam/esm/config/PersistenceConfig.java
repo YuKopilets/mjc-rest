@@ -8,7 +8,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -46,5 +49,12 @@ public class PersistenceConfig {
         hibernateProperties.setProperty(STORE_AT_DELETE_PROPERTY, environment.getProperty(STORE_AT_DELETE_PROPERTY));
         hibernateProperties.setProperty(VALIDATION_MODE_PROPERTY, environment.getProperty(VALIDATION_MODE_PROPERTY));
         return hibernateProperties;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
+        return transactionManager;
     }
 }
