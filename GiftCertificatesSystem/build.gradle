@@ -54,7 +54,7 @@ allprojects {
         implementation group: 'org.hibernate', name: 'hibernate-envers', version: '5.4.24.Final'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
         implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
-        //implementation group: 'org.flywaydb', name: 'flyway-core', version: '7.3.0'
+        implementation group: 'org.flywaydb', name: 'flyway-core', version: '6.5.7'
 
         compileOnly 'org.projectlombok:lombok:1.18.16'
         annotationProcessor 'org.projectlombok:lombok:1.18.16'
