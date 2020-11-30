@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.experimental.UtilityClass;
 
+import java.security.Key;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 public class JwtUtils {
     private static final Long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 30;
 
-    private static String SECRET_KEY;
+    private static byte[] SECRET_KEY;
 
     /**
      * Generate token value based on login.
@@ -66,7 +67,7 @@ public class JwtUtils {
         return claims.getSubject();
     }
 
-    public void setSecretKey(String secretKey) {
+    public void setSecretKey(byte[] secretKey) {
         SECRET_KEY = secretKey;
     }
 }

@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class UtilInitializer {
     @Value("${jwt.secret-key}")
-    private String secretKey;
+    private byte[] secretKey;
 
     @PostConstruct
     public void initialize() {
