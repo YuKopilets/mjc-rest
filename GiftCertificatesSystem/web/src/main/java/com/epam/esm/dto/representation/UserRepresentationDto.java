@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The {@code User representation dto} is dto for representation user in
- * response with <i>HAL</i> format.
+ * the response with <i>HAL</i> format.
  *
  * @author Yuriy Kopilets
  * @version 1.0

@@ -59,7 +59,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificate getGiftCertificateById(Long id) throws GiftCertificateNotFoundServiceException {
-        return giftCertificateRepository.findById(id).orElseThrow(() -> new GiftCertificateNotFoundServiceException(id));
+        return giftCertificateRepository.findById(id)
+                .orElseThrow(() -> new GiftCertificateNotFoundServiceException(id));
     }
 
     @Override

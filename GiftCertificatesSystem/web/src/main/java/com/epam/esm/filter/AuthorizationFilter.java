@@ -16,6 +16,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * The {@code Authorization filter} is checking request to having jwt tokens
+ * and validate them.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see GenericFilterBean
+ */
 public class AuthorizationFilter extends GenericFilterBean {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 

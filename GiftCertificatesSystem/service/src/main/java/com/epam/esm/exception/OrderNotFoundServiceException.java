@@ -78,7 +78,8 @@ public class OrderNotFoundServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public OrderNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public OrderNotFoundServiceException(String message, Throwable cause,
+                                         boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -10,6 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 
+/**
+ * The implementation of User details service interface.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see UserDetailsService
+ */
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {

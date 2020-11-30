@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * The {@code Order representation dto} is dto for representation order in
- * response with <i>HAL</i> format.
+ * the response with <i>HAL</i> format.
  *
  * @author Yuriy Kopilets
  * @version 1.0

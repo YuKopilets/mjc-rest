@@ -8,6 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * The implementation of User details interface.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @Builder
 public class UserDetailsImpl implements UserDetails {
     @Getter

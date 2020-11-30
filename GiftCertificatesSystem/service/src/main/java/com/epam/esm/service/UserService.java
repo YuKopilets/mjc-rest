@@ -10,7 +10,13 @@ import com.epam.esm.exception.UserNotFoundServiceException;
  * @version 1.0
  */
 public interface UserService {
+    /**
+     * Sing up process. Add new user.
+     *
+     * @param user the user
+     */
     void singUp(User user);
+
     /**
      * Get user by current id.
      *

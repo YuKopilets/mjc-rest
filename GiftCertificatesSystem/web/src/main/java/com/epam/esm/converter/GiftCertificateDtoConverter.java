@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 /**
- * The {@code Gift certificate dto converter} converts dto to gift certificate.
+ * The {@code Gift certificate dto converter} converts dto to gift certificate
+ * and conversely.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -52,6 +53,13 @@ public class GiftCertificateDtoConverter {
         return giftCertificate;
     }
 
+    /**
+     * Convert gift certificate to representation dto
+     * before preparing response.
+     *
+     * @param giftCertificate the gift certificate
+     * @return the gift certificate representation dto
+     */
     public GiftCertificateRepresentationDto convertToRepresentationDto(GiftCertificate giftCertificate) {
         return modelMapper.map(giftCertificate, GiftCertificateRepresentationDto.class);
     }

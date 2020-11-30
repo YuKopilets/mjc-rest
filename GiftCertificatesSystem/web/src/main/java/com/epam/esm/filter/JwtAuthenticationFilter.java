@@ -13,10 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The Jwt authentication filter based on authentication and
+ * preparing jwt token for authenticated user.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see UsernamePasswordAuthenticationFilter
+ */
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         setAuthenticationManager(authenticationManager);

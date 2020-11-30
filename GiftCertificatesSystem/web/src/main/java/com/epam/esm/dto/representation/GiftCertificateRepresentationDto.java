@@ -10,6 +10,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * The {@code Gift certificate representation dto} is dto for representation
+ * gift certificate in the response.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @Data
 @NoArgsConstructor
 public class GiftCertificateRepresentationDto {

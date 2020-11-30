@@ -57,7 +57,9 @@ public class TagController {
 
     @GetMapping
     @ApiOperation(value = "get list of tags")
-    public List<TagRepresentationDto> getAllTags(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public List<TagRepresentationDto> getAllTags(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         List<Tag> tags = tagService.getAllTags(pageable).getContent();
         return convertTagsToDtoList(tags);
     }

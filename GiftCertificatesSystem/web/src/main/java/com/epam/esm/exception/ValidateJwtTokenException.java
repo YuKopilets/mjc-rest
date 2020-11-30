@@ -1,5 +1,13 @@
 package com.epam.esm.exception;
 
+/**
+ * {@code ValidateJwtTokenException} is generated when jwt token
+ * haven't passed validation.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see RuntimeException
+ */
 public class ValidateJwtTokenException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
@@ -70,7 +78,8 @@ public class ValidateJwtTokenException extends RuntimeException {
      *                           be writable
      * @since 1.7
      */
-    public ValidateJwtTokenException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ValidateJwtTokenException(String message, Throwable cause,
+                                     boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

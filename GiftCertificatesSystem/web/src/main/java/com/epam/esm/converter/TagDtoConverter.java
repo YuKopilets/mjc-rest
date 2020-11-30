@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 /**
- * The {@code Tag dto converter} converts dto to tag.
+ * The {@code Tag dto converter} converts dto to tag and conversely.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -29,6 +29,12 @@ public class TagDtoConverter {
         return modelMapper.map(dto, Tag.class);
     }
 
+    /**
+     * Convert tag to representation dto before preparing response.
+     *
+     * @param tag the tag
+     * @return the tag representation dto
+     */
     public TagRepresentationDto convertToRepresentationDto(Tag tag) {
         return modelMapper.map(tag, TagRepresentationDto.class);
     }
