@@ -5,6 +5,7 @@ import com.epam.esm.dto.representation.TagRepresentationDto;
 import com.epam.esm.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,5 +38,15 @@ public class TagDtoConverter {
      */
     public TagRepresentationDto convertToRepresentationDto(Tag tag) {
         return modelMapper.map(tag, TagRepresentationDto.class);
+    }
+
+    /**
+     * Convert tags to dto page for pagination.
+     *
+     * @param tags the tags
+     * @return the page
+     */
+    public Page<TagRepresentationDto> convertTagsToDtoPage(Page<Tag> tags) {
+        return tags.map(this::convertToRepresentationDto);
     }
 }

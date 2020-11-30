@@ -10,6 +10,7 @@ import com.epam.esm.util.GiftCertificateQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -28,9 +29,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Gift certificate controller.
@@ -65,7 +64,7 @@ public class GiftCertificateController {
 
     @GetMapping
     @ApiOperation(value = "get list of certificates")
-    public List<GiftCertificateRepresentationDto> getGiftCertificates(
+    public Page<GiftCertificateRepresentationDto> getGiftCertificates(
             @RequestParam(name = "tag_name", required = false) String[] tagNames,
             @RequestParam(name = "part_of_name", required = false) String partOfName,
             @RequestParam(name = "part_of_description", required = false) String partOfDescription,
@@ -74,8 +73,8 @@ public class GiftCertificateController {
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         GiftCertificateQuery query = prepareGiftCertificateQuery(tagNames, partOfName, partOfDescription, sort, order);
-        List<GiftCertificate> certificates = giftCertificateService.getGiftCertificates(query, pageable).getContent();
-        return convertCertificatesToDtoList(certificates);
+        Page<GiftCertificate> giftCertificates = giftCertificateService.getGiftCertificates(query, pageable);
+        return dtoConverter.convertCertificatesToDtoPage(giftCertificates);
     }
 
     @PatchMapping(value = "/{id}")
@@ -100,11 +99,5 @@ public class GiftCertificateController {
             Collections.addAll(names, tagNames);
         }
         return new GiftCertificateQuery(names, partOfName, partOfDescription, sort, order);
-    }
-
-    private List<GiftCertificateRepresentationDto> convertCertificatesToDtoList(List<GiftCertificate> certificates) {
-        return certificates.stream()
-                .map(dtoConverter::convertToRepresentationDto)
-                .collect(Collectors.toList());
     }
 }

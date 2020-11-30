@@ -8,6 +8,7 @@ import com.epam.esm.service.TagService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The type Tag controller.
@@ -57,11 +56,11 @@ public class TagController {
 
     @GetMapping
     @ApiOperation(value = "get list of tags")
-    public List<TagRepresentationDto> getAllTags(
+    public Page<TagRepresentationDto> getAllTags(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        List<Tag> tags = tagService.getAllTags(pageable).getContent();
-        return convertTagsToDtoList(tags);
+        Page<Tag> tags = tagService.getAllTags(pageable);
+        return dtoConverter.convertTagsToDtoPage(tags);
     }
 
     @GetMapping("/most-used")
@@ -75,11 +74,5 @@ public class TagController {
     @ApiOperation(value = "delete tag")
     public void deleteTag(@PathVariable @Min(value = 1) long id) {
         tagService.removeTag(id);
-    }
-
-    private List<TagRepresentationDto> convertTagsToDtoList(List<Tag> tags) {
-        return tags.stream()
-                .map(dtoConverter::convertToRepresentationDto)
-                .collect(Collectors.toList());
     }
 }

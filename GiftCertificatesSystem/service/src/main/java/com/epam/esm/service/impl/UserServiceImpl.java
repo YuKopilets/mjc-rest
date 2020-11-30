@@ -7,7 +7,6 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
     public User getUserById(Long id) throws UserNotFoundServiceException {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundServiceException(id));
     }
 
     @Override
-    @PreAuthorize("#login == authentication.principal.username or hasRole('ADMIN')")
     public User getUserByLogin(String login) throws UserNotFoundServiceException {
         return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
     }

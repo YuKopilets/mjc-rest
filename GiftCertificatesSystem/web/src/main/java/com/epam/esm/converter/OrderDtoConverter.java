@@ -5,6 +5,7 @@ import com.epam.esm.dto.representation.OrderRepresentationDto;
 import com.epam.esm.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,5 +38,15 @@ public class OrderDtoConverter {
      */
     public OrderRepresentationDto convertToRepresentationDto(Order order) {
         return modelMapper.map(order, OrderRepresentationDto.class);
+    }
+
+    /**
+     * Convert orders to dto page for pagination.
+     *
+     * @param orders the orders
+     * @return the page
+     */
+    public Page<OrderRepresentationDto> convertOrdersToDtoPage(Page<Order> orders) {
+        return orders.map(this::convertToRepresentationDto);
     }
 }
