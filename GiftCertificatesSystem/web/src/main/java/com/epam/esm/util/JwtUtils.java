@@ -16,8 +16,9 @@ import java.util.Date;
  */
 @UtilityClass
 public class JwtUtils {
-    private static final String SECRET_KEY = "q3t6w9z$C&F)J@NcQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s5v8y/B?E(H+MbQeTh";
     private static final Long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 30;
+
+    private static String SECRET_KEY;
 
     /**
      * Generate token value based on login.
@@ -63,5 +64,9 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
+    }
+
+    public void setSecretKey(String secretKey) {
+        SECRET_KEY = secretKey;
     }
 }
