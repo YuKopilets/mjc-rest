@@ -1,4 +1,4 @@
-package com.epam.esm.config;
+package com.epam.esm.service.impl;
 
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
