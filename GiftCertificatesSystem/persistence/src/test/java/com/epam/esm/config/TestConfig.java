@@ -1,6 +1,7 @@
-package com.epam.esm.context;
+package com.epam.esm.config;
 
-import com.epam.esm.config.PersistenceConfig;
+import com.epam.esm.repository.GiftCertificateFilterRepository;
+import com.epam.esm.repository.impl.GiftCertificateFilterRepositoryImpl;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -19,5 +20,11 @@ public class TestConfig {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .build();
+    }
+
+    @Bean
+    @Profile("test")
+    public GiftCertificateFilterRepository giftCertificateFilterRepository() {
+        return new GiftCertificateFilterRepositoryImpl();
     }
 }

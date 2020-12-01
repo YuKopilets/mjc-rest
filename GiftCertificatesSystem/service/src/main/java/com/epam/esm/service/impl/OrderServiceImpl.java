@@ -61,11 +61,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getUserOrderById(String userLogin, Long id) throws OrderNotFoundServiceException {
+    public Order getUserOrderById(Long id) throws OrderNotFoundServiceException {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
     }
 
-    private Long getAuthorizedUserId() {
+    private Long getAuthorizedUserId() throws UserNotFoundServiceException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
         User user = userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));

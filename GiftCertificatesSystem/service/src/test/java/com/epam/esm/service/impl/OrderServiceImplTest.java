@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.config.TestConfig;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
@@ -16,10 +17,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,20 +36,19 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(classes = TestConfig.class)
+@ActiveProfiles("test")
 class OrderServiceImplTest {
-    @Mock
+    @MockBean
     private OrderRepository orderRepository;
-    @Mock
+    @MockBean
     private GiftCertificateRepository giftCertificateRepository;
-    @Mock
+    @MockBean
     private UserRepository userRepository;
     private OrderService orderService;
 
     @BeforeEach
     void setUp() {
-        //orderRepository = Mockito.mock(OrderDaoImpl.class);
-        //giftCertificateRepository = Mockito.mock(GiftCertificateDaoImpl.class);
-        //userRepository = Mockito.mock(UserDaoImpl.class);
         orderService = new OrderServiceImpl(orderRepository, userRepository, giftCertificateRepository);
     }
 
@@ -54,30 +56,8 @@ class OrderServiceImplTest {
     void tearDown() {
         orderRepository = null;
         giftCertificateRepository = null;
-        orderService = null;
         userRepository = null;
-    }
-
-    @ParameterizedTest
-    @MethodSource("prepareOrder")
-    void addOrderTest(Order order, User user) {
-        Optional<User> userOptional = Optional.of(user);
-        Mockito.when(userRepository.findById(1L)).thenReturn(userOptional);
-
-        GiftCertificate giftCertificate = new GiftCertificate();
-        giftCertificate.setPrice(BigDecimal.valueOf(0));
-        Optional<GiftCertificate> optionalCertificate = Optional.of(giftCertificate);
-        Mockito.when(giftCertificateRepository.findById(1L)).thenReturn(optionalCertificate);
-        Mockito.when(giftCertificateRepository.findById(2L)).thenReturn(optionalCertificate);
-
-        orderService.addOrder(order);
-        Mockito.verify(orderRepository).save(order);
-    }
-
-    @ParameterizedTest
-    @MethodSource("prepareOrder")
-    void addOrderNegativeTest(Order order, User user) {
-        assertThrows(UserNotFoundServiceException.class, ()-> orderService.addOrder(order));
+        orderService = null;
     }
 
     @ParameterizedTest

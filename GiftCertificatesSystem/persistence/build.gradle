@@ -5,7 +5,4 @@ version '1.0'
 dependencies {
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
     runtimeOnly 'mysql:mysql-connector-java'
-
-    testRuntimeOnly 'com.h2database:h2'
-    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 }

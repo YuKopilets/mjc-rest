@@ -1,11 +1,13 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.config.TestConfig;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.repository.GiftCertificateFilterRepository;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
+import com.epam.esm.repository.impl.GiftCertificateFilterRepositoryImpl;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
@@ -17,8 +19,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,26 +37,29 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(classes = TestConfig.class)
+@ActiveProfiles("test")
 class GiftCertificateServiceImplTest {
-    @Mock
+    @MockBean
     private GiftCertificateRepository giftCertificateRepository;
+    @MockBean
+    private TagRepository tagRepository;
     @Mock
     private GiftCertificateFilterRepository giftCertificateFilterRepository;
-    @Mock
-    private TagRepository tagRepository;
     private GiftCertificateService giftCertificateService;
 
     @BeforeEach
     void setUp() {
-        //giftCertificateRepository = Mockito.mock(GiftCertificateDaoImpl.class);
-        //tagRepository = Mockito.mock(TagDaoImpl.class);
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateRepository, giftCertificateFilterRepository, tagRepository);
+        giftCertificateFilterRepository = Mockito.mock(GiftCertificateFilterRepositoryImpl.class);
+        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateRepository,
+                giftCertificateFilterRepository, tagRepository);
     }
 
     @AfterEach
     void tearDown() {
         giftCertificateRepository = null;
         tagRepository = null;
+        giftCertificateFilterRepository = null;
         giftCertificateService = null;
     }
 

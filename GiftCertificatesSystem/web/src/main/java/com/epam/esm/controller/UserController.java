@@ -79,7 +79,7 @@ public class UserController {
 
     @GetMapping(value = "/{login}/orders")
     @ApiOperation(value = "get list of user's orders by login")
-    @PreAuthorize("#userLogin == authentication.principal.username or hasRole('ADMIN')")
+    @PreAuthorize("#login == authentication.principal.username or hasRole('ADMIN')")
     public Page<OrderRepresentationDto> getUserOrders(
             @PathVariable @Size(min = 4, max = 50) String login,
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
@@ -92,10 +92,10 @@ public class UserController {
 
     @GetMapping(value = "/{login}/orders/{id}")
     @ApiOperation(value = "get user's order by id")
-    @PreAuthorize("#userLogin == authentication.principal.username or hasRole('ADMIN')")
+    @PreAuthorize("#login == authentication.principal.username or hasRole('ADMIN')")
     public OrderRepresentationDto getUserOrderById(@PathVariable @Size(min = 4, max = 50) String login,
                                                    @PathVariable @Min(value = 1) long id) {
-        Order order = orderService.getUserOrderById(login, id);
+        Order order = orderService.getUserOrderById(id);
         OrderRepresentationDto dto = orderDtoConverter.convertToRepresentationDto(order);
         addGiftCertificatesLinksInDto(dto);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)

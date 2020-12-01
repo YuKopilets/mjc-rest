@@ -2,7 +2,6 @@ package com.epam.esm.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -17,7 +16,6 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.epam.esm.repository")
-@ComponentScan("com.epam.esm.repository.impl")
 @PropertySource("classpath:hibernate.properties")
 @RequiredArgsConstructor
 public class PersistenceConfig {

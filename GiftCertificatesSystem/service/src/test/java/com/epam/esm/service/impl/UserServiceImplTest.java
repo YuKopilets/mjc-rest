@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.config.TestConfig;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.repository.UserRepository;
@@ -11,27 +12,31 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SpringBootTest(classes = TestConfig.class)
+@ActiveProfiles("test")
 class UserServiceImplTest {
-    @MockBean(name = "userRepository")
+    @MockBean
     private UserRepository userRepository;
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        //userRepository = Mockito.mock(UserDaoImpl.class);
-        userService = new UserServiceImpl(userRepository);
+        userService = new UserServiceImpl(userRepository, new BCryptPasswordEncoder(8));
     }
 
     @AfterEach
     void tearDown() {
-        //userRepository = null;
+        userRepository = null;
         userService = null;
     }
 

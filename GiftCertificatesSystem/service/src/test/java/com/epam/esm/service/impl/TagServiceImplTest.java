@@ -1,20 +1,23 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.ServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.config.TestConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +25,15 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(classes = TestConfig.class)
+@ActiveProfiles("test")
 class TagServiceImplTest {
-    @Mock
+    @MockBean
     private TagRepository tagRepository;
     private TagService tagService;
 
     @BeforeEach
     void setUp() {
-        //tagRepository = Mockito.mock(TagDaoImpl.class);
         tagService = new TagServiceImpl(tagRepository);
     }
 

@@ -1,6 +1,6 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.context.TestConfig;
+import com.epam.esm.config.TestConfig;
 import com.epam.esm.entity.User;
 import com.epam.esm.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import javax.persistence.NoResultException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
