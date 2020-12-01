@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import springfox.documentation.builders.PathSelectors;
@@ -20,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan("com.epam.esm")
-@Import({PersistenceConfig.class, ServiceConfig.class})
 public class ApplicationConfig {
     private static final String MESSAGE_SOURCE_BASE_NAME = "classpath:messages";
 

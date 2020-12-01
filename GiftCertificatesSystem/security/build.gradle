@@ -4,6 +4,4 @@ version '1.0'
 
 dependencies {
     compile project(":persistence")
-    compile project(":service")
-    compile project(":security")
 }
