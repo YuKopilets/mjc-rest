@@ -6,7 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.experimental.UtilityClass;
 
-import java.security.Key;
 import java.util.Date;
 
 /**
@@ -17,10 +16,6 @@ import java.util.Date;
  */
 @UtilityClass
 public class JwtUtils {
-    private static final Long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 30;
-
-    private static byte[] SECRET_KEY;
-
     /**
      * Generate token value based on login.
      *
@@ -28,11 +23,11 @@ public class JwtUtils {
      * @return the token
      */
     public static String generateToken(String login) {
-        Date expiration = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+        Date expiration = new Date(System.currentTimeMillis() + JwtConstantHolder.getExpirationTime());
         return Jwts.builder()
                 .setSubject(login)
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS512, JwtConstantHolder.getSecretKey())
                 .compact();
     }
 
@@ -45,7 +40,7 @@ public class JwtUtils {
     public static boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
+                    .setSigningKey(JwtConstantHolder.getSecretKey())
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
@@ -61,13 +56,9 @@ public class JwtUtils {
      */
     public String getLoginFromToken(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(JwtConstantHolder.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
-    }
-
-    public void setSecretKey(byte[] secretKey) {
-        SECRET_KEY = secretKey;
     }
 }
