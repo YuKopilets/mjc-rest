@@ -32,6 +32,7 @@ public class AuthorizationFilter extends GenericFilterBean {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String REDIRECT_URL = "login";
     private static final List<String> UNCHECKED_URIS;
+    private static final String STATIC_RESOURCES_URL = "/gift_certificates_system/static/";
 
     private final JwtTokenSupport jwtTokenSupport;
 
@@ -62,7 +63,7 @@ public class AuthorizationFilter extends GenericFilterBean {
 
     private boolean isUncheckedUri(HttpServletRequest request) {
         String currentUrl = request.getRequestURI();
-        return UNCHECKED_URIS.contains(currentUrl);
+        return UNCHECKED_URIS.contains(currentUrl) || currentUrl.startsWith(STATIC_RESOURCES_URL);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
