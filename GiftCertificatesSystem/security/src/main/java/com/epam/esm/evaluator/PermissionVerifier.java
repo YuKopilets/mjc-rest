@@ -13,6 +13,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
+/**
+ * The {@code Permission verifier} verifies custom permission.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @Component
 public class PermissionVerifier {
     private final Map<Permission, BiPredicate<Authentication, Object>> permissions;
@@ -24,6 +30,14 @@ public class PermissionVerifier {
         permissions.put(Permission.GET_USER, this::hasSuitableId);
     }
 
+    /**
+     * Verify permission method.
+     *
+     * @param authentication the authentication
+     * @param targetObject   the target object
+     * @param permission     the permission
+     * @return has permission
+     */
     public boolean verifyPermission(Authentication authentication, Object targetObject, Object permission) {
         Permission permissionType = definePermission(permission);
         BiPredicate<Authentication, Object> predicate = permissions.get(permissionType);

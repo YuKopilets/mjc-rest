@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * The interface Order repository is expansion of CrudDao for additional read
- * operations with <i>user_account</i> table, <i>user_order</i> table and
- * <i>order_has_gift_certificate</i> associated table.
+ * The interface Order repository is expansion of JpaRepository
+ * for additional read operations with <i>user_account</i> table,
+ * <i>user_order</i> table and <i>order_has_gift_certificate</i>
+ * associated table.
  *
  * @author Yuriy Kopilets
  * @version 1.0

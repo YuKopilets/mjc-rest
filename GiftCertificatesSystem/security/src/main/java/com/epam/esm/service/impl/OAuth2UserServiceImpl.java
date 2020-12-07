@@ -9,6 +9,13 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+/**
+ * The type is implementation of OAuth user service.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see OAuth2UserService
+ */
 @Component
 @RequiredArgsConstructor
 public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {

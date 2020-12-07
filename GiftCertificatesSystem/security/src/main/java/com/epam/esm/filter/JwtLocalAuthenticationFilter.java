@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * The Jwt authentication filter based on authentication and
- * preparing jwt token for authenticated user.
+ * preparing jwt token for authenticated local users.
  *
  * @author Yuriy Kopilets
  * @version 1.0

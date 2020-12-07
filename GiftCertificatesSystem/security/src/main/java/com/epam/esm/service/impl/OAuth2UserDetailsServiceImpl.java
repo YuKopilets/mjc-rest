@@ -9,6 +9,13 @@ import org.apache.commons.lang3.EnumUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+/**
+ * The type is implementation of OAuth user details service.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see OAuth2UserDetailsService
+ */
 @Component
 @RequiredArgsConstructor
 public class OAuth2UserDetailsServiceImpl implements OAuth2UserDetailsService {

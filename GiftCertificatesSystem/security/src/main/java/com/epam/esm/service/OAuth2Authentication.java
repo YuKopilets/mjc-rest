@@ -17,6 +17,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * The enum OAuth authentication contains authentication types.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 public enum OAuth2Authentication {
     GOOGLE(OAuth2Authentication::getGoogleSub,
@@ -35,12 +41,26 @@ public enum OAuth2Authentication {
     private final Function<Map<String, Object>, User> buildUserFunction;
     private final Function<User, Map<String, Object>> buildUserAttributesFunction;
 
+    /**
+     * Do process of authentication oauth user.
+     *
+     * @param userRepository the user repository
+     * @param sub            the oauth sub
+     * @return the oauth user
+     * @throws OAuth2UserNotFoundException the o auth 2 user not found exception
+     */
     public OAuth2User doAuthentication(UserRepository userRepository, String sub) throws OAuth2UserNotFoundException {
         User user = findExistsUser(userRepository, sub).orElseThrow(() -> new OAuth2UserNotFoundException(sub));
         Map<String, Object> attributes = buildUserAttributes(user);
         return new DefaultOAuth2User(user.getRoles(), attributes, "sub");
     }
 
+    /**
+     * Do process of registration oauth user.
+     *
+     * @param userRepository the user repository
+     * @param oauth2User     the oauth user
+     */
     public void doRegistration(UserRepository userRepository, OAuth2User oauth2User) {
         Map<String, Object> attributes = oauth2User.getAttributes();
         String sub = getSubFromAttributes(attributes);

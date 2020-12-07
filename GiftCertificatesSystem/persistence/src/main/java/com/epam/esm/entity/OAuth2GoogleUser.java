@@ -11,6 +11,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * The {@code type User} is domain representation of
+ * <i>google_account</i> table.
+ * It used for mapping to relational database.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see Entity
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder

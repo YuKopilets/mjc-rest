@@ -2,7 +2,7 @@ package com.epam.esm.exception;
 
 /**
  * {@code UserNotFoundServiceException} is generated when user not found
- * in the database
+ * in the database.
  *
  * @author Yuriy Kopilets
  * @version 1.0

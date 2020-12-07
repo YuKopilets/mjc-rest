@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * The {@code Jwt utils} is utility class for working with jwt tokens.
+ * The {@code Jwt token support} works with jwt tokens.
  *
  * @author Yuriy Kopilets
  * @version 1.0

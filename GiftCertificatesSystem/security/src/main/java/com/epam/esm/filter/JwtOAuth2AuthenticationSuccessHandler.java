@@ -11,6 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The Jwt authentication filter based on authentication and
+ * preparing jwt token for authenticated oauth users.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see SimpleUrlAuthenticationSuccessHandler
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtOAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

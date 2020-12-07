@@ -23,9 +23,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT lu FROM LocalUser lu WHERE lu.login = :login")
     Optional<User> findLocalUserByLogin(String login);
 
-    @Query("SELECT ghu FROM OAuth2GithubUser ghu WHERE ghu.sub = :sub")
-    Optional<User> findGithubUserBySub(String sub);
-
+    /**
+     * Find google user by oauth sub.
+     *
+     * @param sub the sub
+     * @return the optional google user
+     */
     @Query("SELECT gu FROM OAuth2GoogleUser gu WHERE gu.sub = :sub")
     Optional<User> findGoogleUserBySub(String sub);
+
+    /**
+     * Find github user by oauth sub.
+     *
+     * @param sub the sub
+     * @return the optional github user
+     */
+    @Query("SELECT ghu FROM OAuth2GithubUser ghu WHERE ghu.sub = :sub")
+    Optional<User> findGithubUserBySub(String sub);
 }

@@ -8,6 +8,13 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 
+/**
+ * The type is implementation of Oidc user service.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see OidcUserService
+ */
 @Component
 @RequiredArgsConstructor
 public class OidcOAuth2UserServiceImpl extends OidcUserService {

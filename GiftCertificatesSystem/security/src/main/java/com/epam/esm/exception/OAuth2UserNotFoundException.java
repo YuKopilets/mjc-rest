@@ -1,5 +1,13 @@
 package com.epam.esm.exception;
 
+/**
+ * {@code OAuth2UserNotFoundException} is generated when oauth user account
+ * not found in the database.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see RuntimeException
+ */
 public class OAuth2UserNotFoundException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its

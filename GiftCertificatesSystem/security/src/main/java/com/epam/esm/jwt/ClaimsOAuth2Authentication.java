@@ -10,6 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * The {@code enum ClaimsOAuth2Authentication} creates jwt claims depends on
+ * oauth authentication type.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 public enum ClaimsOAuth2Authentication {
     GOOGLE("sub", o -> (String) o),
@@ -18,6 +25,12 @@ public enum ClaimsOAuth2Authentication {
     private final String subAttributeName;
     private final Function<Object, String> castSubAttributeFunction;
 
+    /**
+     * Create claims.
+     *
+     * @param authentication the authentication
+     * @return the claims
+     */
     public Claims createClaims(OAuth2AuthenticationToken authentication) {
         Map<String, Object> claims = new HashMap<>();
         OAuth2User user = authentication.getPrincipal();
