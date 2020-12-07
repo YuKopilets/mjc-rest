@@ -27,4 +27,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      */
     @Query("SELECT u.orders FROM User u WHERE u.id = :id")
     Page<Order> findOrdersByUserId(Long id, Pageable pageable);
+
+    /**
+     * Count number of orders.
+     *
+     * @return the number
+     */
+    @Query("SELECT count(o) FROM Order o")
+    Long countOrders();
 }

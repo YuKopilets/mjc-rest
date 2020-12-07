@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class V4__Encode_passwords extends BaseJavaMigration {
+public class V5__Encode_passwords extends BaseJavaMigration {
     private static final String SELECT_USER_PASSWORDS = "SELECT id, password FROM local_account";
     private static final String UPDATE_PASSWORD = "UPDATE local_account SET password=? WHERE id=?";
     private static final String USER_ID_COLUMN = "id";
