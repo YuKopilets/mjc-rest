@@ -1,2 +1,2 @@
 # mjc-rest
-Module2. REST API Basics. MJC.School (RUN.OCTOBER.2020)
+Module4. Authentication & Spring Security. MJC.School (RUN.OCTOBER.2020)
