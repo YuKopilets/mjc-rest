@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.Date;
  * @author Yuriy Kopilets
  * @version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenSupport {
@@ -50,8 +52,9 @@ public class JwtTokenSupport {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            return false;
+            log.info("Token validation not passed!", e);
         }
+        return false;
     }
 
     /**
