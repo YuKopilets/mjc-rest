@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static com.epam.esm.service.UserAuthenticationAttributeConstant.*;
+
 /**
  * The enum OAuth authentication contains authentication types.
  *
@@ -52,7 +54,7 @@ public enum OAuth2Authentication {
     public OAuth2User doAuthentication(UserRepository userRepository, String sub) throws OAuth2UserNotFoundException {
         User user = findExistsUser(userRepository, sub).orElseThrow(() -> new OAuth2UserNotFoundException(sub));
         Map<String, Object> attributes = buildUserAttributes(user);
-        return new DefaultOAuth2User(user.getRoles(), attributes, "sub");
+        return new DefaultOAuth2User(user.getRoles(), attributes, USER_ID);
     }
 
     /**
@@ -88,19 +90,19 @@ public enum OAuth2Authentication {
     }
 
     private static String getGoogleSub(Map<String, Object> attributes) {
-        return (String) attributes.get("sub");
+        return (String) attributes.get(GOOGLE_USER_SUB);
     }
 
     private static String getGithubSub(Map<String, Object> attributes) {
-        return ((Integer) attributes.get("id")).toString();
+        return ((Integer) attributes.get(GITHUB_USER_SUB)).toString();
     }
 
     private static OAuth2GoogleUser buildOAuth2GoogleUser(Map<String, Object> attributes) {
         return OAuth2GoogleUser.builder()
-                .sub((String) attributes.get("sub"))
-                .name((String) attributes.get("name"))
-                .email((String) attributes.get("email"))
-                .avatarUrl((String) attributes.get("picture"))
+                .sub((String) attributes.get(GOOGLE_USER_SUB))
+                .name((String) attributes.get(GOOGLE_USER_NAME))
+                .email((String) attributes.get(GOOGLE_USER_EMAIL))
+                .avatarUrl((String) attributes.get(GOOGLE_USER_AVATAR_URL))
                 .active(true)
                 .roles(Collections.singleton(UserRole.USER))
                 .registrationTypes(Collections.singleton(RegistrationType.GOOGLE))
@@ -109,10 +111,10 @@ public enum OAuth2Authentication {
 
     private static OAuth2GithubUser buildOAuth2GithubUser(Map<String, Object> attributes) {
         return OAuth2GithubUser.builder()
-                .sub(((Integer) attributes.get("id")).toString())
-                .login((String) attributes.get("login"))
-                .email((String) attributes.get("email"))
-                .avatarUrl((String) attributes.get("avatar_url"))
+                .sub(((Integer) attributes.get(GITHUB_USER_SUB)).toString())
+                .login((String) attributes.get(GITHUB_USER_NAME))
+                .email((String) attributes.get(GITHUB_USER_EMAIL))
+                .avatarUrl((String) attributes.get(GITHUB_USER_AVATAR_URL))
                 .active(true)
                 .roles(Collections.singleton(UserRole.USER))
                 .registrationTypes(Collections.singleton(RegistrationType.GITHUB))
@@ -122,24 +124,24 @@ public enum OAuth2Authentication {
     private static Map<String, Object> buildOAuth2GoogleUserAttributes(User user) {
         OAuth2GoogleUser googleUser = (OAuth2GoogleUser) user;
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("id", googleUser.getId());
-        attributes.put("active", googleUser.getActive());
-        attributes.put("sub", googleUser.getSub());
-        attributes.put("name", googleUser.getName());
-        attributes.put("email", googleUser.getEmail());
-        attributes.put("avatar_url", googleUser.getAvatarUrl());
+        attributes.put(USER_ID, googleUser.getId());
+        attributes.put(USER_ACTIVE, googleUser.getActive());
+        attributes.put(GOOGLE_USER_SUB, googleUser.getSub());
+        attributes.put(GOOGLE_USER_NAME, googleUser.getName());
+        attributes.put(GOOGLE_USER_EMAIL, googleUser.getEmail());
+        attributes.put(GOOGLE_USER_AVATAR_URL, googleUser.getAvatarUrl());
         return attributes;
     }
 
     private static Map<String, Object> buildOAuth2GithubUserAttributes(User user) {
         OAuth2GithubUser githubUser = (OAuth2GithubUser) user;
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("id", githubUser.getId());
-        attributes.put("active", githubUser.getActive());
-        attributes.put("sub", githubUser.getSub());
-        attributes.put("login", githubUser.getLogin());
-        attributes.put("email", githubUser.getEmail());
-        attributes.put("avatar_url", githubUser.getAvatarUrl());
+        attributes.put(USER_ID, githubUser.getId());
+        attributes.put(USER_ACTIVE, githubUser.getActive());
+        attributes.put(GITHUB_USER_SUB, githubUser.getSub());
+        attributes.put(GITHUB_USER_NAME, githubUser.getLogin());
+        attributes.put(GITHUB_USER_EMAIL, githubUser.getEmail());
+        attributes.put(GITHUB_USER_AVATAR_URL, githubUser.getAvatarUrl());
         return attributes;
     }
 }

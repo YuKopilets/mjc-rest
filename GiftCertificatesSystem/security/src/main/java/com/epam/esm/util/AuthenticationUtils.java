@@ -1,5 +1,6 @@
 package com.epam.esm.util;
 
+import com.epam.esm.service.UserAuthenticationAttributeConstant;
 import com.epam.esm.service.impl.LocalUserDetailsImpl;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,7 @@ public class AuthenticationUtils {
         if (authentication instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
             OAuth2User principal = authenticationToken.getPrincipal();
-            userId = principal.getAttribute("id");
+            userId = principal.getAttribute(UserAuthenticationAttributeConstant.USER_ID);
         } else {
             LocalUserDetailsImpl principal = (LocalUserDetailsImpl) authentication.getPrincipal();
             userId = principal.getId();

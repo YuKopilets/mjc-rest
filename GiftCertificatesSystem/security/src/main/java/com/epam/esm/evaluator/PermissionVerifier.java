@@ -1,5 +1,6 @@
 package com.epam.esm.evaluator;
 
+import com.epam.esm.service.UserAuthenticationAttributeConstant;
 import com.epam.esm.service.impl.LocalUserDetailsImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -55,7 +56,7 @@ public class PermissionVerifier {
         if (authentication instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
             OAuth2User principal = authenticationToken.getPrincipal();
-            authorizedId = principal.getAttribute("id");
+            authorizedId = principal.getAttribute(UserAuthenticationAttributeConstant.USER_ID);
         } else {
             String login = authentication.getName();
             LocalUserDetailsImpl userDetails = (LocalUserDetailsImpl) userDetailsService.loadUserByUsername(login);
