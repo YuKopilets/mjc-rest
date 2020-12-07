@@ -11,8 +11,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class V3__Encode_passwords extends BaseJavaMigration {
-    private static final String SELECT_USER_PASSWORDS = "SELECT id, password FROM user_account";
-    private static final String UPDATE_PASSWORD = "UPDATE user_account SET password=? WHERE id=?";
+    private static final String SELECT_USER_PASSWORDS = "SELECT id, password FROM local_account";
+    private static final String UPDATE_PASSWORD = "UPDATE local_account SET password=? WHERE id=?";
     private static final String USER_ID_COLUMN = "id";
     private static final String USER_PASSWORD_COLUMN = "password";
 

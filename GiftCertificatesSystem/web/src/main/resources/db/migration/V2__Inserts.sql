@@ -25,18 +25,19 @@ INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_
 INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 1);
 INSERT INTO gift_certificates_system.gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 6);
 
-INSERT INTO user_account (login, password, active) VALUES ('user', 'user', true);
-INSERT INTO user_account (login, password, active) VALUES ('user3', 'user', true);
-INSERT INTO user_account (login, password, active) VALUES ('admin', 'admin', true);
+INSERT INTO gift_certificates_system.user_account (active) VALUES (1);
+INSERT INTO gift_certificates_system.user_role (user_id, role) VALUES (1, 'USER');
+INSERT INTO gift_certificates_system.registration_type (user_id, registration) VALUES (1, 'LOCAL');
+INSERT INTO gift_certificates_system.local_account (id, login, password) VALUES (1, 'user3', 'user');
 
-INSERT INTO user_role (user_id, role) VALUES (1, 'USER');
-INSERT INTO user_role (user_id, role) VALUES (2, 'USER');
-INSERT INTO user_role (user_id, role) VALUES (3, 'USER');
-INSERT INTO user_role (user_id, role) VALUES (3, 'ADMIN');
+INSERT INTO gift_certificates_system.user_account (active) VALUES (1);
+INSERT INTO gift_certificates_system.user_role (user_id, role) VALUES (2, 'ADMIN');
+INSERT INTO gift_certificates_system.registration_type (user_id, registration) VALUES (2, 'LOCAL');
+INSERT INTO gift_certificates_system.local_account (id, login, password) VALUES (2, 'admin', 'admin');
 
-INSERT INTO user_order (user_account_id, cost, date) VALUES (1, 30.43, '2009-10-04 15:42:20.134');
-INSERT INTO user_order (user_account_id, cost, date) VALUES (1, 10.20, '2010-03-01 13:48:10.224');
+INSERT INTO gift_certificates_system.user_order (user_account_id, cost, date) VALUES (1, 30.43, '2009-10-04 15:42:20.134');
+INSERT INTO gift_certificates_system.user_order (user_account_id, cost, date) VALUES (1, 10.20, '2010-03-01 13:48:10.224');
 
-INSERT INTO order_has_gift_certificate (order_id, gift_certificate_id) VALUES (1, 1);
-INSERT INTO order_has_gift_certificate (order_id, gift_certificate_id) VALUES (1, 2);
-INSERT INTO order_has_gift_certificate (order_id, gift_certificate_id) VALUES (2, 1);
+INSERT INTO gift_certificates_system.order_has_gift_certificate (order_id, gift_certificate_id) VALUES (1, 1);
+INSERT INTO gift_certificates_system.order_has_gift_certificate (order_id, gift_certificate_id) VALUES (1, 2);
+INSERT INTO gift_certificates_system.order_has_gift_certificate (order_id, gift_certificate_id) VALUES (2, 1);

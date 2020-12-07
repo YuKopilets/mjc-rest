@@ -1,6 +1,8 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.entity.LocalUser;
 import com.epam.esm.entity.User;
+import com.epam.esm.exception.RegistrationFailServiceException;
 import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.UserService;
@@ -15,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.nio.CharBuffer;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,18 +26,37 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
     private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, new BCryptPasswordEncoder(8));
+        passwordEncoder = Mockito.mock(BCryptPasswordEncoder.class);
+        userService = new UserServiceImpl(userRepository, passwordEncoder);
     }
 
     @AfterEach
     void tearDown() {
         userRepository = null;
         userService = null;
+    }
+
+    @ParameterizedTest
+    @MethodSource("prepareLocalUser")
+    void singUpTest(LocalUser localUser, CharBuffer charBuffer) {
+        Mockito.when(userRepository.findLocalUserByLogin("login")).thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.encode(charBuffer)).thenReturn("pass");
+        userService.singUp(localUser);
+        Mockito.verify(userRepository).save(localUser);
+    }
+
+    @ParameterizedTest
+    @MethodSource("prepareLocalUser")
+    void singUpNegativeTest(LocalUser localUser) {
+        Mockito.when(userRepository.findLocalUserByLogin("login")).thenReturn(Optional.ofNullable(localUser));
+        assertThrows(RegistrationFailServiceException.class, () -> userService.singUp(localUser));
     }
 
     @ParameterizedTest
@@ -52,26 +74,19 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundServiceException.class, () -> userService.getUserById(1L));
     }
 
-    @ParameterizedTest
-    @MethodSource("prepareUser")
-    void getUserByLoginTest(User expected) {
-        Optional<User> userOptional = Optional.of(expected);
-        Mockito.when(userRepository.findByLogin("login")).thenReturn(userOptional);
-        User actual = userService.getUserByLogin("login");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void getUserByLoginNegativeTest() {
-        Mockito.when(userRepository.findByLogin("login")).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundServiceException.class, () -> userService.getUserByLogin("login"));
-    }
-
     private static Arguments[] prepareUser() {
         User user = User.builder()
                 .id(1L)
-                .login("login")
                 .build();
         return new Arguments[]{Arguments.of(user)};
+    }
+
+    private static Arguments[] prepareLocalUser() {
+        char[] password = new char[]{'p', 'a', 's', 's'};
+        LocalUser localUser = LocalUser.builder()
+                .login("login")
+                .password(password)
+                .build();
+        return new Arguments[]{Arguments.of(localUser, CharBuffer.wrap(password))};
     }
 }

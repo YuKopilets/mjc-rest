@@ -1,4 +1,4 @@
-package com.epam.esm.service;
+package com.epam.esm.service.impl;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.Set;
  * @version 1.0
  */
 @Builder
-public class UserDetailsImpl implements UserDetails {
+public class LocalUserDetailsImpl implements UserDetails {
     @Getter
     private final Long id;
     private final String login;

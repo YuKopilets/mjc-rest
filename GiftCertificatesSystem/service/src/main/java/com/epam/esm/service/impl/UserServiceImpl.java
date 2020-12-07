@@ -1,5 +1,7 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.entity.LocalUser;
+import com.epam.esm.entity.RegistrationType;
 import com.epam.esm.entity.UserRole;
 import com.epam.esm.exception.RegistrationFailServiceException;
 import com.epam.esm.repository.UserRepository;
@@ -27,25 +29,21 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void singUp(User user) {
-        userRepository.findByLogin(user.getLogin()).ifPresent(userByLogin -> {
+    public void singUp(LocalUser user) {
+        userRepository.findLocalUserByLogin(user.getLogin()).ifPresent(userByLogin -> {
             throw new RegistrationFailServiceException("User with login: "
-                    + userByLogin.getLogin() + " already exists");
+                    + ((LocalUser) userByLogin).getLogin() + " already exists");
         });
         String encodedPassword = passwordEncoder.encode(CharBuffer.wrap(user.getPassword()));
         user.setPassword(encodedPassword.toCharArray());
         user.setRoles(Collections.singleton(UserRole.USER));
         user.setActive(true);
+        user.setRegistrationTypes(Collections.singleton(RegistrationType.LOCAL));
         userRepository.save(user);
     }
 
     @Override
     public User getUserById(Long id) throws UserNotFoundServiceException {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundServiceException(id));
-    }
-
-    @Override
-    public User getUserByLogin(String login) throws UserNotFoundServiceException {
-        return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
     }
 }

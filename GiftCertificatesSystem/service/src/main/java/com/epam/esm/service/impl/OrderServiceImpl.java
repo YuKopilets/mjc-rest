@@ -1,6 +1,5 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.User;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.repository.UserRepository;
@@ -10,11 +9,10 @@ import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
+import com.epam.esm.util.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -43,8 +41,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException,
-            UserNotFoundServiceException {
+    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException {
         Long userId = getAuthorizedUserId();
         order.setUserId(userId);
         order.setDate(LocalDateTime.now());
@@ -55,9 +52,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> getUserOrders(String userLogin, Pageable pageable) throws UserNotFoundServiceException {
-        userRepository.findByLogin(userLogin).orElseThrow(() -> new UserNotFoundServiceException(userLogin));
-        return orderRepository.findOrdersByUserLogin(userLogin, pageable);
+    public Page<Order> getUserOrders(Long userId, Pageable pageable) throws UserNotFoundServiceException {
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundServiceException(userId));
+        return orderRepository.findOrdersByUserId(userId, pageable);
     }
 
     @Override
@@ -65,11 +62,8 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
     }
 
-    private Long getAuthorizedUserId() throws UserNotFoundServiceException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName();
-        User user = userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundServiceException(login));
-        return user.getId();
+    private Long getAuthorizedUserId() {
+        return AuthenticationUtils.getAuthorizedUserId();
     }
 
     private void initOrderByGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {

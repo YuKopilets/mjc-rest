@@ -28,8 +28,6 @@ CREATE TABLE gift_certificate_has_tag
 CREATE TABLE user_account
 (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  login VARCHAR(50) NOT NULL,
-  password VARCHAR(255) NOT NULL,
   active INTEGER NOT NULL
 );
 
@@ -100,8 +98,6 @@ CREATE TABLE gift_certificate_has_tag_aud
 CREATE TABLE user_account_aud
 (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  login VARCHAR(50) NOT NULL,
-  password VARCHAR(255) NOT NULL,
   active INTEGER NOT NULL,
   REV INTEGER NOT NULL,
   REVTYPE tinyint,

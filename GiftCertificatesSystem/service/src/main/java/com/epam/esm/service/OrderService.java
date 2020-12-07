@@ -24,21 +24,19 @@ public interface OrderService {
      * @throws GiftCertificateNotFoundServiceException in case of {@code gift
      *                                                 certificate in list
      *                                                 not found by id}
-     * @throws UserNotFoundServiceException            in case of {@code user with
-     *                                                 current id not found}
      */
-    Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException, UserNotFoundServiceException;
+    Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException;
 
     /**
      * Get list of all user's orders by user login value.
      *
-     * @param userLogin   the user login
+     * @param userId      the user id
      * @param pageable    the pageable
      * @return the orders
      * @throws UserNotFoundServiceException        in case of {@code user with
      *                                             current login not found}
      */
-    Page<Order> getUserOrders(String userLogin, Pageable pageable) throws UserNotFoundServiceException;
+    Page<Order> getUserOrders(Long userId, Pageable pageable) throws UserNotFoundServiceException;
 
     /**
      * Get user's order by order id.

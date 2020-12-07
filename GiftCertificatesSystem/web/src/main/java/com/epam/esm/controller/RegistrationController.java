@@ -1,6 +1,6 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.entity.User;
+import com.epam.esm.entity.LocalUser;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,13 +25,8 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String createUser(User user) {
+    public String createUser(LocalUser user) {
         userService.singUp(user);
         return "redirect:/login";
-    }
-
-    @GetMapping("/")
-    public String greeting() {
-        return "greeting";
     }
 }

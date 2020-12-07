@@ -24,7 +24,7 @@ INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (2, 3)
 INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 1);
 INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 6);
 
-INSERT INTO user_account (login, password, active) VALUES ('user', 'user', 1);
+INSERT INTO user_account (active) VALUES (1);
 INSERT INTO user_role (user_id, role) VALUES (1, 'USER');
 
 INSERT INTO user_order (user_account_id, cost, date) VALUES (1, 30.43, '2009-10-04 15:42:20.134');

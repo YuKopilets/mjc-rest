@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
 /**
  * The type User controller.
@@ -49,67 +48,53 @@ public class UserController {
     private final UserDtoConverter userDtoConverter;
     private final OrderDtoConverter orderDtoConverter;
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     @ApiOperation(value = "get user by id")
     @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
     public UserRepresentationDto getUserById(@PathVariable @Min(value = 1) long id) {
         User user = userService.getUserById(id);
         UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
-                .slash(user.getLogin())
+                .slash(user.getId())
                 .slash(LINK_ORDERS)
                 .withRel(LINK_ORDERS);
         dto.add(link);
         return dto;
     }
 
-    @GetMapping("/login/{login}")
-    @ApiOperation(value = "get user by login")
-    @PreAuthorize("#login == authentication.principal.username or hasRole('ADMIN')")
-    public UserRepresentationDto getUserByLogin(@PathVariable @Size(min = 4, max = 50) String login) {
-        User user = userService.getUserByLogin(login);
-        UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
-        Link link = WebMvcLinkBuilder.linkTo(UserController.class)
-                .slash(login)
-                .slash(LINK_ORDERS)
-                .withRel(LINK_ORDERS);
-        dto.add(link);
-        return dto;
-    }
-
-    @GetMapping(value = "/{login}/orders")
+    @GetMapping(value = "/{id}/orders")
     @ApiOperation(value = "get list of user's orders by login")
-    @PreAuthorize("#login == authentication.principal.username or hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
     public Page<OrderRepresentationDto> getUserOrders(
-            @PathVariable @Size(min = 4, max = 50) String login,
+            @PathVariable @Min(value = 1) long id,
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
-            ) {
-        Page<Order> orders = orderService.getUserOrders(login, pageable);
+    ) {
+        Page<Order> orders = orderService.getUserOrders(id, pageable);
         Page<OrderRepresentationDto> dtoPage = orderDtoConverter.convertOrdersToDtoPage(orders);
-        addSelfOrderLinksInDtoPage(dtoPage, login);
+        addSelfOrderLinksInDtoPage(dtoPage, id);
         return dtoPage;
     }
 
-    @GetMapping(value = "/{login}/orders/{id}")
+    @GetMapping(value = "/{userId}/orders/{id}")
     @ApiOperation(value = "get user's order by id")
-    @PreAuthorize("#login == authentication.principal.username or hasRole('ADMIN')")
-    public OrderRepresentationDto getUserOrderById(@PathVariable @Size(min = 4, max = 50) String login,
+    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
+    public OrderRepresentationDto getUserOrderById(@PathVariable @Min(value = 1) long userId,
                                                    @PathVariable @Min(value = 1) long id) {
         Order order = orderService.getUserOrderById(id);
         OrderRepresentationDto dto = orderDtoConverter.convertToRepresentationDto(order);
         addGiftCertificatesLinksInDto(dto);
         Link link = WebMvcLinkBuilder.linkTo(UserController.class)
-                .slash(login)
+                .slash(userId)
                 .slash(LINK_ORDERS)
                 .withRel(LINK_ALL_USER_ORDERS);
         dto.add(link);
         return dto;
     }
 
-    private void addSelfOrderLinksInDtoPage(Page<OrderRepresentationDto> dtoPage, String login) {
+    private void addSelfOrderLinksInDtoPage(Page<OrderRepresentationDto> dtoPage, Long id) {
         dtoPage.forEach(dto -> {
             Link link = WebMvcLinkBuilder.linkTo(UserController.class)
-                    .slash(login)
+                    .slash(id)
                     .slash(LINK_ORDERS)
                     .slash(dto.getId())
                     .withSelfRel();

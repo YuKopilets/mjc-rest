@@ -1,6 +1,6 @@
-package com.epam.esm.service;
+package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.User;
+import com.epam.esm.entity.LocalUser;
 import com.epam.esm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,15 +19,15 @@ import java.util.HashSet;
  */
 @Service
 @RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class LocalUserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login).orElseThrow(() ->
+        LocalUser user = (LocalUser) userRepository.findLocalUserByLogin(login).orElseThrow(() ->
                 new UsernameNotFoundException("User with login=" + login + " not found!")
         );
-        return UserDetailsImpl.builder()
+        return LocalUserDetailsImpl.builder()
                 .id(user.getId())
                 .login(user.getLogin())
                 .password(new String(user.getPassword()))

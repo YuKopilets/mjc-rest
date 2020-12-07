@@ -60,13 +60,13 @@ class OrderServiceImplTest {
     @MethodSource("prepareOrders")
     void getUserOrdersTest(List<Order> exceptedOrders, User user) {
         Optional<User> userOptional = Optional.of(user);
-        Mockito.when(userRepository.findByLogin("login")).thenReturn(userOptional);
+        Mockito.when(userRepository.findById(1L)).thenReturn(userOptional);
 
         PageRequest pageRequest = PageRequest.of(1, 10);
-        Mockito.when(orderRepository.findOrdersByUserLogin(Mockito.eq("login"), Mockito.eq(pageRequest)))
+        Mockito.when(orderRepository.findOrdersByUserId(1L, pageRequest))
                 .thenReturn(new PageImpl<>(exceptedOrders));
 
-        List<Order> actualOrders = orderService.getUserOrders("login", pageRequest).getContent();
+        List<Order> actualOrders = orderService.getUserOrders(1L, pageRequest).getContent();
         assertEquals(exceptedOrders, actualOrders);
     }
 
@@ -90,7 +90,6 @@ class OrderServiceImplTest {
         Order order = buildOrder(1L, 1L, 30.43, localDateTime, prepareOrderGiftCertificates());
         User user = User.builder()
                 .id(1L)
-                .login("user")
                 .build();
         return new Arguments[]{Arguments.of(order, user)};
     }
@@ -139,7 +138,6 @@ class OrderServiceImplTest {
 
         User user = User.builder()
                 .id(1L)
-                .login("user")
                 .build();
         return new Arguments[]{Arguments.of(orders, user)};
     }

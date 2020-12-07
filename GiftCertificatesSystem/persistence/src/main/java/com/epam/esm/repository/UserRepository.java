@@ -2,6 +2,7 @@ package com.epam.esm.repository;
 
 import com.epam.esm.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
@@ -14,10 +15,17 @@ import java.util.Optional;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
     /**
-     * Find user by login.
+     * Find local user by login.
      *
      * @param login the login
-     * @return the optional
+     * @return the optional user
      */
-    Optional<User> findByLogin(String login);
+    @Query("SELECT lu FROM LocalUser lu WHERE lu.login = :login")
+    Optional<User> findLocalUserByLogin(String login);
+
+    @Query("SELECT ghu FROM OAuth2GithubUser ghu WHERE ghu.sub = :sub")
+    Optional<User> findGithubUserBySub(String sub);
+
+    @Query("SELECT gu FROM OAuth2GoogleUser gu WHERE gu.sub = :sub")
+    Optional<User> findGoogleUserBySub(String sub);
 }

@@ -1,6 +1,6 @@
 package com.epam.esm.config;
 
-import com.epam.esm.util.CustomPermissionEvaluator;
+import com.epam.esm.evaluator.CustomPermissionEvaluator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;

@@ -1,6 +1,6 @@
 package com.epam.esm.filter;
 
-import com.epam.esm.util.JwtUtils;
+import com.epam.esm.jwt.JwtTokenSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -22,8 +22,9 @@ import java.io.IOException;
  * @see UsernamePasswordAuthenticationFilter
  */
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtLocalAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenSupport jwtTokenSupport;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -34,16 +35,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                            FilterChain chain, Authentication authResult)
+                                            FilterChain chain, Authentication authentication)
             throws IOException, ServletException {
-        String token = JwtUtils.generateToken(authResult.getName());
+        String token = jwtTokenSupport.generateToken(authentication);
         response.addHeader("token", token);
-        super.successfulAuthentication(request, response, chain, authResult);
-    }
-
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
-        super.unsuccessfulAuthentication(request, response, failed);
+        super.successfulAuthentication(request, response, chain, authentication);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -60,5 +61,20 @@ public class SpecialControllerExceptionHandler extends ControllerExceptionHandle
     })
     public ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * {@code @ExceptionHandler} defines exceptions for handling like
+     * <i>forbidden</i> status
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
+    @ExceptionHandler({
+            AccessDeniedException.class
+    })
+    public ResponseEntity<Object> handleForbidden(Exception ex, WebRequest request) {
+        return handleException(ex, HttpStatus.FORBIDDEN);
     }
 }

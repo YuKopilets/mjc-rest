@@ -72,12 +72,6 @@ class OrderDaoImplTest {
         assertFalse(order.isPresent());
     }
 
-    private static Arguments[] prepareOrder() {
-        LocalDateTime localDateTime = LocalDateTime.parse("2009-10-04T15:42:20.134");
-        Order order = buildOrder(null, 1L, 30.43, localDateTime, prepareOrderGiftCertificates());
-        return new Arguments[]{Arguments.of(order)};
-    }
-
     private static List<GiftCertificate> prepareOrderGiftCertificates() {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         LocalDateTime firstCertificateDateTime = LocalDateTime.parse("2007-03-01T13:00:30.234");

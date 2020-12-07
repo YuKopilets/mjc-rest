@@ -1,32 +1,12 @@
 package com.epam.esm.exception;
 
-/**
- * {@code ValidateJwtTokenException} is generated when jwt token
- * haven't passed validation.
- *
- * @author Yuriy Kopilets
- * @version 1.0
- * @see RuntimeException
- */
-public class ValidateJwtTokenException extends RuntimeException {
+public class OAuth2UserNotFoundException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public ValidateJwtTokenException() {
-    }
-
-    /**
-     * Constructs a new runtime exception with the specified detail message.
-     * The cause is not initialized, and may subsequently be initialized by a
-     * call to {@link #initCause}.
-     *
-     * @param message the detail message. The detail message is saved for
-     *                later retrieval by the {@link #getMessage()} method.
-     */
-    public ValidateJwtTokenException(String message) {
-        super(message);
+    public OAuth2UserNotFoundException() {
     }
 
     /**
@@ -43,7 +23,7 @@ public class ValidateJwtTokenException extends RuntimeException {
      *                unknown.)
      * @since 1.4
      */
-    public ValidateJwtTokenException(String message, Throwable cause) {
+    public OAuth2UserNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -60,7 +40,7 @@ public class ValidateJwtTokenException extends RuntimeException {
      *              unknown.)
      * @since 1.4
      */
-    public ValidateJwtTokenException(Throwable cause) {
+    public OAuth2UserNotFoundException(Throwable cause) {
         super(cause);
     }
 
@@ -78,8 +58,12 @@ public class ValidateJwtTokenException extends RuntimeException {
      *                           be writable
      * @since 1.7
      */
-    public ValidateJwtTokenException(String message, Throwable cause,
-                                     boolean enableSuppression, boolean writableStackTrace) {
+    public OAuth2UserNotFoundException(String message, Throwable cause, boolean enableSuppression,
+                                       boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public OAuth2UserNotFoundException(String sub) {
+        super("OAuth user with sub=" + sub + " not found!");
     }
 }

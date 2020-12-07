@@ -17,13 +17,13 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
-     * Find list of orders by user login. The {@code page request}
+     * Find list of orders by user id. The {@code page request}
      * can show which part of list needed to return.
      * Read operation (CRUD).
      *
-     * @param login the user login
+     * @param id the user id
      * @return the list
      */
-    @Query("SELECT u.orders FROM User u WHERE u.login = :login")
-    Page<Order> findOrdersByUserLogin(String login, Pageable pageable);
+    @Query("SELECT u.orders FROM User u WHERE u.id = :id")
+    Page<Order> findOrdersByUserId(Long id, Pageable pageable);
 }
