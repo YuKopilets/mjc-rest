@@ -31,7 +31,7 @@ class TagServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        tagService = new TagServiceImpl(tagRepository);
+        tagService = Mockito.spy(new TagServiceImpl(tagRepository));
     }
 
     @AfterEach

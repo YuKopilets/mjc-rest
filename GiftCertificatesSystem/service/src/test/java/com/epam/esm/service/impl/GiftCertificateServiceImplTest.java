@@ -47,8 +47,12 @@ class GiftCertificateServiceImplTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         giftCertificateFilterRepository = Mockito.mock(GiftCertificateFilterRepositoryImpl.class);
-        giftCertificateService = new GiftCertificateServiceImpl(giftCertificateRepository,
-                giftCertificateFilterRepository, tagRepository);
+        giftCertificateService = Mockito.spy(new GiftCertificateServiceImpl(
+                        giftCertificateRepository,
+                        giftCertificateFilterRepository,
+                        tagRepository
+                )
+        );
     }
 
     @AfterEach
@@ -87,7 +91,7 @@ class GiftCertificateServiceImplTest {
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesTest(List<GiftCertificate> exceptedGiftCertificates,
-                                    GiftCertificateQuery giftCertificateQuery) {
+                                 GiftCertificateQuery giftCertificateQuery) {
         PageRequest pageRequest = PageRequest.of(1, 10);
         Mockito.when(giftCertificateRepository.findAll(Mockito.eq(pageRequest)))
                 .thenReturn(new PageImpl<>(exceptedGiftCertificates));
@@ -99,10 +103,11 @@ class GiftCertificateServiceImplTest {
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesNegativeTest(List<GiftCertificate> exceptedGiftCertificates,
-                                            GiftCertificateQuery giftCertificateQuery) {
+                                         GiftCertificateQuery giftCertificateQuery) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         PageRequest pageRequest = PageRequest.of(1, 10);
-        Mockito.when(giftCertificateRepository.findAll(Mockito.eq(pageRequest))).thenReturn(new PageImpl<>(giftCertificates));
+        Mockito.when(giftCertificateRepository.findAll(Mockito.eq(pageRequest)))
+                .thenReturn(new PageImpl<>(giftCertificates));
         List<GiftCertificate> actualGiftCertificates = giftCertificateService.getGiftCertificates(giftCertificateQuery,
                 pageRequest).getContent();
         assertNotEquals(exceptedGiftCertificates, actualGiftCertificates);
@@ -111,7 +116,7 @@ class GiftCertificateServiceImplTest {
     @ParameterizedTest
     @MethodSource("prepareExpectedGiftCertificates")
     void getGiftCertificatesByQueryParamsTest(List<GiftCertificate> exceptedGiftCertificates,
-                                 GiftCertificateQuery giftCertificateQuery) {
+                                              GiftCertificateQuery giftCertificateQuery) {
         PageRequest pageRequest = PageRequest.of(1, 10);
         Set<String> tagNames = giftCertificateQuery.getTagNames();
         tagNames.add("test tag");

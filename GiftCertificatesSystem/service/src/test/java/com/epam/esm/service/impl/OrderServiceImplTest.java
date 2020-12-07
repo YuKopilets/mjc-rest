@@ -45,7 +45,7 @@ class OrderServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        orderService = new OrderServiceImpl(orderRepository, userRepository, giftCertificateRepository);
+        orderService = Mockito.spy(new OrderServiceImpl(orderRepository, userRepository, giftCertificateRepository));
     }
 
     @AfterEach

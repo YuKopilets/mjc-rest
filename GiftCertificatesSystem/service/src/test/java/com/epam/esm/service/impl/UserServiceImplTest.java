@@ -34,7 +34,7 @@ class UserServiceImplTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         passwordEncoder = Mockito.mock(BCryptPasswordEncoder.class);
-        userService = new UserServiceImpl(userRepository, passwordEncoder);
+        userService = Mockito.spy(new UserServiceImpl(userRepository, passwordEncoder));
     }
 
     @AfterEach
