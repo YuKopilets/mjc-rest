@@ -38,6 +38,6 @@ public enum QueryOrderType {
     }
 
     private static String generateOrderType(String order) {
-        return StringUtils.isNotEmpty(order) && "desc".equals(order) ? " DESC" : StringUtils.EMPTY;
+        return StringUtils.isNotEmpty(order) && "asc".equals(order) ? " ASC" : " DESC";
     }
 }

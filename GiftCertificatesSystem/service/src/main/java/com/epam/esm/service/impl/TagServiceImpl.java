@@ -50,7 +50,6 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void removeTag(Long id) throws TagNotFoundServiceException {
         tagRepository.findById(id).orElseThrow(() -> new TagNotFoundServiceException(id));
-        tagRepository.deleteGiftCertificatesTag(id);
         tagRepository.deleteById(id);
     }
 }

@@ -49,12 +49,4 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
             nativeQuery = true
     )
     void saveToGiftCertificate(Long giftCertificateId, Long tagId);
-
-    /**
-     * Delete records in <i>gift_certificate_has_tag</i> by tag id.
-     *
-     * @param id the id
-     */
-    @Query(value = "DELETE FROM gift_certificate_has_tag WHERE tag_id = ?", nativeQuery = true)
-    void deleteGiftCertificatesTag(Long id);
 }
