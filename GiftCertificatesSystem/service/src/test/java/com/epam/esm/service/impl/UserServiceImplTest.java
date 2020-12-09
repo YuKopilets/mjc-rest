@@ -45,18 +45,18 @@ class UserServiceImplTest {
 
     @ParameterizedTest
     @MethodSource("prepareLocalUser")
-    void singUpTest(LocalUser localUser, CharBuffer charBuffer) {
+    void signUpTest(LocalUser localUser, CharBuffer charBuffer) {
         Mockito.when(userRepository.findLocalUserByLogin("login")).thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.encode(charBuffer)).thenReturn("pass");
-        userService.singUp(localUser);
+        userService.signUp(localUser);
         Mockito.verify(userRepository).save(localUser);
     }
 
     @ParameterizedTest
     @MethodSource("prepareLocalUser")
-    void singUpNegativeTest(LocalUser localUser) {
+    void signUpNegativeTest(LocalUser localUser) {
         Mockito.when(userRepository.findLocalUserByLogin("login")).thenReturn(Optional.ofNullable(localUser));
-        assertThrows(RegistrationFailServiceException.class, () -> userService.singUp(localUser));
+        assertThrows(RegistrationFailServiceException.class, () -> userService.signUp(localUser));
     }
 
     @ParameterizedTest

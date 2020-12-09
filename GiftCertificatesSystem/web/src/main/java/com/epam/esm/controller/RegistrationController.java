@@ -26,7 +26,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String createUser(LocalUser user) {
-        userService.singUp(user);
+        userService.signUp(user);
         return "redirect:/login";
     }
 }

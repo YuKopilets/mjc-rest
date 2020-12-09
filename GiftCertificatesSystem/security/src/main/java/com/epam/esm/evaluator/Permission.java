@@ -13,7 +13,7 @@ import java.util.Arrays;
  */
 @RequiredArgsConstructor
 public enum Permission {
-    GET_USER("hasPermissionToGetUser");
+    GET_USER("getUserById");
 
     @Getter
     private final String permissionName;

@@ -23,10 +23,7 @@ public class V5__Encode_passwords extends BaseJavaMigration {
             try (ResultSet rows = select.executeQuery(SELECT_USER_PASSWORDS)) {
                 while (rows.next()) {
                     byte[] password = rows.getBytes(USER_PASSWORD_COLUMN);
-                    char[] chars = new char[password.length];
-                    for (int i = 0; i < password.length; i++) {
-                        chars[i] = (char) password[i];
-                    }
+                    char[] chars = convertPasswordToCharArray(password);
                     String encodedPassword = passwordEncoder.encode(CharBuffer.wrap(chars));
 
                     try (PreparedStatement statement = context.getConnection().prepareStatement(UPDATE_PASSWORD)) {
@@ -37,5 +34,13 @@ public class V5__Encode_passwords extends BaseJavaMigration {
                 }
             }
         }
+    }
+
+    private char[] convertPasswordToCharArray(byte[] password) {
+        char[] chars = new char[password.length];
+        for (int i = 0; i < password.length; i++) {
+            chars[i] = (char) password[i];
+        }
+        return chars;
     }
 }

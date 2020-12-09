@@ -24,7 +24,7 @@ public class JwtSecretKeyHolder {
             INSTANCE = this;
         } else {
             throw new IllegalStateException("Attempt to create second object of singleton class. " +
-                    "Instance is already created!");
+                    "Instance was already created!");
         }
     }
 

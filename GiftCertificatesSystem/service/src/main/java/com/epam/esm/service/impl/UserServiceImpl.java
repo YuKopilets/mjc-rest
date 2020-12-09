@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void singUp(LocalUser user) {
+    public void signUp(LocalUser user) {
         userRepository.findLocalUserByLogin(user.getLogin()).ifPresent(userByLogin -> {
             throw new RegistrationFailServiceException("User with login: "
                     + ((LocalUser) userByLogin).getLogin() + " already exists");

@@ -16,7 +16,7 @@ public interface UserService {
      *
      * @param user the user
      */
-    void singUp(LocalUser user);
+    void signUp(LocalUser user);
 
     /**
      * Get user by current id.

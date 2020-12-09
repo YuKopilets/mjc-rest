@@ -28,8 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ADMIN_ROLE = "ADMIN";
-    private static final String[] AUTHORIZE_ADMIN_LIST = {
-            // -- swagger
+    private static final String[] ADMIN_WHITELIST = {
             "/v2/api-docs",
             "/v3/api-docs",
             "/swagger-resources",
@@ -40,7 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/webjars/**",
-            // -- actuator
             "/actuator",
             "/actuator/*"
     };
@@ -55,19 +53,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
-                .csrf().disable()
-                .cors().disable()
                 .authorizeRequests()
                     .antMatchers("/", "/registration", "/static/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/certificates","/certificates/*").permitAll()
-                    .antMatchers(AUTHORIZE_ADMIN_LIST).hasRole(ADMIN_ROLE)
+                    .antMatchers(ADMIN_WHITELIST).hasRole(ADMIN_ROLE)
                     .antMatchers(HttpMethod.POST,
                             "/certificates", "/certificates/", "/tags", "/tags/").hasRole(ADMIN_ROLE)
                     .antMatchers(HttpMethod.PATCH).hasRole(ADMIN_ROLE)
                     .antMatchers(HttpMethod.DELETE).hasRole(ADMIN_ROLE)
                     .anyRequest().authenticated()
                 .and()
+                    .httpBasic()
+                .and()
+                    .csrf()
+                .and()
+                    .cors()
+                .disable()
                     .formLogin()
                         .loginPage("/login")
                         .defaultSuccessUrl("/certificates", true)

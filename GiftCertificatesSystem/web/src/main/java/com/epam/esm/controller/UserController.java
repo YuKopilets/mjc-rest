@@ -50,7 +50,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "get user by id")
-    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'userId', 'getUserById') or hasRole('ADMIN')")
     public UserRepresentationDto getUserById(@PathVariable @Min(value = 1) long id) {
         User user = userService.getUserById(id);
         UserRepresentationDto dto = userDtoConverter.convertToRepresentationDto(user);
@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}/orders")
     @ApiOperation(value = "get list of user's orders by login")
-    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'userId', 'getUserById') or hasRole('ADMIN')")
     public Page<OrderRepresentationDto> getUserOrders(
             @PathVariable @Min(value = 1) long id,
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
@@ -77,7 +77,7 @@ public class UserController {
 
     @GetMapping(value = "/{userId}/orders/{id}")
     @ApiOperation(value = "get user's order by id")
-    @PreAuthorize("hasPermission(#id, 'userId', 'hasPermissionToGetUser') or hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'userId', 'getUserById') or hasRole('ADMIN')")
     public OrderRepresentationDto getUserOrderById(@PathVariable @Min(value = 1) long userId,
                                                    @PathVariable @Min(value = 1) long id) {
         Order order = orderService.getUserOrderById(id);
