@@ -11,6 +11,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+/**
+ * The Get user implementation of Permission Manager.
+ * Verifies does authorized user have id for operation.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see PermissionManager
+ */
 @Component
 @RequiredArgsConstructor
 public class GetUserPermissionManagerImpl implements PermissionManager {
