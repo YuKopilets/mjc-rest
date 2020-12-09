@@ -1,6 +1,6 @@
 package com.epam.esm.jwt;
 
-import com.epam.esm.service.UserAuthenticationAttributeConstant;
+import com.epam.esm.util.UserAuthenticationAttributeConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;

@@ -7,7 +7,7 @@ import com.epam.esm.service.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * The type is implementation of OAuth user details service.
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  * @see OAuth2UserDetailsService
  */
-@Component
+@Service
 @RequiredArgsConstructor
 public class OAuth2UserDetailsServiceImpl implements OAuth2UserDetailsService {
     private final UserRepository userRepository;

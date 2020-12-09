@@ -1,4 +1,4 @@
-package com.epam.esm.service;
+package com.epam.esm.util;
 
 /**
  * Constant values for working with user's attributes.

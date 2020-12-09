@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.epam.esm.service.UserAuthenticationAttributeConstant.*;
+import static com.epam.esm.util.UserAuthenticationAttributeConstant.*;
 
 /**
  * The enum OAuth authentication contains authentication types.

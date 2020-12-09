@@ -53,6 +53,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .httpBasic().disable()
+                .csrf().disable()
+                .cors().disable()
                 .authorizeRequests()
                     .antMatchers("/", "/registration", "/static/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/certificates","/certificates/*").permitAll()
@@ -63,12 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.DELETE).hasRole(ADMIN_ROLE)
                     .anyRequest().authenticated()
                 .and()
-                    .httpBasic()
-                .and()
-                    .csrf()
-                .and()
-                    .cors()
-                .disable()
                     .formLogin()
                         .loginPage("/login")
                         .defaultSuccessUrl("/certificates", true)
@@ -91,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .and()
                     .addFilter(new JwtLocalAuthenticationFilter(authenticationManager(), jwtTokenSupport))
-                    .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

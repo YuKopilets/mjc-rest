@@ -3,6 +3,7 @@ package db.migration;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -12,23 +13,12 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @Component
+@RequiredArgsConstructor
 public class OrderCostReviewer {
-    private static OrderCostReviewer instance;
-
     private final OrderRepository orderRepository;
 
-    public OrderCostReviewer(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-        if (instance == null) {
-            instance = this;
-        } else {
-            throw new IllegalStateException("Attempt to create second object of singleton class. " +
-                    "Instance was already created!");
-        }
-    }
-
     public void reviewOrdersCost() {
-        long countOfOrders = orderRepository.countOrders();
+        long countOfOrders = orderRepository.count();
         int pageSize = 100;
         IntStream.range(0, countPages(countOfOrders, pageSize))
                 .mapToObj(i -> PageRequest.of(i, pageSize))
@@ -36,12 +26,9 @@ public class OrderCostReviewer {
                 .forEach(this::updateOrdersCost);
     }
 
-    public static OrderCostReviewer getInstance() {
-        return instance;
-    }
-
     private int countPages(long countOfOrders, int pageSize) {
-        return (int) (countOfOrders % pageSize == 0 ? countOfOrders / pageSize : countOfOrders / pageSize + 1);
+        int pages = (int) countOfOrders / pageSize;
+        return countOfOrders % pageSize == 0 ? pages : pages + 1;
     }
 
     private List<Order> recalculateOrdersCost(List<Order> orders) {
