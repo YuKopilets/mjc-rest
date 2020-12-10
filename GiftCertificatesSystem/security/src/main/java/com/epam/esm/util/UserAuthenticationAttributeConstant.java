@@ -7,7 +7,7 @@ package com.epam.esm.util;
  * @version 1.0
  */
 public final class UserAuthenticationAttributeConstant {
-    public static final String USER_ID = "id";
+    public static final String USER_ID = "user_id";
     public static final String USER_ACTIVE = "active";
 
     public static final String GOOGLE_USER_SUB = "sub";

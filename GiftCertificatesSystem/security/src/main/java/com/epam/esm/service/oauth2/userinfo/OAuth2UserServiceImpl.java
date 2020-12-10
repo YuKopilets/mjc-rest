@@ -1,6 +1,6 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service.oauth2.userinfo;
 
-import com.epam.esm.service.OAuth2RegistrationHandler;
+import com.epam.esm.service.oauth2.handler.OAuth2RegistrationHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

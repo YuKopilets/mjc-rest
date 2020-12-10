@@ -1,6 +1,6 @@
 package com.epam.esm.util;
 
-import com.epam.esm.service.impl.LocalUserDetailsImpl;
+import com.epam.esm.service.local.LocalUserDetailsImpl;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

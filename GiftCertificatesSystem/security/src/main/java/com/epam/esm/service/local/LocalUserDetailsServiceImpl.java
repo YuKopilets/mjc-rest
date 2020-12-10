@@ -1,4 +1,4 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service.local;
 
 import com.epam.esm.entity.LocalUser;
 import com.epam.esm.repository.UserRepository;

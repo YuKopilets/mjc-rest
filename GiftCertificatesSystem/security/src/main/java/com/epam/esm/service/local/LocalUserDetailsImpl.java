@@ -1,4 +1,4 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service.local;
 
 import lombok.Builder;
 import lombok.Getter;

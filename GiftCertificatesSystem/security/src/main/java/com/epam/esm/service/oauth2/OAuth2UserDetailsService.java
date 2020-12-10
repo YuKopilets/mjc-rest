@@ -1,4 +1,4 @@
-package com.epam.esm.service;
+package com.epam.esm.service.oauth2;
 
 import com.epam.esm.exception.OAuth2UserNotFoundException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,10 +15,10 @@ public interface OAuth2UserDetailsService {
      * In this case, the <code>OAuth2User</code> object that comes back
      * from the database.
      *
-     * @param oAuthType the o auth type
+     * @param oauthType the o auth type
      * @param sub       the oauth sub
      * @return the user
      * @throws OAuth2UserNotFoundException the user by sub not found exception
      */
-    OAuth2User loadUserBySub(String oAuthType, String sub) throws OAuth2UserNotFoundException;
+    OAuth2User loadUserBySub(String oauthType, String sub) throws OAuth2UserNotFoundException;
 }

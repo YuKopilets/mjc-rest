@@ -1,10 +1,11 @@
-package com.epam.esm.service;
+package com.epam.esm.service.oauth2.handler;
 
-import com.epam.esm.repository.UserRepository;
+import com.epam.esm.service.oauth2.manager.AbstractOAuth2AuthenticationManager;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.EnumUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * The type Registration handler based on registration oauth user logic.
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class OAuth2RegistrationHandler {
-    private final UserRepository userRepository;
+    private final List<AbstractOAuth2AuthenticationManager> managers;
 
     /**
      * Do process of registration oauth user.
@@ -24,7 +25,9 @@ public class OAuth2RegistrationHandler {
      * @param registrationId the oauth registration id
      */
     public void doRegistration(OAuth2User user, String registrationId) {
-        OAuth2Authentication registration = EnumUtils.getEnumIgnoreCase(OAuth2Authentication.class, registrationId);
-        registration.doRegistration(userRepository, user);
+        managers.stream()
+                .filter(manager -> manager.getAuthenticationName().equalsIgnoreCase(registrationId))
+                .findFirst()
+                .ifPresent(manager -> manager.doRegistration(user));
     }
 }

@@ -1,6 +1,6 @@
 package com.epam.esm.jwt;
 
-import com.epam.esm.service.OAuth2UserDetailsService;
+import com.epam.esm.service.oauth2.OAuth2UserDetailsService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
