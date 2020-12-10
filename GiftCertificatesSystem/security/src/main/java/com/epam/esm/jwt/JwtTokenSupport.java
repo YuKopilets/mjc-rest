@@ -1,5 +1,9 @@
 package com.epam.esm.jwt;
 
+import com.epam.esm.jwt.authentication.JwtAuthenticationProvider;
+import com.epam.esm.jwt.authentication.JwtAuthenticationProviderFactory;
+import com.epam.esm.jwt.claims.JwtClaimsProvider;
+import com.epam.esm.jwt.claims.JwtClaimsProviderFactory;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,8 +24,8 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenSupport {
-    private final JwtClaimsProvider jwtClaimsProvider;
-    private final AuthenticationProvider authenticationProvider;
+    private final JwtClaimsProviderFactory claimsProviderFactory;
+    private final JwtAuthenticationProviderFactory authenticationProviderFactory;
 
     /**
      * Generate new jwt token.
@@ -31,7 +35,8 @@ public class JwtTokenSupport {
      */
     public String generateToken(Authentication authentication) {
         Date expiration = new Date(System.currentTimeMillis() + JwtConstant.EXPIRATION_TIME);
-        Claims claims = JwtAuthenticationType.createJwtClaims(jwtClaimsProvider, authentication);
+        JwtClaimsProvider jwtClaimsProvider = claimsProviderFactory.getJwtClaimsProvider(authentication);
+        Claims claims = jwtClaimsProvider.provideClaims(authentication);
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(expiration)
@@ -68,6 +73,7 @@ public class JwtTokenSupport {
                 .setSigningKey(JwtSecretKeyHolder.getInstance().getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        return JwtAuthenticationType.generateAuthentication(authenticationProvider, claims);
+        JwtAuthenticationProvider provider = authenticationProviderFactory.getJwtAuthenticationProvider(claims);
+        return provider.provideAuthentication(claims);
     }
 }

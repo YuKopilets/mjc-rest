@@ -1,5 +1,6 @@
-package com.epam.esm.jwt;
+package com.epam.esm.jwt.claims;
 
+import com.epam.esm.jwt.JwtConstant;
 import com.epam.esm.util.UserAuthenticationAttributeConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,8 +21,8 @@ import java.util.function.Function;
  */
 @RequiredArgsConstructor
 public enum ClaimsOAuth2Authentication {
-    GOOGLE(UserAuthenticationAttributeConstant.GOOGLE_USER_SUB, o -> (String) o),
-    GITHUB(UserAuthenticationAttributeConstant.GITHUB_USER_SUB, o -> ((Integer) o).toString());
+    GOOGLE(UserAuthenticationAttributeConstant.GOOGLE_USER_SUB, attribute -> (String) attribute),
+    GITHUB(UserAuthenticationAttributeConstant.GITHUB_USER_SUB, attribute -> ((Integer) attribute).toString());
 
     private final String subAttributeName;
     private final Function<Object, String> castSubAttributeFunction;
