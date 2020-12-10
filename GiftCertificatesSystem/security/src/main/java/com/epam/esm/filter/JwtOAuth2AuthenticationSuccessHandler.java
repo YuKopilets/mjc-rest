@@ -7,13 +7,14 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * The Jwt authentication filter based on authentication and
- * preparing jwt token for authenticated oauth users.
+ * preparing jwt token for authenticated OAuth 2.0 users.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -28,7 +29,9 @@ public class JwtOAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticati
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         String token = jwtTokenSupport.generateToken(authentication);
-        response.addHeader("token", token);
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

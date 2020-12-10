@@ -43,10 +43,11 @@ public class AuthorizationFilter extends GenericFilterBean {
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearer = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.isNotEmpty(bearer) && bearer.startsWith("Bearer ")) {
-            return bearer.replace("Bearer ", "");
-        }
-        return StringUtils.EMPTY;
+        return isBearerToken(bearer) ? bearer.replace("Bearer ", "") : StringUtils.EMPTY;
+    }
+
+    private boolean isBearerToken(String bearer) {
+        return StringUtils.isNotEmpty(bearer) && bearer.startsWith("Bearer ");
     }
 
     private boolean tokenIsValid(String token) {
