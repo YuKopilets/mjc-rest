@@ -25,6 +25,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      * @param id the user id
      * @return the list
      */
-    @Query("SELECT u.orders FROM User u WHERE u.id = :id")
-    Page<Order> findOrdersByUserId(Long id, Pageable pageable);
+    Page<Order> findByUserId(Long id, Pageable pageable);
 }

@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<Order> getUserOrders(Long userId, Pageable pageable) throws UserNotFoundServiceException {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundServiceException(userId));
-        return orderRepository.findOrdersByUserId(userId, pageable);
+        return orderRepository.findByUserId(userId, pageable);
     }
 
     @Override
