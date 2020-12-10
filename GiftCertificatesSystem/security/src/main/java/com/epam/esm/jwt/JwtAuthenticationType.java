@@ -18,10 +18,22 @@ public enum JwtAuthenticationType {
     LOCAL,
     OAUTH2;
 
+    /**
+     * Define jwt authentication type by current authentication.
+     *
+     * @param authentication the authentication
+     * @return the jwt authentication type
+     */
     public static JwtAuthenticationType defineAuthenticationType(Authentication authentication) {
         return authentication instanceof OAuth2AuthenticationToken ? OAUTH2 : LOCAL;
     }
 
+    /**
+     * Define jwt authentication type by jwt claims from token.
+     *
+     * @param claims the claims
+     * @return the jwt authentication type
+     */
     public static JwtAuthenticationType defineAuthenticationType(Claims claims) {
         return LOCAL.name().equalsIgnoreCase((String) claims.get(JwtConstant.AUTHENTICATION_TYPE_CLAIM)) ? LOCAL
                 : OAUTH2;

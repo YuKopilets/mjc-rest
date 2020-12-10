@@ -14,6 +14,13 @@ import java.util.Optional;
 
 import static com.epam.esm.util.UserAuthenticationAttributeConstant.*;
 
+/**
+ * The type Google authentication manager.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see AbstractOAuth2AuthenticationManager
+ */
 public class GoogleOAuth2AuthenticationManager extends AbstractOAuth2AuthenticationManager {
     public GoogleOAuth2AuthenticationManager(UserRepository userRepository) {
         super(userRepository);

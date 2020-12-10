@@ -19,6 +19,15 @@ import java.util.List;
 public class OAuth2AuthenticationHandler {
     private final List<AbstractOAuth2AuthenticationManager> managers;
 
+    /**
+     * Do process of authentication oauth user.
+     *
+     * @param oauthType the oauth type
+     * @param sub       the oauth sub
+     * @return the oauth user
+     * @throws AuthenticationManagerNotFoundException the authentication
+     * manager not found exception
+     */
     public OAuth2User doAuthentication(String oauthType, String sub) throws AuthenticationManagerNotFoundException {
         return managers.stream()
                 .filter(manager -> manager.getAuthenticationName().equalsIgnoreCase(oauthType))

@@ -13,6 +13,13 @@ import java.util.Optional;
 
 import static com.epam.esm.util.UserAuthenticationAttributeConstant.USER_ID;
 
+/**
+ * The abstract implementation of Authentication manager.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see OAuth2AuthenticationManager
+ */
 @RequiredArgsConstructor
 public abstract class AbstractOAuth2AuthenticationManager implements OAuth2AuthenticationManager {
     protected final UserRepository userRepository;
@@ -35,11 +42,35 @@ public abstract class AbstractOAuth2AuthenticationManager implements OAuth2Authe
         return new DefaultOAuth2User(user.getRoles(), attributes, USER_ID);
     }
 
+    /**
+     * Get sub from user's attributes.
+     *
+     * @param attributes the attributes
+     * @return the sub from attributes
+     */
     protected abstract String getSubFromAttributes(Map<String, Object> attributes);
 
+    /**
+     * Find exists user in the database.
+     *
+     * @param sub the oauth sub
+     * @return the optional user
+     */
     protected abstract Optional<User> findExistsUser(String sub);
 
+    /**
+     * Build oauth user by attributes.
+     *
+     * @param attributes the attributes
+     * @return the user
+     */
     protected abstract User buildOAuth2User(Map<String, Object> attributes);
 
+    /**
+     * Build user attributes by user.
+     *
+     * @param user the user
+     * @return the attributes
+     */
     protected abstract Map<String, Object> buildUserAttributes(User user);
 }

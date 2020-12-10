@@ -11,6 +11,14 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+/**
+ * The implementation of Jwt authentication provider.
+ * Provides oauth authentication.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see JwtAuthenticationProvider
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtOAuth2AuthenticationProvider implements JwtAuthenticationProvider {

@@ -11,6 +11,14 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The implementation of Jwt claims provider.
+ * Provides claims based on local authentication.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see JwtClaimsProvider
+ */
 @Component
 public class JwtLocalClaimsProvider implements JwtClaimsProvider {
     private static final String LOCAL_AUTHENTICATION = "local";

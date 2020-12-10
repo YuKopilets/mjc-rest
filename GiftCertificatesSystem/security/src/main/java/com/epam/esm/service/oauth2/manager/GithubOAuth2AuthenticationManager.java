@@ -15,6 +15,13 @@ import java.util.Optional;
 
 import static com.epam.esm.util.UserAuthenticationAttributeConstant.*;
 
+/**
+ * The type Github authentication manager.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see AbstractOAuth2AuthenticationManager
+ */
 @Component
 public class GithubOAuth2AuthenticationManager extends AbstractOAuth2AuthenticationManager {
     public GithubOAuth2AuthenticationManager(UserRepository userRepository) {

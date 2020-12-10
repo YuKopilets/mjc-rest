@@ -9,6 +9,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
 
+/**
+ * The implementation of Jwt claims provider.
+ * Provides claims based on oauth authentication.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see JwtClaimsProvider
+ */
 @Component
 public class JwtOAuth2ClaimsProvider implements JwtClaimsProvider {
     @Override

@@ -10,6 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+/**
+ * The implementation of Jwt authentication provider.
+ * Provides local authentication.
+ *
+ * @author Yuriy Kopilets
+ * @version 1.0
+ * @see JwtAuthenticationProvider
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtLocalAuthenticationProvider implements JwtAuthenticationProvider {
