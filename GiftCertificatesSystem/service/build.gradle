@@ -4,6 +4,7 @@ version '1.0'
 
 dependencies {
     compile project(":persistence")
+    compile project(":security")
 }
 
 apply plugin: 'jacoco'

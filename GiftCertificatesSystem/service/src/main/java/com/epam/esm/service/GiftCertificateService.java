@@ -1,13 +1,13 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dao.PageRequest;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.TagNotFoundServiceException;
 import com.epam.esm.util.GiftCertificateQuery;
 import com.epam.esm.entity.GiftCertificate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * The interface Gift certificate service.
@@ -42,10 +42,10 @@ public interface GiftCertificateService {
      *
      * @param giftCertificateQuery the query params for finding list of
      * gift certificate
-     * @param pageRequest          the page number and size
+     * @param pageable             the pageable
      * @return the list of gift certificates matching search parameters
      */
-    List<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, PageRequest pageRequest);
+    Page<GiftCertificate> getGiftCertificates(GiftCertificateQuery giftCertificateQuery, Pageable pageable);
 
     /**
      * Update gift certificate. Update values of gift certificate if there are

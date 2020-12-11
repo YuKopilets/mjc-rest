@@ -2,15 +2,18 @@ package com.epam.esm.converter;
 
 import com.epam.esm.dto.GiftCertificatePatchDto;
 import com.epam.esm.dto.GiftCertificatePostDto;
+import com.epam.esm.dto.representation.GiftCertificateRepresentationDto;
 import com.epam.esm.entity.GiftCertificate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 /**
- * The {@code Gift certificate dto converter} converts dto to gift certificate.
+ * The {@code Gift certificate dto converter} converts dto to gift certificate
+ * and conversely.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -49,5 +52,26 @@ public class GiftCertificateDtoConverter {
             giftCertificate.setDuration(Duration.ofDays(dto.getDuration()));
         }
         return giftCertificate;
+    }
+
+    /**
+     * Convert gift certificate to representation dto
+     * before preparing response.
+     *
+     * @param giftCertificate the gift certificate
+     * @return the gift certificate representation dto
+     */
+    public GiftCertificateRepresentationDto convertToRepresentationDto(GiftCertificate giftCertificate) {
+        return modelMapper.map(giftCertificate, GiftCertificateRepresentationDto.class);
+    }
+
+    /**
+     * Convert certificates to dto page for pagination.
+     *
+     * @param giftCertificates the gift certificates
+     * @return the page
+     */
+    public Page<GiftCertificateRepresentationDto> convertCertificatesToDtoPage(Page<GiftCertificate> giftCertificates) {
+        return giftCertificates.map(this::convertToRepresentationDto);
     }
 }

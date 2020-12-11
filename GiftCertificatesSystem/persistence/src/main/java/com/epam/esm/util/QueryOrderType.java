@@ -16,6 +16,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum QueryOrderType {
+    DEFAULT(" ORDER BY gc.id"),
     NAME(" ORDER BY gc.name"),
     DATE(" ORDER BY gc.lastUpdateDate");
 
@@ -33,10 +34,10 @@ public enum QueryOrderType {
                 .filter(value -> value.name().equalsIgnoreCase(giftCertificateQuery.getSort()))
                 .findFirst()
                 .map(value -> value.getCondition() + orderType)
-                .orElse(StringUtils.EMPTY);
+                .orElse(DEFAULT.getCondition() + orderType);
     }
 
     private static String generateOrderType(String order) {
-        return StringUtils.isNotEmpty(order) && "desc".equals(order) ? " DESC" : StringUtils.EMPTY;
+        return StringUtils.isNotEmpty(order) && "asc".equals(order) ? " ASC" : " DESC";
     }
 }

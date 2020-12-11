@@ -28,7 +28,14 @@ CREATE TABLE gift_certificate_has_tag
 CREATE TABLE user_account
 (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  login VARCHAR(50) NOT NULL
+  active INTEGER NOT NULL
+);
+
+CREATE TABLE user_role
+(
+  user_id BIGINT NOT NULL,
+  role VARCHAR(50) NOT NULL PRIMARY KEY,
+  FOREIGN KEY (user_id) REFERENCES user_account(id)
 );
 
 CREATE TABLE user_order
@@ -91,9 +98,19 @@ CREATE TABLE gift_certificate_has_tag_aud
 CREATE TABLE user_account_aud
 (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  login VARCHAR(50) NOT NULL,
+  active INTEGER NOT NULL,
   REV INTEGER NOT NULL,
   REVTYPE tinyint,
+  FOREIGN KEY (REV) REFERENCES REVINFO (REV)
+);
+
+CREATE TABLE user_role_aud
+(
+  user_id BIGINT NOT NULL,
+  role VARCHAR(50) NOT NULL PRIMARY KEY,
+  REV INTEGER NOT NULL,
+  REVTYPE tinyint,
+  FOREIGN KEY (user_id) REFERENCES user_account(id),
   FOREIGN KEY (REV) REFERENCES REVINFO (REV)
 );
 

@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import com.epam.esm.entity.LocalUser;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.UserNotFoundServiceException;
 
@@ -11,6 +12,13 @@ import com.epam.esm.exception.UserNotFoundServiceException;
  */
 public interface UserService {
     /**
+     * Sing up process. Add new local user.
+     *
+     * @param user the user
+     */
+    void signUp(LocalUser user);
+
+    /**
      * Get user by current id.
      *
      * @param id the id
@@ -19,14 +27,4 @@ public interface UserService {
      *                                      current id not found}
      */
     User getUserById(Long id) throws UserNotFoundServiceException;
-
-    /**
-     * Get user by current login.
-     *
-     * @param login the login
-     * @return the user by login
-     * @throws UserNotFoundServiceException in case of {@code user with
-     *                                      current login not found}
-     */
-    User getUserByLogin(String login) throws UserNotFoundServiceException;
 }

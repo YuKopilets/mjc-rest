@@ -15,6 +15,6 @@ import java.time.Duration;
 public class DaysDurationValidator implements ConstraintValidator<ValidDaysDuration, Duration> {
     @Override
     public boolean isValid(Duration duration, ConstraintValidatorContext context) {
-        return duration.toDays() > 0;
+        return duration == null || duration.toDays() > 0;
     }
 }

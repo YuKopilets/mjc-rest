@@ -2,7 +2,7 @@ package com.epam.esm.exception;
 
 /**
  * {@code GiftCertificateNotFoundServiceException} is generated when gift
- * certificate not found in the database
+ * certificate not found in the database.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -78,7 +78,8 @@ public class GiftCertificateNotFoundServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public GiftCertificateNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public GiftCertificateNotFoundServiceException(String message, Throwable cause,
+                                                   boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -1,16 +1,18 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.OrderDao;
-import com.epam.esm.dao.PageRequest;
-import com.epam.esm.dao.UserDao;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.OrderRepository;
+import com.epam.esm.repository.UserRepository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.exception.UserNotFoundServiceException;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.exception.GiftCertificateNotFoundServiceException;
 import com.epam.esm.exception.OrderNotFoundServiceException;
+import com.epam.esm.util.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -33,32 +35,35 @@ import java.util.stream.Collectors;
 @Validated
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final OrderDao orderDao;
-    private final UserDao userDao;
-    private final GiftCertificateDao giftCertificateDao;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final GiftCertificateRepository giftCertificateRepository;
 
     @Override
     @Transactional
-    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException,
-            UserNotFoundServiceException {
-        userDao.findById(order.getUserId()).orElseThrow(() -> new UserNotFoundServiceException(order.getUserId()));
-
+    public Order addOrder(@Valid Order order) throws GiftCertificateNotFoundServiceException {
+        Long userId = getAuthorizedUserId();
+        order.setUserId(userId);
         order.setDate(LocalDateTime.now());
         initOrderByGiftCertificates(order);
         order.setCost(calculateOrderCost(order));
-        orderDao.save(order);
+        orderRepository.save(order);
         return order;
     }
 
     @Override
-    public List<Order> getUserOrders(String userLogin, PageRequest pageRequest) throws UserNotFoundServiceException {
-        userDao.findByLogin(userLogin).orElseThrow(() -> new UserNotFoundServiceException(userLogin));
-        return orderDao.findOrdersByUserLogin(userLogin, pageRequest);
+    public Page<Order> getUserOrders(Long userId, Pageable pageable) throws UserNotFoundServiceException {
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundServiceException(userId));
+        return orderRepository.findByUserId(userId, pageable);
     }
 
     @Override
     public Order getUserOrderById(Long id) throws OrderNotFoundServiceException {
-        return orderDao.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
+        return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundServiceException(id));
+    }
+
+    private Long getAuthorizedUserId() {
+        return AuthenticationUtils.getAuthorizedUserId();
     }
 
     private void initOrderByGiftCertificates(Order order) throws GiftCertificateNotFoundServiceException {
@@ -70,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
 
     private GiftCertificate findOrderGiftCertificate(GiftCertificate giftCertificate)
             throws GiftCertificateNotFoundServiceException {
-        return giftCertificateDao.findById(giftCertificate.getId())
+        return giftCertificateRepository.findById(giftCertificate.getId())
                 .orElseThrow(() -> new GiftCertificateNotFoundServiceException(giftCertificate.getId()));
     }
 

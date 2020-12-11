@@ -1,12 +1,10 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.PageRequest;
-import com.epam.esm.dao.TagDao;
-import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.TagNotFoundServiceException;
-import com.epam.esm.service.TagService;
 import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.TagNotFoundServiceException;
+import com.epam.esm.repository.TagRepository;
+import com.epam.esm.service.TagService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +13,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +25,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TagServiceImplTest {
     @Mock
-    private TagDao tagDao;
+    private TagRepository tagRepository;
     private TagService tagService;
 
     @BeforeEach
     void setUp() {
-        tagDao = Mockito.mock(TagDaoImpl.class);
-        tagService = new TagServiceImpl(tagDao);
+        MockitoAnnotations.initMocks(this);
+        tagService = Mockito.spy(new TagServiceImpl(tagRepository));
     }
 
     @AfterEach
     void tearDown() {
-        tagDao = null;
+        tagRepository = null;
         tagService = null;
     }
 
@@ -43,30 +44,30 @@ class TagServiceImplTest {
     @MethodSource("prepareTag")
     void addGiftCertificateTest(Tag tag) {
         tagService.addTag(tag);
-        Mockito.verify(tagDao).save(tag);
+        Mockito.verify(tagRepository).save(tag);
     }
 
     @ParameterizedTest
     @MethodSource("prepareTag")
     void getTagByIdTest(Tag tag) throws ServiceException {
         Optional<Tag> tagOptional = Optional.ofNullable(tag);
-        Mockito.when(tagDao.findById(1L)).thenReturn(tagOptional);
+        Mockito.when(tagRepository.findById(1L)).thenReturn(tagOptional);
         tagService.getTagById(1L);
-        Mockito.verify(tagDao, Mockito.atLeastOnce()).findById(Mockito.anyLong());
+        Mockito.verify(tagRepository, Mockito.atLeastOnce()).findById(Mockito.anyLong());
     }
 
     @Test
     void getTagByIdNegativeTest() {
-        Mockito.when(tagDao.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(tagRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ServiceException.class, () -> tagService.getTagById(1L));
     }
 
     @ParameterizedTest
     @MethodSource("prepareExceptedTags")
     void getAllTagsTest(List<Tag> exceptedTags) {
-        PageRequest pageRequest = new PageRequest(1, 10);
-        Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(exceptedTags);
-        List<Tag> actualTags = tagService.getAllTags(pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Mockito.when(tagRepository.findAll(Mockito.eq(pageRequest))).thenReturn(new PageImpl<>(exceptedTags));
+        List<Tag> actualTags = tagService.getAllTags(pageRequest).getContent();
         assertEquals(exceptedTags, actualTags);
     }
 
@@ -74,30 +75,30 @@ class TagServiceImplTest {
     @MethodSource("prepareExceptedTags")
     void getAllTagsNegativeTest(List<Tag> exceptedTags) {
         List<Tag> tags = new ArrayList<>();
-        PageRequest pageRequest = new PageRequest(1, 10);
-        Mockito.when(tagDao.findAll(Mockito.eq(pageRequest))).thenReturn(tags);
-        List<Tag> actualTags = tagService.getAllTags(pageRequest);
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Mockito.when(tagRepository.findAll(Mockito.eq(pageRequest))).thenReturn(new PageImpl<>(tags));
+        List<Tag> actualTags = tagService.getAllTags(pageRequest).getContent();
         assertNotEquals(exceptedTags, actualTags);
     }
 
     @Test
     void getMostWidelyUsedTagTest() {
         tagService.getMostWidelyUsedTag();
-        Mockito.verify(tagDao).findMostWidelyUsedTag();
+        Mockito.verify(tagRepository).findMostWidelyUsedTag();
     }
 
     @ParameterizedTest
     @MethodSource("prepareTag")
     void removeTagTest(Tag tag) throws ServiceException {
         Optional<Tag> tagOptional = Optional.of(tag);
-        Mockito.when(tagDao.findById(1L)).thenReturn(tagOptional);
+        Mockito.when(tagRepository.findById(1L)).thenReturn(tagOptional);
         tagService.removeTag(1L);
-        Mockito.verify(tagDao).delete(Mockito.anyLong());
+        Mockito.verify(tagRepository).deleteById(Mockito.anyLong());
     }
 
     @Test
     void removeTagNegativeTest() {
-        Mockito.when(tagDao.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(tagRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(TagNotFoundServiceException.class, () -> tagService.removeTag(1L));
     }
 

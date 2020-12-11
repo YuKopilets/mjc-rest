@@ -2,7 +2,7 @@ package com.epam.esm.exception;
 
 /**
  * {@code UserNotFoundServiceException} is generated when user not found
- * in the database
+ * in the database.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -66,7 +66,8 @@ public class UserNotFoundServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public UserNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public UserNotFoundServiceException(String message, Throwable cause,
+                                        boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

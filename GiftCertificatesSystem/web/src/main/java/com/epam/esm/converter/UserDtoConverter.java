@@ -1,6 +1,6 @@
 package com.epam.esm.converter;
 
-import com.epam.esm.dto.UserRepresentationDto;
+import com.epam.esm.dto.representation.UserRepresentationDto;
 import com.epam.esm.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

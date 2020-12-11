@@ -2,7 +2,7 @@ package com.epam.esm.exception;
 
 /**
  * {@code TagNotFoundServiceException} is generated when tag not found
- * in the database
+ * in the database.
  *
  * @author Yuriy Kopilets
  * @version 1.0
@@ -78,7 +78,8 @@ public class TagNotFoundServiceException extends ServiceException {
      *                           be writable
      * @since 1.7
      */
-    public TagNotFoundServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public TagNotFoundServiceException(String message, Throwable cause,
+                                       boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
