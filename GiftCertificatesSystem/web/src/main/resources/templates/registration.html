@@ -1,13 +1,82 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link th:href="@{/static/css/style.css}" media="all" type="text/css" rel="stylesheet">
 </head>
-<body>
-    <form th:action="@{/registration}" method="post">
-        <div><label> User Name : <input type="text" name="login"/> </label></div>
-        <div><label> Password: <input type="password" name="password"/> </label></div>
-        <div><input type="submit" value="Sign Up"/></div>
-    </form>
-</body>
+    <body>
+        <header class="header">
+            <div class="header__wrapper">
+                <div class="header__logo">
+                    <div class="hamburger">
+                        <span class="hamburger__line"></span>
+                    </div>
+                    <h1 class="logo">Logo</h1>
+                </div>
+                <div class="header__search-bar">
+                    <div class="search-bar">
+                        <input class="input search-bar__input" placeholder="Search by item name"/>
+                        <select class="search-bar__select">
+                            <option hidden>All Categories</option>
+                            <option>Category 1</option>
+                            <option>Category 2</option>
+                            <option>Category 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="header__actions">
+                    <div class="header__icons">
+                        <img alt="like" src="static/assets/favorite.svg" class="icon icon_favorite"/>
+                        <img alt="like" src="static/assets/cart.svg" class="icon icon_cart"/>
+                    </div>
+                    <div class="header__links">
+                        <a class="link" th:href="@{/login}">Login</a>
+                        <a class="link" th:href="@{/registration}">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main  class="registration">
+            <form class="form form-registration" th:action="@{/registration}" method="post">
+                <div class="form-registration__register">Register</div>
+                <div class="form-registration__columns">
+                    <div class="form-registration__column">
+                        <div class="form-registration__field">
+                            <label class="label" for="login">Login Name</label>
+                            <input id="login" type="text" name="login" class="input form-registration__input"/>
+                        </div>
+                        <div class="form-registration__field">
+                            <label class="label" for="password">Password</label>
+                            <input id="password" type="password" name="password" class="input form-registration__input"/>
+                        </div>
+                        <div class="form-registration__field">
+                            <label class="label" for="email">Email</label>
+                            <input id="email" type="text" name="email" class="input form-registration__input"/>
+                        </div>
+                    </div>
+                    <div class="form-registration__column">
+                        <div class="form-registration__field">
+                            <label class="label" for="first-name">First Name</label>
+                            <input id="first-name" type="text" name="first-name" class="input form-registration__input"/>
+                        </div>
+                        <div class="form-registration__field">
+                            <label class="label" for="repeat-password">Repeat Password</label>
+                            <input id="repeat-password" type="text" name="repeat-password" class="input form-registration__input"/>
+                        </div>
+                        <div class="form-registration__field">
+                            <label class="label" for="address">Address</label>
+                            <input id="address" type="text" name="address" class="input form-registration__input"/>
+                        </div>
+                        <div class="form-registration__buttons">
+                            <button class="button button_cancel form-registration__button" type="button">Cancel</button>
+                            <button class="button button_submit form-registration__button" type="submit">Login</button>
+                        </div>
+                    </div>   
+                </div>
+            </form>
+        </main>
+    </body>
 </html>
