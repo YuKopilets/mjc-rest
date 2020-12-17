@@ -6,6 +6,7 @@ import com.epam.esm.entity.User;
 import com.epam.esm.entity.UserRole;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.oauth2.OAuth2Authentication;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import static com.epam.esm.util.UserAuthenticationAttributeConstant.*;
  * @version 1.0
  * @see AbstractOAuth2AuthenticationManager
  */
+@Component
 public class GoogleOAuth2AuthenticationManager extends AbstractOAuth2AuthenticationManager {
     public GoogleOAuth2AuthenticationManager(UserRepository userRepository) {
         super(userRepository);
