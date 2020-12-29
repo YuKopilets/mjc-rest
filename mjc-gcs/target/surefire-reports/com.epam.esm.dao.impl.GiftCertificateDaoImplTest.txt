@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.epam.esm.dao.impl.GiftCertificateDaoImplTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.388 s - in com.epam.esm.dao.impl.GiftCertificateDaoImplTest
