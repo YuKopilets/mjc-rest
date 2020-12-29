@@ -1,2 +1,2 @@
 # mjc-rest
-Module4. Authentication & Spring Security. MJC.School (RUN.OCTOBER.2020)
+Module5. Amazon Web Services. MJC.School (RUN.OCTOBER.2020)
