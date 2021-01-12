@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>GiftCertificatesSystem</name>
     <description>MJC-School web project (RUN.OCTOBER.2020)</description>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
