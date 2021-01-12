@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.epam.esm.service.impl.GiftCertificateServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.285 s - in com.epam.esm.service.impl.GiftCertificateServiceImplTest
