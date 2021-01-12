@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.epam.esm.dao.impl.OrderDaoImplTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.122 s - in com.epam.esm.dao.impl.OrderDaoImplTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.191 s - in com.epam.esm.dao.impl.OrderDaoImplTest
