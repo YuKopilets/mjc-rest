@@ -19,4 +19,7 @@ public final class UserAuthenticationAttributeConstant {
     public static final String GITHUB_USER_NAME = "login";
     public static final String GITHUB_USER_EMAIL = "email";
     public static final String GITHUB_USER_AVATAR_URL = "avatar_url";
+
+    private UserAuthenticationAttributeConstant() {
+    }
 }

@@ -12,4 +12,7 @@ public final class QueryConditionConstant {
     public static final String AND = " AND ";
     public static final String OR = " OR ";
     public static final String TAG_NAME = "t.name";
+
+    private QueryConditionConstant() {
+    }
 }
