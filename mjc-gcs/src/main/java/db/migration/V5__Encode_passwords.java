@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+@SuppressWarnings("squid:S2068")
 public class V5__Encode_passwords extends BaseJavaMigration {
     private static final String SELECT_USER_PASSWORDS = "SELECT id, password FROM local_account";
     private static final String UPDATE_PASSWORD = "UPDATE local_account SET password=? WHERE id=?";
