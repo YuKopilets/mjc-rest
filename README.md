@@ -1,3 +1,3 @@
 # mjc-rest
-Module6. CI & CD. MJC.School (RUN.OCTOBER.2020)
+Module 6. CI & CD. MJC.School (RUN.OCTOBER.2020)
 
