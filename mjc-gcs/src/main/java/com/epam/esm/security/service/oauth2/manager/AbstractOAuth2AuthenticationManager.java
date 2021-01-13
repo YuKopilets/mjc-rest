@@ -1,8 +1,8 @@
 package com.epam.esm.security.service.oauth2.manager;
 
 import com.epam.esm.entity.User;
-import com.epam.esm.service.exception.OAuth2UserNotFoundException;
 import com.epam.esm.persistence.repository.UserRepository;
+import com.epam.esm.security.exception.OAuth2UserNotFoundException;
 import com.epam.esm.security.service.oauth2.OAuth2AuthenticationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;

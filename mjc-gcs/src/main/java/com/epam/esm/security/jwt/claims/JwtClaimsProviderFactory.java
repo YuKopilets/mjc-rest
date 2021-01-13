@@ -1,6 +1,6 @@
 package com.epam.esm.security.jwt.claims;
 
-import com.epam.esm.service.exception.JwtClaimsProviderNotFoundException;
+import com.epam.esm.security.exception.JwtClaimsProviderNotFoundException;
 import com.epam.esm.security.jwt.JwtAuthenticationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

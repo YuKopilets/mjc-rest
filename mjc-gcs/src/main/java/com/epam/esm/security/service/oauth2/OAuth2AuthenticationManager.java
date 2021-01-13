@@ -1,6 +1,6 @@
 package com.epam.esm.security.service.oauth2;
 
-import com.epam.esm.service.exception.OAuth2UserNotFoundException;
+import com.epam.esm.security.exception.OAuth2UserNotFoundException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 /**

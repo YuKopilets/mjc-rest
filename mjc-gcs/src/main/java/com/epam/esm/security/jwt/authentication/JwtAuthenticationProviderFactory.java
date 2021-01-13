@@ -1,6 +1,6 @@
 package com.epam.esm.security.jwt.authentication;
 
-import com.epam.esm.service.exception.JwtAuthenticationProviderNotFoundException;
+import com.epam.esm.security.exception.JwtAuthenticationProviderNotFoundException;
 import com.epam.esm.security.jwt.JwtAuthenticationType;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
