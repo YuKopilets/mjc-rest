@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,8 +21,13 @@ import java.nio.charset.StandardCharsets;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan("com.epam.esm")
-public class ApplicationConfig {
+public class ApplicationConfig extends SpringBootServletInitializer {
     private static final String MESSAGE_SOURCE_BASE_NAME = "classpath:messages";
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(ApplicationConfig.class);
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(ApplicationConfig.class, args);
