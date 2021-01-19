@@ -28,5 +28,6 @@ public class GiftCertificateRepresentationDto {
     private LocalDateTime lastUpdateDate;
     @JsonSerialize(using = JsonDurationSerializer.class)
     private Duration duration;
+    private String imageUrl;
     private Set<TagRepresentationDto> tags;
 }

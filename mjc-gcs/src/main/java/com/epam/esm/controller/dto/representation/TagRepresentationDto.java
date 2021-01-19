@@ -15,4 +15,5 @@ import lombok.NoArgsConstructor;
 public class TagRepresentationDto {
     private Long id;
     private String name;
+    private String imageUrl;
 }
