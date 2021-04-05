@@ -6,13 +6,15 @@ CREATE TABLE gift_certificate
     price DECIMAL(10, 2) NOT NULL,
     create_date DATETIME NOT NULL,
     last_update_date DATETIME NOT NULL,
-    duration INT NOT NULL
+    duration INT NOT NULL,
+    image_url VARCHAR(255)
 );
 
 CREATE TABLE tag
 (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255)
 );
 
 CREATE TABLE gift_certificate_has_tag
@@ -72,6 +74,7 @@ CREATE TABLE gift_certificate_aud
     create_date DATETIME NOT NULL,
     last_update_date DATETIME NOT NULL,
     duration INT NOT NULL,
+    image_url VARCHAR(255),
     REV INTEGER NOT NULL,
     REVTYPE tinyint,
     FOREIGN KEY (REV) REFERENCES REVINFO (REV)
@@ -81,6 +84,7 @@ CREATE TABLE tag_aud
 (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255),
     REV INTEGER NOT NULL,
     REVTYPE tinyint,
     FOREIGN KEY (REV) REFERENCES REVINFO (REV)

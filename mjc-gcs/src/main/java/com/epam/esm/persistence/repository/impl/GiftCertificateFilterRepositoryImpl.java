@@ -36,7 +36,7 @@ public class GiftCertificateFilterRepositoryImpl implements GiftCertificateFilte
         // This cast is correct, because the list we're creating is of the same
         // type as the one passed after operation with entity manager.
         // We're selecting the list of gift certificate identifiers.
-        @SuppressWarnings("unchecked") List<Long> certificateIds  = entityManager.createQuery(query)
+        @SuppressWarnings("unchecked") List<Long> certificateIds = entityManager.createQuery(query)
                 .setFirstResult(firstResult)
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

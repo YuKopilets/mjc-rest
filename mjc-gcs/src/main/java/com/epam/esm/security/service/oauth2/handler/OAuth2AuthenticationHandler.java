@@ -1,6 +1,6 @@
 package com.epam.esm.security.service.oauth2.handler;
 
-import com.epam.esm.service.exception.AuthenticationManagerNotFoundException;
+import com.epam.esm.security.exception.AuthenticationManagerNotFoundException;
 import com.epam.esm.security.service.oauth2.manager.AbstractOAuth2AuthenticationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;

@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -55,10 +56,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
-                .cors().disable()
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
                 .authorizeRequests()
                     .antMatchers("/", "/registration", "/static/**").permitAll()
-                    .antMatchers(HttpMethod.GET, "/certificates","/certificates/*").permitAll()
+                    .antMatchers(HttpMethod.GET, "/certificates","/certificates/*", "/tags", "/tags/*").permitAll()
                     .antMatchers(ADMIN_WHITELIST).hasRole(ADMIN_ROLE)
                     .antMatchers(HttpMethod.POST,
                             "/certificates", "/certificates/", "/tags", "/tags/").hasRole(ADMIN_ROLE)

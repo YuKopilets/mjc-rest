@@ -1,6 +1,6 @@
 package com.epam.esm.security.service.oauth2.userinfo;
 
-import com.epam.esm.service.exception.OAuth2UserNotFoundException;
+import com.epam.esm.security.exception.OAuth2UserNotFoundException;
 import com.epam.esm.security.service.oauth2.OAuth2UserDetailsService;
 import com.epam.esm.security.service.oauth2.handler.OAuth2AuthenticationHandler;
 import lombok.RequiredArgsConstructor;
